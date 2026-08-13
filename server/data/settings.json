@@ -1,0 +1,63 @@
+{
+  "storeName": "Kohinoor Signature Farms",
+  "tagline": "Nurturing Life, Growing Prosperity",
+  "founder": "Feroz Shaik",
+  "whatsappNumber": "+919876543210",
+  "phone": "+91 98765 43210",
+  "email": "contact@kohinoorsignaturefarms.com",
+  "farmAddress": "Kohinoor Signature Farms Sanctuary, Shankarpally - Chevella Corridor, Telangana 501503",
+  "operatingHours": "6:00 AM - 9:00 PM (Daily Fresh Butchery)",
+  "deliveryInfo": "Direct Morning Farm-to-Door Fresh Delivery",
+  "masterFssai": "13624014000889",
+  "announcement": "🌿 100% Pure Organic & Grass-Fed • Halal Certified • Morning Fresh Cuts Direct from Farm",
+  "adminPin": "goateggs",
+  "whatsappTemplate": "🌱 *Order Enquiry - Kohinoor Signature Farms*\n────────────────────────\n🥩 *Item:* {product_name}\n⚖️ *Weight / Size:* {variant_name}\n💰 *Price:* ₹{selling_price} (MRP: ~₹{mrp}~ | *{discount_percent}% OFF*)\n🏷️ *FSSAI Lic:* {fssai_no}\n🔗 *Product Link:* {product_url}\n────────────────────────\nHello Kohinoor Farms team! I would like to place an order for this fresh item. Please confirm availability and delivery slot.",
+  "heroBanners": [
+    {
+      "id": "banner-1",
+      "title": "Pasture-Raised Tender Goat Cuts",
+      "subtitle": "100% Grass-Fed, naturally grazed livestock with unmatched tenderness and rich flavor.",
+      "categoryFilter": "goat",
+      "badge": "Signature Grass-Fed",
+      "buttonText": "Explore Goat Cuts",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "banner-2",
+      "title": "Free-Range Country Chicken (Natukodi)",
+      "subtitle": "Naturally raised on green forage & whole grains. Free from antibiotics, hormones, and chemicals.",
+      "categoryFilter": "chicken",
+      "badge": "100% Antibiotic-Free",
+      "buttonText": "View Country Chicken",
+      "image": "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "banner-3",
+      "title": "Organic Farm-Fresh & Country Eggs",
+      "subtitle": "Golden yolks packed with natural Omega-3 and protein. Collected daily at dawn.",
+      "categoryFilter": "eggs",
+      "badge": "Daily Dawn Harvest",
+      "buttonText": "Discover Fresh Eggs",
+      "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "banner-4",
+      "title": "100% Halal & Hygienic Cold Chain",
+      "subtitle": "Butchered strictly per Halal rites in temperature-controlled sanitary facilities.",
+      "categoryFilter": "all",
+      "badge": "FSSAI & Halal Certified",
+      "buttonText": "Our Farm Quality",
+      "image": "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=1400&q=80"
+    },
+    {
+      "id": "banner-1786630873123",
+      "title": "New Farm Fresh Cut",
+      "subtitle": "Premium quality livestock cuts direct from Kohinoor farm.",
+      "categoryFilter": "goat",
+      "badge": "Special Cut",
+      "buttonText": "Order Fresh",
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80"
+    }
+  ],
+  "hasCustomPin": true
+}

@@ -1,0 +1,12 @@
+# Server Dependencies
+node_modules/
+*.log
+.env
+.env.*
+
+# Uploads
+uploads/ksf-*
+
+# OS files
+.DS_Store
+Thumbs.db

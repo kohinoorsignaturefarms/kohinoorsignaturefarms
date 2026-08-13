@@ -1,0 +1,22 @@
+{
+  "name": "kohinoorsignaturefarms",
+  "version": "1.0.0",
+  "description": "Kohinoor Signature Agro & Livestock Farms - Web Platform & Admin Dashboard",
+  "scripts": {
+    "server": "cd server && npm start",
+    "client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "dev:server": "cd server && npm run dev",
+    "dev": "node start-dev.js"
+  },
+  "keywords": [
+    "kohinoor-signature-farms",
+    "meat-delivery",
+    "goat-mutton",
+    "country-chicken",
+    "organic-eggs",
+    "whatsapp-ecommerce"
+  ],
+  "author": "Feroz Shaik",
+  "license": "ISC"
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "goat",
+    "slug": "goat",
+    "name": "Goat & Sheep (Mutton)",
+    "tagline": "Tender grass-fed meat, rich in nutrients and authentic taste",
+    "icon": "🐐",
+    "badge": "Pasture-Raised",
+    "accentColor": "#0B3B24",
+    "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80",
+    "description": "Our goats and sheep graze freely on natural pasture, medicinal herbs, and clean mineral water. 100% tender cuts, zero growth hormones, expertly trimmed by master butchers."
+  },
+  {
+    "id": "chicken",
+    "slug": "chicken",
+    "name": "Country & Farm Chicken",
+    "tagline": "Authentic free-range Natukodi & tender juicy poultry cuts",
+    "icon": "🐔",
+    "badge": "Antibiotic-Free",
+    "accentColor": "#135334",
+    "image": "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=800&q=80",
+    "description": "Naturally raised country fowls and farm chicken fed with whole grains and leafy greens. High muscle density, zero antibiotic residue, and exceptional aroma."
+  },
+  {
+    "id": "eggs",
+    "slug": "eggs",
+    "name": "Farm-Fresh Organic Eggs",
+    "tagline": "Rich golden yolk eggs, collected fresh every morning",
+    "icon": "🥚",
+    "badge": "Daily Dawn Collection",
+    "accentColor": "#D4AF37",
+    "image": "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=800&q=80",
+    "description": "Laid by hens roaming in open sunlit pastures. Naturally rich in Omega-3, lutein, and clean protein with deep golden orange yolks and strong shells."
+  },
+  {
+    "id": "combos",
+    "slug": "combos",
+    "name": "Special Cuts & Farm Combos",
+    "tagline": "Curated weekend biryani & barbecue value bundles",
+    "icon": "✨",
+    "badge": "Super Savings",
+    "accentColor": "#805A18",
+    "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80",
+    "description": "Hand-picked combinations of premium mutton cuts, tender country chicken, and fresh eggs designed for family feasts and celebrations."
+  }
+]
