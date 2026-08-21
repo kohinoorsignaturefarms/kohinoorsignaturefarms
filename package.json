@@ -4,7 +4,7 @@
   "description": "Kohinoor Signature Agro & Livestock Farms - Web Platform & Admin Dashboard",
   "type": "module",
   "scripts": {
-    "build": "npm install --prefix client && npm run build --prefix client",
+    "build": "cd client && npm install --include=dev && npm run build",
     "start": "node server/server.js",
     "server": "cd server && npm start",
     "client": "cd client && npm run dev",
