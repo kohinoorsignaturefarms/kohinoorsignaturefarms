@@ -1,15 +1,17 @@
 import React from 'react';
-import { Search, MessageCircle, X } from 'lucide-react';
+import { Search, MessageCircle, X, ShoppingBag } from 'lucide-react';
 
 export default function Header({
   searchTerm,
   setSearchTerm,
   storeSettings,
-  onGoHome
+  onGoHome,
+  cartCount = 0,
+  onOpenCart
 }) {
   const whatsappNumber = (storeSettings?.whatsappNumber || '919876543210').replace(/[^0-9]/g, '');
   const farmWhatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    '🌿 Hello Kohinoor Signature Farms! I would like to inquire about today\'s available fresh farm cuts.'
+    'Hello Kohinoor Signature Farms! I would like to inquire about today\'s available fresh farm cuts.'
   )}`;
 
   return (
@@ -55,6 +57,23 @@ export default function Header({
 
           {/* Header Action Buttons */}
           <div className="ksf-header-actions">
+            {/* Basket / Cart Action */}
+            <button
+              type="button"
+              onClick={onOpenCart}
+              className="btn-cart-header"
+              title="View your farm basket"
+              aria-label="View farm basket"
+            >
+              <div className="ksf-header-cart-icon-wrap">
+                <ShoppingBag size={18} />
+                {cartCount > 0 && (
+                  <span className="ksf-header-cart-badge">{cartCount}</span>
+                )}
+              </div>
+              <span className="ksf-header-cart-label">Basket</span>
+            </button>
+
             {/* Direct WhatsApp Action */}
             <a
               href={farmWhatsappUrl}

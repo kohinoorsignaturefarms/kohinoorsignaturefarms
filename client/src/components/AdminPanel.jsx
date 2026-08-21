@@ -16,9 +16,13 @@ import {
   ShieldCheck,
   Sparkles,
   ArrowLeft,
+  ArrowRight,
   Upload,
   RefreshCw,
   Eye,
+  EyeOff,
+  Lock,
+  Home,
   Sliders,
   DollarSign
 } from 'lucide-react';
@@ -36,6 +40,7 @@ export default function AdminPanel({
   );
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [activeTab, setActiveTab] = useState('products'); // 'products', 'settings', 'banners', 'categories', 'stats'
 
   // Data States
@@ -373,101 +378,95 @@ export default function AdminPanel({
   });
 
   // ----------------------------------------------------
-  // RENDER: LOGIN PIN SCREEN
+  // RENDER: LOGIN PIN SCREEN (LUXURY BRANDED AUTH PORTAL)
   // ----------------------------------------------------
   if (!isAuthenticated) {
     return (
-      <div className="ksf-modal-overlay">
-        <div
-          className="ksf-admin-modal-card animate-fade-in"
-          style={{ maxWidth: '400px', width: '92vw', padding: '1.75rem 1.25rem', textAlign: 'center' }}
-        >
-          <img
-            src="/logo.jpeg"
-            alt="Kohinoor Signature Farms"
-            style={{
-              width: '64px',
-              height: '64px',
-              borderRadius: 'var(--radius-md)',
-              margin: '0 auto 1rem',
-              border: '2px solid var(--gold-primary)'
-            }}
-          />
+      <div className="ksf-admin-login-screen">
+        <div className="ksf-admin-login-card animate-fade-in">
+          {/* Brand Logo & Badge */}
+          <div className="ksf-admin-login-logo-wrap">
+            <img
+              src="/logo.jpeg"
+              alt="Kohinoor Signature Farms"
+              className="ksf-admin-login-logo"
+            />
+            <div className="ksf-admin-login-badge">
+              <Lock size={11} />
+              <span>Admin Portal</span>
+            </div>
+          </div>
 
-          <h3
-            style={{
-              fontFamily: 'var(--font-cinzel)',
-              fontSize: '1.2rem',
-              fontWeight: 800,
-              color: 'var(--green-primary)',
-              marginBottom: '0.3rem'
-            }}
-          >
-            Admin Management Portal
-          </h3>
-          <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', marginBottom: '1.25rem' }}>
+          <h2 className="ksf-admin-login-title">
             Kohinoor Signature Farms
+          </h2>
+          <p className="ksf-admin-login-subtitle">
+            Management & Inventory Portal
           </p>
 
-          <form onSubmit={handlePinSubmit}>
-            <div className="ksf-form-group">
-              <input
-                type="password"
-                className="ksf-input"
-                placeholder="Enter Admin Password"
-                value={pinInput}
-                onChange={(e) => setPinInput(e.target.value)}
-                autoFocus
-                style={{ textAlign: 'center', fontSize: '1.1rem', letterSpacing: '0.1em' }}
-              />
+          <form onSubmit={handlePinSubmit} className="ksf-admin-login-form">
+            <div className="ksf-form-group" style={{ textAlign: 'left', marginBottom: '1.15rem' }}>
+              <label className="ksf-form-label" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                <Lock size={13} style={{ color: 'var(--gold-dark)' }} />
+                <span>Security Password</span>
+              </label>
+
+              <div className="ksf-admin-password-wrap">
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  className="ksf-input ksf-admin-password-input"
+                  placeholder="Enter Admin Password"
+                  value={pinInput}
+                  onChange={(e) => {
+                    setPinInput(e.target.value);
+                    if (pinError) setPinError('');
+                  }}
+                  autoFocus
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="ksf-admin-pw-toggle"
+                  title={showPassword ? 'Hide password' : 'Show password'}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
             </div>
 
             {pinError && (
-              <div
-                style={{
-                  color: 'var(--error-red)',
-                  fontSize: '0.8rem',
-                  fontWeight: 600,
-                  marginBottom: '1rem'
-                }}
-              >
-                {pinError}
+              <div className="ksf-admin-login-error animate-fade-in">
+                <AlertCircle size={15} style={{ flexShrink: 0 }} />
+                <span>{pinError}</span>
               </div>
             )}
 
-            <div style={{ display: 'flex', gap: '0.5rem' }}>
+            <div className="ksf-admin-login-actions">
               <button
-                type="button"
-                onClick={onClose}
-                style={{
-                  flex: 1,
-                  padding: '0.65rem',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--bg-subtle)',
-                  color: 'var(--text-dark)',
-                  fontWeight: 600,
-                  fontSize: '0.85rem'
-                }}
+                type="submit"
+                className="btn-admin-login-submit"
               >
-                Cancel
+                <span>Unlock Dashboard</span>
+                <ArrowRight size={16} />
               </button>
 
               <button
-                type="submit"
-                style={{
-                  flex: 1,
-                  padding: '0.65rem',
-                  borderRadius: 'var(--radius-md)',
-                  background: 'var(--green-primary)',
-                  color: '#FFFFFF',
-                  fontWeight: 700,
-                  fontSize: '0.85rem'
-                }}
+                type="button"
+                onClick={onClose}
+                className="btn-admin-login-back"
               >
-                Unlock Dashboard
+                <Home size={15} />
+                <span>Return to Storefront</span>
               </button>
             </div>
           </form>
+
+          {/* Card Footer Note */}
+          <div className="ksf-admin-login-footer">
+            <ShieldCheck size={14} style={{ color: 'var(--green-accent)', flexShrink: 0 }} />
+            <span>Authorized access only • Kohinoor Signature Farms</span>
+          </div>
         </div>
       </div>
     );
@@ -576,45 +575,47 @@ export default function AdminPanel({
 
       {/* Tabs Navigation */}
       <div className="ksf-admin-tab-bar">
-        <button
-          className={`btn-admin-tab ${activeTab === 'products' ? 'active' : ''}`}
-          onClick={() => setActiveTab('products')}
-        >
-          <Package size={15} />
-          <span>Product Catalog ({products.length})</span>
-        </button>
+        <div className="ksf-admin-tab-inner">
+          <button
+            className={`btn-admin-tab ${activeTab === 'products' ? 'active' : ''}`}
+            onClick={() => setActiveTab('products')}
+          >
+            <Package size={15} />
+            <span>Product Catalog ({products.length})</span>
+          </button>
 
-        <button
-          className={`btn-admin-tab ${activeTab === 'settings' ? 'active' : ''}`}
-          onClick={() => setActiveTab('settings')}
-        >
-          <SettingsIcon size={15} />
-          <span>Store & WhatsApp Settings</span>
-        </button>
+          <button
+            className={`btn-admin-tab ${activeTab === 'settings' ? 'active' : ''}`}
+            onClick={() => setActiveTab('settings')}
+          >
+            <SettingsIcon size={15} />
+            <span>Store & WhatsApp Settings</span>
+          </button>
 
-        <button
-          className={`btn-admin-tab ${activeTab === 'banners' ? 'active' : ''}`}
-          onClick={() => setActiveTab('banners')}
-        >
-          <ImageIcon size={15} />
-          <span>Hero Banners ({(settings?.heroBanners || []).length})</span>
-        </button>
+          <button
+            className={`btn-admin-tab ${activeTab === 'banners' ? 'active' : ''}`}
+            onClick={() => setActiveTab('banners')}
+          >
+            <ImageIcon size={15} />
+            <span>Hero Banners ({(settings?.heroBanners || []).length})</span>
+          </button>
 
-        <button
-          className={`btn-admin-tab ${activeTab === 'categories' ? 'active' : ''}`}
-          onClick={() => setActiveTab('categories')}
-        >
-          <Layers size={15} />
-          <span>Categories ({categories.length})</span>
-        </button>
+          <button
+            className={`btn-admin-tab ${activeTab === 'categories' ? 'active' : ''}`}
+            onClick={() => setActiveTab('categories')}
+          >
+            <Layers size={15} />
+            <span>Categories ({categories.length})</span>
+          </button>
 
-        <button
-          className={`btn-admin-tab ${activeTab === 'stats' ? 'active' : ''}`}
-          onClick={() => setActiveTab('stats')}
-        >
-          <TrendingUp size={15} />
-          <span>Farm Metrics</span>
-        </button>
+          <button
+            className={`btn-admin-tab ${activeTab === 'stats' ? 'active' : ''}`}
+            onClick={() => setActiveTab('stats')}
+          >
+            <TrendingUp size={15} />
+            <span>Farm Metrics</span>
+          </button>
+        </div>
       </div>
 
       {/* Main Admin Tab Body */}
@@ -1272,16 +1273,32 @@ export default function AdminPanel({
                     </div>
 
                     <div className="ksf-form-group">
-                      <label className="ksf-form-label">Banner Image URL</label>
+                      <label className="ksf-form-label">Desktop Banner Image URL (Wide Landscape)</label>
                       <input
                         type="text"
                         className="ksf-input"
-                        value={banner.image}
+                        value={banner.image || ''}
                         onChange={(e) => {
                           const copy = [...settings.heroBanners];
                           copy[idx].image = e.target.value;
                           setSettings({ ...settings, heroBanners: copy });
                         }}
+                        placeholder="https://images.unsplash.com/..."
+                      />
+                    </div>
+
+                    <div className="ksf-form-group">
+                      <label className="ksf-form-label">Mobile Banner Image URL (Portrait / Vertical)</label>
+                      <input
+                        type="text"
+                        className="ksf-input"
+                        value={banner.mobileImage || ''}
+                        onChange={(e) => {
+                          const copy = [...settings.heroBanners];
+                          copy[idx].mobileImage = e.target.value;
+                          setSettings({ ...settings, heroBanners: copy });
+                        }}
+                        placeholder="https://images.unsplash.com/... (optional)"
                       />
                     </div>
 
@@ -1578,6 +1595,58 @@ export default function AdminPanel({
                 />
               </div>
 
+              {/* Stock Status Controller Box */}
+              <div className="ksf-admin-stock-control-card">
+                <div className="ksf-admin-stock-control-info">
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                    <span style={{ fontWeight: 800, fontSize: '0.9rem', color: 'var(--green-primary)' }}>
+                      Product Stock & Availability Status
+                    </span>
+                    <span
+                      style={{
+                        padding: '0.15rem 0.55rem',
+                        borderRadius: 'var(--radius-full)',
+                        fontSize: '0.725rem',
+                        fontWeight: 800,
+                        background: editingProduct.inStock !== false ? '#DCFCE7' : '#FEE2E2',
+                        color: editingProduct.inStock !== false ? '#15803D' : '#B91C1C',
+                        border: `1px solid ${editingProduct.inStock !== false ? '#86EFAC' : '#FCA5A5'}`
+                      }}
+                    >
+                      {editingProduct.inStock !== false ? '● In Stock (Live)' : '● Out of Stock (Sold Out)'}
+                    </span>
+                  </div>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.3 }}>
+                    {editingProduct.inStock !== false
+                      ? 'This product is active. Shoppers can view details, select portions, add to basket, and order.'
+                      : 'This product is marked SOLD OUT. It will appear grayed out on the storefront with an "Out of Stock Today" badge.'}
+                  </p>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setEditingProduct({ ...editingProduct, inStock: editingProduct.inStock === false ? true : false })}
+                  className="btn-admin-stock-switch"
+                  style={{
+                    background: editingProduct.inStock !== false ? '#DCFCE7' : '#FEE2E2',
+                    color: editingProduct.inStock !== false ? '#15803D' : '#B91C1C',
+                    borderColor: editingProduct.inStock !== false ? '#86EFAC' : '#FCA5A5'
+                  }}
+                >
+                  {editingProduct.inStock !== false ? (
+                    <>
+                      <Check size={16} />
+                      <span>Change to Out of Stock</span>
+                    </>
+                  ) : (
+                    <>
+                      <RefreshCw size={16} />
+                      <span>Restore to In Stock</span>
+                    </>
+                  )}
+                </button>
+              </div>
+
               {/* Regulatory & Hygiene Details (FSSAI, Expiry, Storage, Feed) */}
               <div style={{ background: 'var(--bg-subtle)', padding: '1rem', borderRadius: 'var(--radius-lg)', margin: '1rem 0', border: '1px solid var(--border-light)', width: '100%', boxSizing: 'border-box' }}>
                 <h4 style={{ fontFamily: 'var(--font-cinzel)', fontSize: '0.85rem', fontWeight: 800, color: 'var(--green-primary)', marginBottom: '0.75rem' }}>
@@ -1755,19 +1824,40 @@ export default function AdminPanel({
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.4rem', borderTop: '1px solid var(--border-light)', paddingTop: '0.4rem' }}>
-                          <span
-                            style={{
-                              display: 'inline-block',
-                              background: discount > 0 ? 'var(--discount-bg)' : '#F1F5F9',
-                              color: discount > 0 ? 'var(--discount-text)' : '#64748B',
-                              fontSize: '0.725rem',
-                              fontWeight: 800,
-                              padding: '0.2rem 0.5rem',
-                              borderRadius: 'var(--radius-sm)'
-                            }}
-                          >
-                            {discount > 0 ? `${discount}% OFF (Save ₹${savings})` : 'No Discount'}
-                          </span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', flexWrap: 'wrap' }}>
+                            <span
+                              style={{
+                                display: 'inline-block',
+                                background: discount > 0 ? 'var(--discount-bg)' : '#F1F5F9',
+                                color: discount > 0 ? 'var(--discount-text)' : '#64748B',
+                                fontSize: '0.725rem',
+                                fontWeight: 800,
+                                padding: '0.2rem 0.5rem',
+                                borderRadius: 'var(--radius-sm)'
+                              }}
+                            >
+                              {discount > 0 ? `${discount}% OFF (Save ₹${savings})` : 'No Discount'}
+                            </span>
+
+                            {/* Portion Stock Toggle Button */}
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateVariant(vIdx, 'inStock', v.inStock === false ? true : false)}
+                              style={{
+                                padding: '0.2rem 0.5rem',
+                                borderRadius: 'var(--radius-sm)',
+                                fontSize: '0.725rem',
+                                fontWeight: 700,
+                                background: v.inStock !== false ? '#DCFCE7' : '#FEE2E2',
+                                color: v.inStock !== false ? '#15803D' : '#B91C1C',
+                                border: `1px solid ${v.inStock !== false ? '#86EFAC' : '#FCA5A5'}`,
+                                cursor: 'pointer'
+                              }}
+                              title="Toggle portion stock availability"
+                            >
+                              {v.inStock !== false ? '● In Stock' : '● Sold Out'}
+                            </button>
+                          </div>
 
                           <button
                             type="button"

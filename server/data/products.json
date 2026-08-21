@@ -15,10 +15,14 @@
     "culinaryUses": "Perfect for traditional Hyderabadi Mutton Curry, Dalcha, Rogan Josh, and slow-braised curries.",
     "piecesEstimate": "16 to 20 tender pieces per kg",
     "images": [
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Best Seller", "Grass Fed", "100% Halal"],
+    "badges": [
+      "Best Seller",
+      "Grass Fed",
+      "100% Halal"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -69,10 +73,14 @@
     "culinaryUses": "Formulated specifically for Authentic Hyderabadi Dum Biryani, Mandi, and Pulao.",
     "piecesEstimate": "10 to 14 large biryani cuts per kg",
     "images": [
-      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Chef's Pick", "Dum Biryani Special", "100% Halal"],
+    "badges": [
+      "Chef's Pick",
+      "Dum Biryani Special",
+      "100% Halal"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -124,9 +132,13 @@
     "piecesEstimate": "100% edible meat, 25-30 bite sized chunks per 500g",
     "images": [
       "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["100% Edible", "High Protein", "100% Halal"],
+    "badges": [
+      "100% Edible",
+      "High Protein",
+      "100% Halal"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -167,9 +179,14 @@
     "culinaryUses": "Shami Kebabs, Keema Pav, Seekh Kebabs, and Keema Matar.",
     "piecesEstimate": "Double ground fine keema mince",
     "images": [
-      "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Fresh Ground", "Juicy & Tender", "100% Halal"],
+    "badges": [
+      "Fresh Ground",
+      "Juicy & Tender",
+      "100% Halal"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -210,9 +227,14 @@
     "culinaryUses": "Mutton Chaap Fry, Tandoori Chops, Grilled Ribs, and Shahi Korma.",
     "piecesEstimate": "8 - 10 rib chops per 500g",
     "images": [
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Gourmet Cut", "Grass Fed", "100% Halal"],
+    "badges": [
+      "Gourmet Cut",
+      "Grass Fed",
+      "100% Halal"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -253,9 +275,14 @@
     "culinaryUses": "Authentic Hyderabadi Mutton Paya Shorba, Nihari, and bone marrow broth.",
     "piecesEstimate": "Set of 4 trotters (cut into 8-12 pieces)",
     "images": [
+      "https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Flame Scorched", "Collagen Rich", "100% Halal"],
+    "badges": [
+      "Flame Scorched",
+      "Collagen Rich",
+      "100% Halal"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -297,9 +324,13 @@
     "piecesEstimate": "14 to 18 curry cut pieces per kg",
     "images": [
       "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["100% Desi Natukodi", "Free-Range", "Zero Antibiotics"],
+    "badges": [
+      "100% Desi Natukodi",
+      "Free-Range",
+      "Zero Antibiotics"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -351,9 +382,13 @@
     "piecesEstimate": "14 to 16 neat pieces per kg",
     "images": [
       "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Daily Fresh Cut", "100% Halal", "Antibiotic-Free"],
+    "badges": [
+      "Daily Fresh Cut",
+      "100% Halal",
+      "Antibiotic-Free"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -404,9 +439,14 @@
     "culinaryUses": "Grilled Chicken, Pasta, Tikka, Meal Prep, and Crispy Chicken Strips.",
     "piecesEstimate": "2 to 4 whole prime fillets per 500g",
     "images": [
-      "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Gym & Keto Choice", "High Protein", "100% Halal"],
+    "badges": [
+      "Gym & Keto Choice",
+      "High Protein",
+      "100% Halal"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -447,9 +487,14 @@
     "culinaryUses": "Tangdi Kebab, Fried Chicken, Tandoori Chicken, and Drumstick Masala.",
     "piecesEstimate": "5 to 6 juicy drumsticks per 500g",
     "images": [
+      "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Party Favorite", "Juicy Meat", "100% Halal"],
+    "badges": [
+      "Party Favorite",
+      "Juicy Meat",
+      "100% Halal"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -490,10 +535,14 @@
     "culinaryUses": "Half-boiled, sunny side up, poached eggs, egg bhurji, and baking.",
     "piecesEstimate": "Graded medium-to-large desi eggs",
     "images": [
-      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1590559832921-995275586619?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Golden Yolk", "Omega-3 Rich", "Free-Range"],
+    "badges": [
+      "Golden Yolk",
+      "Omega-3 Rich",
+      "Free-Range"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -544,9 +593,14 @@
     "culinaryUses": "Boiled eggs, omelettes, nutritious breakfast tonic bowls.",
     "piecesEstimate": "Rare heritage brown-tinted eggs",
     "images": [
-      "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Superfood", "High Iron & Low Fat", "Ayurvedic Heritage"],
+    "badges": [
+      "Superfood",
+      "High Iron & Low Fat",
+      "Ayurvedic Heritage"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -587,9 +641,14 @@
     "culinaryUses": "Baking cakes, daily omelettes, French toast, scrambled eggs.",
     "piecesEstimate": "Graded table eggs",
     "images": [
+      "https://images.unsplash.com/photo-1616852924107-1647e3351d3b?auto=format&fit=crop&w=900&q=80",
       "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Daily Breakfast Staple", "Farm Fresh", "Hygienic"],
+    "badges": [
+      "Daily Breakfast Staple",
+      "Farm Fresh",
+      "Hygienic"
+    ],
     "inStock": true,
     "variants": [
       {
@@ -640,10 +699,14 @@
     "culinaryUses": "Weekend Family Biryani, Sunday Feast curries, and gatherings.",
     "piecesEstimate": "1 kg Goat Cut + 1 kg Country Chicken Cut",
     "images": [
-      "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
     ],
-    "badges": ["Mega Saver", "Weekend Special", "100% Halal"],
+    "badges": [
+      "Mega Saver",
+      "Weekend Special",
+      "100% Halal"
+    ],
     "inStock": true,
     "variants": [
       {

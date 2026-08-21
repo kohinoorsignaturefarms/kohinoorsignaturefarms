@@ -12,13 +12,25 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-const DATA_DIR = path.join(__dirname, 'data');
+// Data and Public directories with serverless resilience
+let DATA_DIR = path.join(__dirname, 'data');
+if (!fs.existsSync(DATA_DIR)) {
+  const cwdData = path.join(process.cwd(), 'server', 'data');
+  if (fs.existsSync(cwdData)) {
+    DATA_DIR = cwdData;
+  }
+}
+
 const PUBLIC_DIR = path.join(__dirname, 'public');
 const UPLOADS_DIR = path.join(PUBLIC_DIR, 'uploads');
 
-// Ensure directories exist
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+// Ensure directories exist safely (without crashing on read-only serverless filesystems)
+try {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+  if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+} catch (e) {
+  // Ignored in read-only serverless environment
+}
 
 // Copy official logo from root if not already present
 const rootLogoPath = path.join(__dirname, '..', 'WhatsApp Image 2026-08-13 at 18.16.46.jpeg');
@@ -27,7 +39,7 @@ if (fs.existsSync(rootLogoPath) && !fs.existsSync(publicLogoPath)) {
   try {
     fs.copyFileSync(rootLogoPath, publicLogoPath);
   } catch (e) {
-    console.error('Error copying logo:', e);
+    // ignore
   }
 }
 
@@ -56,9 +68,9 @@ app.use('/uploads', express.static(UPLOADS_DIR));
 
 // Helper functions for reading & writing JSON
 const readData = (filename) => {
-  const filePath = path.join(DATA_DIR, filename);
-  if (!fs.existsSync(filePath)) return null;
   try {
+    const filePath = path.join(DATA_DIR, filename);
+    if (!fs.existsSync(filePath)) return null;
     const raw = fs.readFileSync(filePath, 'utf-8');
     return JSON.parse(raw);
   } catch (err) {
@@ -68,14 +80,93 @@ const readData = (filename) => {
 };
 
 const writeData = (filename, data) => {
-  const filePath = path.join(DATA_DIR, filename);
   try {
+    const filePath = path.join(DATA_DIR, filename);
     fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
     return true;
   } catch (err) {
-    console.error(`Error writing ${filename}:`, err);
-    return false;
+    console.warn(`Note: File persistence skipped on read-only serverless environment for ${filename}:`, err.message);
+    return true;
   }
+};
+
+import { createClient } from '@supabase/supabase-js';
+
+// Supabase Cloud Configuration
+const supabaseUrl = process.env.SUPABASE_URL || 'https://ifhjqtysuyhgpqjwxudf.supabase.co';
+const supabaseKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || 'sb_publishable_pkSzcrZ1o0f3tYPqEhkUnA_3jIIKvUc';
+
+let supabase = null;
+if (supabaseUrl && supabaseKey) {
+  try {
+    supabase = createClient(supabaseUrl, supabaseKey);
+    console.log('⚡ Connected to Supabase Cloud Database');
+  } catch (e) {
+    console.warn('⚠️ Could not initialize Supabase client:', e.message);
+  }
+}
+
+// In-memory cache for ultra-fast response times (<1ms)
+const memoryCache = new Map();
+
+// Helper functions for reading & writing JSON with Supabase Cloud Sync
+const getStoreData = async (key) => {
+  if (memoryCache.has(key)) {
+    return memoryCache.get(key);
+  }
+
+  // 1. Query Supabase
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('ksf_store')
+        .select('data')
+        .eq('key', key)
+        .single();
+
+      if (!error && data && data.data) {
+        memoryCache.set(key, data.data);
+        return data.data;
+      }
+    } catch (err) {
+      // Graceful fallback to local JSON
+    }
+  }
+
+  // 2. Fallback to local JSON file
+  const localData = readData(`${key}.json`);
+  if (localData !== null) {
+    memoryCache.set(key, localData);
+    if (supabase) {
+      supabase
+        .from('ksf_store')
+        .upsert({ key, data: localData, updated_at: new Date().toISOString() })
+        .then(
+          () => {},
+          (err) => {}
+        );
+    }
+  }
+  return localData;
+};
+
+const setStoreData = async (key, data) => {
+  memoryCache.set(key, data);
+  writeData(`${key}.json`, data);
+
+  if (supabase) {
+    try {
+      const res = await supabase
+        .from('ksf_store')
+        .upsert({ key, data, updated_at: new Date().toISOString() });
+      if (res?.error) {
+        console.warn(`Supabase upsert note for ${key}:`, res.error.message);
+      }
+    } catch (err) {
+      console.warn(`Supabase sync note for ${key}:`, err.message);
+    }
+  }
+  return true;
 };
 
 // ------------------------------------
@@ -83,27 +174,27 @@ const writeData = (filename, data) => {
 // ------------------------------------
 
 // 1. SETTINGS API
-app.get('/api/settings', (req, res) => {
-  const settings = readData('settings.json') || {};
+app.get('/api/settings', async (req, res) => {
+  const settings = (await getStoreData('settings')) || {};
   // Don't expose plain admin PIN directly in public response, send hasPin boolean or pin in admin mode
   const { adminPin, ...safeSettings } = settings;
   res.json({ ...safeSettings, hasCustomPin: Boolean(adminPin) });
 });
 
-app.put('/api/settings', (req, res) => {
-  const currentSettings = readData('settings.json') || {};
+app.put('/api/settings', async (req, res) => {
+  const currentSettings = (await getStoreData('settings')) || {};
   const updatedSettings = {
     ...currentSettings,
     ...req.body
   };
-  writeData('settings.json', updatedSettings);
+  await setStoreData('settings', updatedSettings);
   res.json({ success: true, message: 'Settings updated successfully', settings: updatedSettings });
 });
 
 // Verify Admin PIN
-app.post('/api/auth/verify-pin', (req, res) => {
+app.post('/api/auth/verify-pin', async (req, res) => {
   const { pin } = req.body;
-  const settings = readData('settings.json') || {};
+  const settings = (await getStoreData('settings')) || {};
   const expectedPin = settings.adminPin || 'goateggs';
   if (pin === expectedPin) {
     res.json({ success: true, token: 'ksf-admin-auth-token-' + Date.now() });
@@ -113,13 +204,13 @@ app.post('/api/auth/verify-pin', (req, res) => {
 });
 
 // 2. CATEGORIES API
-app.get('/api/categories', (req, res) => {
-  const categories = readData('categories.json') || [];
+app.get('/api/categories', async (req, res) => {
+  const categories = (await getStoreData('categories')) || [];
   res.json(categories);
 });
 
-app.post('/api/categories', (req, res) => {
-  const categories = readData('categories.json') || [];
+app.post('/api/categories', async (req, res) => {
+  const categories = (await getStoreData('categories')) || [];
   const newCat = {
     id: req.body.id || 'cat-' + Date.now(),
     slug: req.body.slug || req.body.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
@@ -139,21 +230,21 @@ app.post('/api/categories', (req, res) => {
     categories.push(newCat);
   }
 
-  writeData('categories.json', categories);
+  await setStoreData('categories', categories);
   res.json({ success: true, category: newCat });
 });
 
-app.delete('/api/categories/:id', (req, res) => {
+app.delete('/api/categories/:id', async (req, res) => {
   const { id } = req.params;
-  let categories = readData('categories.json') || [];
+  let categories = (await getStoreData('categories')) || [];
   categories = categories.filter((c) => c.id !== id && c.slug !== id);
-  writeData('categories.json', categories);
+  await setStoreData('categories', categories);
   res.json({ success: true, message: 'Category deleted' });
 });
 
 // 3. PRODUCTS API
-app.get('/api/products', (req, res) => {
-  let products = readData('products.json') || [];
+app.get('/api/products', async (req, res) => {
+  let products = (await getStoreData('products')) || [];
   const { category, search, inStock, badge } = req.query;
 
   if (category && category !== 'all') {
@@ -182,9 +273,9 @@ app.get('/api/products', (req, res) => {
   res.json(products);
 });
 
-app.get('/api/products/:id', (req, res) => {
+app.get('/api/products/:id', async (req, res) => {
   const { id } = req.params;
-  const products = readData('products.json') || [];
+  const products = (await getStoreData('products')) || [];
   const product = products.find((p) => p.id === id || p.slug === id);
 
   if (!product) {
@@ -194,9 +285,9 @@ app.get('/api/products/:id', (req, res) => {
   res.json(product);
 });
 
-app.post('/api/products', (req, res) => {
-  const products = readData('products.json') || [];
-  const settings = readData('settings.json') || {};
+app.post('/api/products', async (req, res) => {
+  const products = (await getStoreData('products')) || [];
+  const settings = (await getStoreData('settings')) || {};
 
   const name = req.body.name || 'New Fresh Cut';
   const slug = req.body.slug || name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') + '-' + Date.now();
@@ -239,14 +330,14 @@ app.post('/api/products', (req, res) => {
   };
 
   products.unshift(newProduct);
-  writeData('products.json', products);
+  await setStoreData('products', products);
 
   res.status(201).json({ success: true, message: 'Product created successfully', product: newProduct });
 });
 
-app.put('/api/products/:id', (req, res) => {
+app.put('/api/products/:id', async (req, res) => {
   const { id } = req.params;
-  const products = readData('products.json') || [];
+  const products = (await getStoreData('products')) || [];
   const index = products.findIndex((p) => p.id === id || p.slug === id);
 
   if (index === -1) {
@@ -260,14 +351,14 @@ app.put('/api/products/:id', (req, res) => {
   };
 
   products[index] = updatedProduct;
-  writeData('products.json', products);
+  await setStoreData('products', products);
 
   res.json({ success: true, message: 'Product updated successfully', product: updatedProduct });
 });
 
-app.delete('/api/products/:id', (req, res) => {
+app.delete('/api/products/:id', async (req, res) => {
   const { id } = req.params;
-  let products = readData('products.json') || [];
+  let products = (await getStoreData('products')) || [];
   const originalLength = products.length;
 
   products = products.filter((p) => p.id !== id && p.slug !== id);
@@ -276,7 +367,7 @@ app.delete('/api/products/:id', (req, res) => {
     return res.status(404).json({ error: 'Product not found' });
   }
 
-  writeData('products.json', products);
+  await setStoreData('products', products);
   res.json({ success: true, message: 'Product deleted successfully' });
 });
 
@@ -290,10 +381,10 @@ app.post('/api/upload', upload.single('image'), (req, res) => {
 });
 
 // 5. ADMIN STATS & OVERVIEW API
-app.get('/api/stats', (req, res) => {
-  const products = readData('products.json') || [];
-  const categories = readData('categories.json') || [];
-  const settings = readData('settings.json') || {};
+app.get('/api/stats', async (req, res) => {
+  const products = (await getStoreData('products')) || [];
+  const categories = (await getStoreData('categories')) || [];
+  const settings = (await getStoreData('settings')) || {};
 
   const totalProducts = products.length;
   const inStockCount = products.filter((p) => p.inStock !== false).length;
@@ -304,7 +395,6 @@ app.get('/api/stats', (req, res) => {
     categoryBreakdown[cat.id] = products.filter((p) => p.category === cat.id).length;
   });
 
-  // Calculate average discount percentage
   let totalDiscounts = 0;
   let variantCount = 0;
   products.forEach((p) => {
@@ -330,6 +420,22 @@ app.get('/api/stats', (req, res) => {
   });
 });
 
+// 6. STORE RESET / RESTORE DEFAULTS API
+app.post('/api/store/reset-defaults', async (req, res) => {
+  memoryCache.clear();
+  const defaultProducts = readData('products.json');
+  const defaultSettings = readData('settings.json');
+  const defaultCategories = readData('categories.json');
+
+  if (supabase) {
+    if (defaultProducts) await supabase.from('ksf_store').upsert({ key: 'products', data: defaultProducts, updated_at: new Date().toISOString() });
+    if (defaultSettings) await supabase.from('ksf_store').upsert({ key: 'settings', data: defaultSettings, updated_at: new Date().toISOString() });
+    if (defaultCategories) await supabase.from('ksf_store').upsert({ key: 'categories', data: defaultCategories, updated_at: new Date().toISOString() });
+  }
+
+  res.json({ success: true, message: 'Store reset to default catalog successfully' });
+});
+
 // Root / health
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString(), brand: 'Kohinoor Signature Farms' });
@@ -341,10 +447,10 @@ if (fs.existsSync(CLIENT_DIST)) {
   app.use(express.static(CLIENT_DIST));
 
   // Dynamic SEO & Open Graph handler for product share links
-  app.get(['/product/:id', '/p/:id'], (req, res) => {
+  app.get(['/product/:id', '/p/:id'], async (req, res) => {
     const { id } = req.params;
-    const products = readData('products.json') || [];
-    const settings = readData('settings.json') || {};
+    const products = (await getStoreData('products')) || [];
+    const settings = (await getStoreData('settings')) || {};
     const product = products.find((p) => p.id === id || p.slug === id);
 
     const indexPath = path.join(CLIENT_DIST, 'index.html');
@@ -443,7 +549,14 @@ if (fs.existsSync(CLIENT_DIST)) {
   });
 }
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Kohinoor Signature Farms API Server running on port ${PORT}`);
-});
+// Start server only when running standalone server process (not when imported as a serverless function)
+const isVercel = Boolean(process.env.VERCEL || process.env.NOW_REGION);
+const isDirectExecution = process.argv[1] && path.resolve(process.argv[1]) === path.resolve(__filename);
+
+if (!isVercel && process.env.NODE_ENV !== 'test' && isDirectExecution) {
+  app.listen(PORT, () => {
+    console.log(`Kohinoor Signature Farms API Server running on port ${PORT}`);
+  });
+}
+
+export default app;

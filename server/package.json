@@ -9,6 +9,8 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.112.3",
+    "@upstash/redis": "^1.38.2",
     "cors": "^2.8.5",
     "express": "^4.21.2",
     "morgan": "^1.10.0",

@@ -159,16 +159,58 @@ export const buildWhatsAppUrl = (whatsappNumber, product, variant, storeSettings
       .replace(/{fssai_no}/g, fssaiNo)
       .replace(/{product_url}/g, currentUrl);
   } else {
-    message = `🌱 *Order Enquiry - Kohinoor Signature Farms*\n` +
-      `────────────────────────\n` +
-      `🥩 *Item:* ${product.name}\n` +
-      `⚖️ *Weight / Size:* ${variant?.label || variant?.weight || '1 kg'}\n` +
-      `💰 *Price:* ₹${selling} (MRP: ~₹${mrp}~ | *${discountPercent}% OFF*)\n` +
-      `🏷️ *FSSAI Lic:* ${fssaiNo}\n` +
-      `🔗 *Link:* ${currentUrl}\n` +
-      `────────────────────────\n` +
-      `Hello Kohinoor Farms! I would like to order this fresh farm cut. Please confirm availability and delivery slot.`;
+    message = `*ORDER ENQUIRY - KOHINOOR SIGNATURE FARMS*\n` +
+      `----------------------------------------\n` +
+      `* Item: ${product.name}\n` +
+      `* Weight / Size: ${variant?.label || variant?.weight || '1 kg'}\n` +
+      `* Price: Rs. ${selling} (MRP: Rs. ${mrp} | ${discountPercent}% OFF)\n` +
+      `* Product Link: ${currentUrl}\n` +
+      `----------------------------------------\n` +
+      `Hello Kohinoor Farms team! I would like to place an order for this fresh item. Please confirm availability and delivery slot.`;
   }
 
   return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
 };
+
+// Helper to build multi-item WhatsApp direct link from Cart
+export const buildCartWhatsAppUrl = (whatsappNumber, cartItems, storeSettings) => {
+  const cleanNumber = (whatsappNumber || storeSettings?.whatsappNumber || '919876543210')
+    .replace(/[^0-9]/g, '');
+
+  if (!cartItems || cartItems.length === 0) {
+    return `https://wa.me/${cleanNumber}`;
+  }
+
+  const totalItemsCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const totalSelling = cartItems.reduce((sum, item) => sum + (item.sellingPrice * (item.quantity || 1)), 0);
+  const totalMrp = cartItems.reduce((sum, item) => sum + ((item.mrp || item.sellingPrice) * (item.quantity || 1)), 0);
+  const totalSavings = Math.max(0, totalMrp - totalSelling);
+
+  let itemsListText = '';
+  cartItems.forEach((item, index) => {
+    const itemSubtotal = item.sellingPrice * item.quantity;
+    const itemMrpSubtotal = (item.mrp || item.sellingPrice) * item.quantity;
+    const itemSavings = Math.max(0, itemMrpSubtotal - itemSubtotal);
+    const weightLabel = item.variantLabel || item.weight || 'Standard Cut';
+    const netWeightInfo = item.netWeight ? ` (Net: ${item.netWeight})` : '';
+
+    itemsListText += `${index + 1}. *${item.name}*\n` +
+      `   - Size: ${weightLabel}${netWeightInfo}\n` +
+      `   - Qty: ${item.quantity} x Rs. ${item.sellingPrice} = *Rs. ${itemSubtotal.toLocaleString('en-IN')}*` +
+      (itemSavings > 0 ? ` (Saved Rs. ${itemSavings.toLocaleString('en-IN')})` : '') +
+      `\n\n`;
+  });
+
+  const message = `*NEW FARM ORDER - KOHINOOR SIGNATURE FARMS*\n` +
+    `----------------------------------------\n` +
+    `*ORDER SUMMARY (${totalItemsCount} ${totalItemsCount === 1 ? 'Item' : 'Items'}):*\n\n` +
+    itemsListText +
+    `----------------------------------------\n` +
+    `* Total Bill: *Rs. ${totalSelling.toLocaleString('en-IN')}*\n` +
+    (totalSavings > 0 ? `* Total Savings: *Rs. ${totalSavings.toLocaleString('en-IN')}*\n` : '') +
+    `----------------------------------------\n` +
+    `Hello Kohinoor Farms team! Please confirm availability for my basket and dispatch slot.`;
+
+  return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
+};
+

@@ -6,11 +6,12 @@ import CategoryBoxes from './components/CategoryBoxes';
 import CategoryFilterBar from './components/CategoryFilterBar';
 import ProductCard from './components/ProductCard';
 import ProductDetailPage from './components/ProductDetailPage';
+import CartDrawer from './components/CartDrawer';
 import WhyChooseUs from './components/WhyChooseUs';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
-import { api } from './api';
-import { Sparkles, MessageCircle, AlertCircle, RefreshCw, Settings, ShieldCheck } from 'lucide-react';
+import { api, formatCurrency } from './api';
+import { Sparkles, MessageCircle, AlertCircle, RefreshCw, Settings, ShieldCheck, ShoppingBag, ArrowRight } from 'lucide-react';
 
 export default function App() {
   const [products, setProducts] = useState([]);
@@ -18,6 +19,88 @@ export default function App() {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Cart State (Persisted in localStorage)
+  const [cartItems, setCartItems] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ksf_cart');
+      return saved ? JSON.parse(saved) : [];
+    } catch (e) {
+      return [];
+    }
+  });
+
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('ksf_cart', JSON.stringify(cartItems));
+    } catch (e) {
+      // ignore
+    }
+  }, [cartItems]);
+
+  // Cart Handlers
+  const handleAddToCart = (product, variant, quantity = 1) => {
+    setCartItems((prev) => {
+      const existingIdx = prev.findIndex(
+        (item) => item.productId === product.id && item.variantId === variant.id
+      );
+      if (existingIdx >= 0) {
+        const updated = [...prev];
+        updated[existingIdx] = {
+          ...updated[existingIdx],
+          quantity: updated[existingIdx].quantity + quantity
+        };
+        return updated;
+      } else {
+        const newItem = {
+          productId: product.id,
+          variantId: variant.id,
+          name: product.name,
+          image: product.images?.[0] || '',
+          category: product.category,
+          variantLabel: variant.label || variant.weight || 'Standard Cut',
+          weight: variant.weight || '',
+          netWeight: variant.netWeight || '',
+          mrp: Number(variant.mrp) || Number(variant.sellingPrice) || 0,
+          sellingPrice: Number(variant.sellingPrice) || 0,
+          quantity: quantity,
+          fssaiNumber: product.fssaiNumber || settings?.masterFssai || ''
+        };
+        return [...prev, newItem];
+      }
+    });
+  };
+
+  const handleUpdateCartQuantity = (productId, variantId, newQuantity) => {
+    if (newQuantity <= 0) {
+      handleRemoveCartItem(productId, variantId);
+      return;
+    }
+    setCartItems((prev) =>
+      prev.map((item) =>
+        item.productId === productId && item.variantId === variantId
+          ? { ...item, quantity: newQuantity }
+          : item
+      )
+    );
+  };
+
+  const handleRemoveCartItem = (productId, variantId) => {
+    setCartItems((prev) =>
+      prev.filter(
+        (item) => !(item.productId === productId && item.variantId === variantId)
+      )
+    );
+  };
+
+  const handleClearCart = () => {
+    setCartItems([]);
+  };
+
+  const totalCartCount = cartItems.reduce((sum, item) => sum + (item.quantity || 1), 0);
+  const totalCartPrice = cartItems.reduce((sum, item) => sum + (item.sellingPrice * (item.quantity || 1)), 0);
 
   // Filter & Search states
   const [activeCategory, setActiveCategory] = useState('all');
@@ -190,6 +273,8 @@ export default function App() {
         setSearchTerm={setSearchTerm}
         storeSettings={settings}
         onGoHome={handleGoHome}
+        cartCount={totalCartCount}
+        onOpenCart={() => setIsCartOpen(true)}
       />
 
       {/* Hero Banner Slider */}
@@ -278,24 +363,23 @@ export default function App() {
           )}
 
           {/* Error State */}
-          {error && !loading && (
+          {error && (
             <div
               style={{
                 background: '#FEF2F2',
-                border: '1px solid #FECACA',
-                color: 'var(--error-red)',
-                padding: '1.5rem',
+                border: '1px solid #FCA5A5',
                 borderRadius: 'var(--radius-lg)',
+                padding: '1.5rem',
                 textAlign: 'center',
+                color: 'var(--error-red)',
                 margin: '2rem 0'
               }}
             >
-              <AlertCircle size={24} style={{ margin: '0 auto 0.5rem' }} />
-              <div style={{ fontWeight: 700 }}>{error}</div>
+              <AlertCircle size={28} style={{ margin: '0 auto 0.5rem' }} />
+              <div style={{ fontWeight: 700, marginBottom: '0.5rem' }}>{error}</div>
               <button
                 onClick={fetchData}
                 style={{
-                  marginTop: '0.75rem',
                   background: 'var(--green-primary)',
                   color: '#FFFFFF',
                   padding: '0.5rem 1rem',
@@ -318,6 +402,9 @@ export default function App() {
                   product={product}
                   storeSettings={settings}
                   onOpenDetail={handleOpenDetail}
+                  onAddToCart={handleAddToCart}
+                  onUpdateQuantity={handleUpdateCartQuantity}
+                  cartItems={cartItems}
                 />
               ))}
 
@@ -393,25 +480,61 @@ export default function App() {
           product={selectedProduct}
           storeSettings={settings}
           onClose={handleCloseDetail}
+          onAddToCart={handleAddToCart}
+          onOpenCart={() => setIsCartOpen(true)}
+          cartItems={cartItems}
         />
       )}
 
-      {/* Mobile Floating Action Buttons: WhatsApp */}
+      {/* Cart Drawer Modal */}
+      <CartDrawer
+        isOpen={isCartOpen}
+        onClose={() => setIsCartOpen(false)}
+        cartItems={cartItems}
+        onUpdateQuantity={handleUpdateCartQuantity}
+        onRemoveItem={handleRemoveCartItem}
+        onClearCart={handleClearCart}
+        storeSettings={settings}
+        onExploreCuts={() => {
+          const el = document.getElementById('products-section');
+          if (el) el.scrollIntoView({ behavior: 'smooth' });
+        }}
+      />
+
+      {/* Mobile Floating Sticky Cart Bar (Shown when items in cart) */}
+      {totalCartCount > 0 && !isCartOpen && (
+        <div
+          className="ksf-mobile-floating-cart-bar animate-fade-in"
+          onClick={() => setIsCartOpen(true)}
+        >
+          <div className="ksf-floating-cart-info">
+            <div className="ksf-floating-cart-icon-box">
+              <ShoppingBag size={20} />
+              <span className="ksf-floating-cart-badge">{totalCartCount}</span>
+            </div>
+            <div>
+              <div className="ksf-floating-cart-price">{formatCurrency(totalCartPrice)}</div>
+              <div className="ksf-floating-cart-sub">{totalCartCount} {totalCartCount === 1 ? 'Cut' : 'Cuts'} in Basket</div>
+            </div>
+          </div>
+
+          <div className="ksf-floating-cart-action">
+            <span>View Basket</span>
+            <ArrowRight size={16} />
+          </div>
+        </div>
+      )}
+
+      {/* Mobile Floating Action Buttons: WhatsApp (positioned above floating cart if cart active) */}
       <div
+        className="ksf-floating-wa-wrapper"
         style={{
-          position: 'fixed',
-          bottom: '1.25rem',
-          right: '1.25rem',
-          zIndex: 95,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-end',
-          gap: '0.6rem'
+          bottom: totalCartCount > 0 ? '5.2rem' : '1.25rem'
         }}
       >
         <a
           href={`https://wa.me/${(settings?.whatsappNumber || '919876543210').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-            '🌱 Hello Kohinoor Signature Farms! I would like to inquire about today\'s available fresh farm cuts.'
+            'Hello Kohinoor Signature Farms! I would like to inquire about today\'s available fresh farm cuts.'
           )}`}
           target="_blank"
           rel="noopener noreferrer"

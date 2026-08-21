@@ -9,11 +9,22 @@ import {
   ChefHat,
   Sparkles,
   Share2,
-  CheckCircle2
+  CheckCircle2,
+  ShoppingBag,
+  Plus,
+  Minus,
+  Check
 } from 'lucide-react';
 import { formatCurrency, buildWhatsAppUrl } from '../api';
 
-export default function ProductDetailPage({ product, storeSettings, onClose }) {
+export default function ProductDetailPage({
+  product,
+  storeSettings,
+  onClose,
+  onAddToCart,
+  onOpenCart,
+  cartItems = []
+}) {
   if (!product) return null;
 
   const variants = product.variants && product.variants.length > 0
@@ -34,6 +45,8 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
   const [selectedVariantId, setSelectedVariantId] = useState(defaultVar?.id);
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const [copiedLink, setCopiedLink] = useState(false);
+  const [qty, setQty] = useState(1);
+  const [addedAnimation, setAddedAnimation] = useState(false);
 
   const activeVariant = variants.find((v) => v.id === selectedVariantId) || variants[0];
 
@@ -41,7 +54,8 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
   const selling = activeVariant?.sellingPrice || 0;
   const discountAmount = Math.max(0, mrp - selling);
   const discountPercent = mrp > 0 ? Math.round((discountAmount / mrp) * 100) : 0;
-  const isOutOfStock = product.inStock === false || activeVariant?.inStock === false;
+  const isProductOutOfStock = product.inStock === false || (variants.length > 0 && variants.every((v) => v.inStock === false));
+  const isOutOfStock = isProductOutOfStock || activeVariant?.inStock === false;
 
   const whatsappUrl = buildWhatsAppUrl(
     storeSettings?.whatsappNumber,
@@ -106,11 +120,22 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
           {/* Left Column: Fixed / Sticky on Desktop */}
           <div className="ksf-detail-left-pane">
             <div className="ksf-detail-gallery">
-              <img
-                src={images[activeImageIdx] || images[0]}
-                alt={product.name}
-                className="ksf-detail-main-img"
-              />
+              <div style={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: 'var(--radius-lg)' }}>
+                <img
+                  src={images[activeImageIdx] || images[0]}
+                  alt={product.name}
+                  className="ksf-detail-main-img"
+                  style={{
+                    filter: isOutOfStock ? 'grayscale(15%)' : 'none'
+                  }}
+                />
+
+                {isOutOfStock && (
+                  <div className="ksf-detail-out-of-stock-overlay">
+                    <span>OUT OF STOCK TODAY</span>
+                  </div>
+                )}
+              </div>
 
               {images.length > 1 && (
                 <div style={{ display: 'flex', gap: '0.45rem', overflowX: 'auto', paddingBottom: '0.2rem' }}>
@@ -125,10 +150,9 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
                         height: '56px',
                         borderRadius: 'var(--radius-md)',
                         objectFit: 'cover',
-                        cursor: 'pointer',
-                        flexShrink: 0,
                         border: idx === activeImageIdx ? '2px solid var(--gold-primary)' : '1px solid var(--border-light)',
-                        transition: 'all 0.2s ease'
+                        cursor: 'pointer',
+                        flexShrink: 0
                       }}
                     />
                   ))}
@@ -211,6 +235,7 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
               <div className="ksf-pack-square-scroll-strip">
                 {variants.map((v) => {
                   const isSelected = v.id === selectedVariantId;
+                  const isVarSoldOut = v.inStock === false;
                   const vDiscount = v.mrp > v.sellingPrice 
                     ? Math.round(((v.mrp - v.sellingPrice) / v.mrp) * 100) 
                     : 0;
@@ -220,14 +245,17 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
                       key={v.id}
                       type="button"
                       onClick={() => setSelectedVariantId(v.id)}
-                      className={`ksf-pack-square-box ${isSelected ? 'active' : ''}`}
-                      disabled={isOutOfStock || v.inStock === false}
-                      title={`${v.label || v.weight} - ${formatCurrency(v.sellingPrice)}`}
+                      className={`ksf-pack-square-box ${isSelected ? 'active' : ''} ${isVarSoldOut ? 'variant-out-of-stock' : ''}`}
+                      title={isVarSoldOut ? `${v.label || v.weight} (Sold Out)` : `${v.label || v.weight} - ${formatCurrency(v.sellingPrice)}`}
                     >
-                      <span className="ksf-pack-square-weight">
+                      <span className="ksf-pack-square-weight" style={{ textDecoration: isVarSoldOut ? 'line-through' : 'none' }}>
                         {v.label || v.weight}
                       </span>
-                      {vDiscount > 0 ? (
+                      {isVarSoldOut ? (
+                        <span className="ksf-pack-square-soldout">
+                          Sold Out
+                        </span>
+                      ) : vDiscount > 0 ? (
                         <span className="ksf-pack-square-badge">
                           {vDiscount}% OFF
                         </span>
@@ -259,7 +287,7 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
             >
               <div>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem' }}>
-                  <span style={{ fontSize: '1.45rem', fontWeight: 800, color: 'var(--green-primary)' }}>
+                  <span style={{ fontSize: '1.45rem', fontWeight: 800, color: isOutOfStock ? 'var(--text-muted)' : 'var(--green-primary)' }}>
                     {formatCurrency(selling)}
                   </span>
                   {mrp > selling && (
@@ -267,14 +295,14 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
                       {formatCurrency(mrp)}
                     </span>
                   )}
-                  {discountPercent > 0 && (
+                  {discountPercent > 0 && !isOutOfStock && (
                     <span className="ksf-discount-badge">
                       <Sparkles size={11} style={{ marginRight: '2px' }} />
                       {discountPercent}% OFF
                     </span>
                   )}
                 </div>
-                {discountAmount > 0 && (
+                {discountAmount > 0 && !isOutOfStock && (
                   <div style={{ fontSize: '0.725rem', color: 'var(--green-accent)', fontWeight: 700, marginTop: '0.15rem' }}>
                     ✨ You save {formatCurrency(discountAmount)} on this cut!
                   </div>
@@ -283,7 +311,7 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
 
               <div>
                 {isOutOfStock ? (
-                  <span style={{ color: 'var(--error-red)', fontWeight: 700, fontSize: '0.8rem' }}>
+                  <span style={{ color: 'var(--error-red)', fontWeight: 800, fontSize: '0.85rem' }}>
                     ● Out of Stock Today
                   </span>
                 ) : (
@@ -294,56 +322,156 @@ export default function ProductDetailPage({ product, storeSettings, onClose }) {
               </div>
             </div>
 
-            {/* WhatsApp Direct Order Button & Share */}
-            <div style={{ display: 'flex', gap: '0.45rem', marginBottom: '1.25rem' }}>
+            {/* Action Section: Quantity + Add to Cart + WhatsApp + Share */}
+            <div style={{ marginBottom: '1.25rem' }}>
               {isOutOfStock ? (
-                <button
-                  disabled
-                  style={{
-                    flex: 1,
-                    padding: '0.75rem',
-                    background: '#E2E8F0',
-                    color: '#64748B',
-                    borderRadius: 'var(--radius-md)',
-                    fontWeight: 700,
-                    fontSize: '0.875rem'
-                  }}
-                >
-                  Sold Out Today
-                </button>
-              ) : (
-                  <a
-                    href={whatsappUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-card-whatsapp"
-                    style={{ flex: 1, padding: '0.75rem 0.85rem', fontSize: '0.875rem' }}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  <div
+                    style={{
+                      background: '#FEF2F2',
+                      border: '1px solid #FECACA',
+                      borderRadius: 'var(--radius-md)',
+                      padding: '0.75rem 1rem',
+                      fontSize: '0.8rem',
+                      color: '#B91C1C',
+                      lineHeight: 1.35
+                    }}
                   >
-                    <MessageCircle size={18} />
-                    <span>Order on WhatsApp</span>
-                  </a>
-              )}
+                    ⚠️ <strong>Currently Sold Out Today:</strong> Fresh pasture cuts are prepared every morning. Check back early tomorrow or select another portion size.
+                  </div>
 
-              <button
-                onClick={handleShareLink}
-                style={{
-                  padding: '0.75rem 0.85rem',
-                  background: 'var(--bg-subtle)',
-                  border: '1px solid var(--border-light)',
-                  borderRadius: 'var(--radius-md)',
-                  color: 'var(--green-primary)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '0.3rem',
-                  fontWeight: 600,
-                  fontSize: '0.8rem'
-                }}
-                title="Share cut link"
-              >
-                {copiedLink ? <CheckCircle2 size={16} color="var(--success-green)" /> : <Share2 size={16} />}
-                <span>{copiedLink ? 'Copied!' : 'Share'}</span>
-              </button>
+                  <div style={{ display: 'flex', gap: '0.45rem' }}>
+                    <button
+                      disabled
+                      style={{
+                        flex: 1,
+                        padding: '0.75rem 0.85rem',
+                        background: '#F1F5F9',
+                        color: '#94A3B8',
+                        border: '1px solid #CBD5E1',
+                        borderRadius: 'var(--radius-md)',
+                        fontWeight: 800,
+                        fontSize: '0.875rem',
+                        cursor: 'not-allowed'
+                      }}
+                    >
+                      ● Out of Stock Today
+                    </button>
+
+                    <button
+                      onClick={handleShareLink}
+                      style={{
+                        padding: '0.75rem 0.85rem',
+                        background: 'var(--bg-subtle)',
+                        border: '1px solid var(--border-light)',
+                        borderRadius: 'var(--radius-md)',
+                        color: 'var(--green-primary)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.3rem',
+                        fontWeight: 600,
+                        fontSize: '0.8rem'
+                      }}
+                      title="Share cut link"
+                    >
+                      {copiedLink ? <CheckCircle2 size={16} color="var(--success-green)" /> : <Share2 size={16} />}
+                      <span>{copiedLink ? 'Copied!' : 'Share'}</span>
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+                  {/* Primary Row: Quantity Counter + Add to Cart Button */}
+                  <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                    {/* Quantity Picker */}
+                    <div className="ksf-detail-qty-picker">
+                      <button
+                        type="button"
+                        onClick={() => setQty((prev) => Math.max(1, prev - 1))}
+                        className="ksf-detail-qty-btn"
+                        title="Decrease quantity"
+                      >
+                        <Minus size={15} />
+                      </button>
+                      <span className="ksf-detail-qty-val">{qty}</span>
+                      <button
+                        type="button"
+                        onClick={() => setQty((prev) => prev + 1)}
+                        className="ksf-detail-qty-btn"
+                        title="Increase quantity"
+                      >
+                        <Plus size={15} />
+                      </button>
+                    </div>
+
+                    {/* Add to Cart Button */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (onAddToCart) {
+                          onAddToCart(product, activeVariant, qty);
+                          setAddedAnimation(true);
+                          setTimeout(() => setAddedAnimation(false), 2000);
+                        }
+                      }}
+                      className="btn-detail-add-cart"
+                      style={{
+                        flex: 1,
+                        background: addedAnimation ? 'var(--gold-primary)' : 'var(--green-primary)'
+                      }}
+                    >
+                      {addedAnimation ? (
+                        <>
+                          <Check size={18} />
+                          <span>Added to Basket!</span>
+                        </>
+                      ) : (
+                        <>
+                          <ShoppingBag size={18} />
+                          <span>Add to Cart ({formatCurrency(selling * qty)})</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {/* Secondary Row: WhatsApp Direct + Share */}
+                  <div style={{ display: 'flex', gap: '0.45rem' }}>
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn-card-whatsapp"
+                      style={{ flex: 1, padding: '0.7rem 0.85rem', fontSize: '0.85rem' }}
+                      title="Direct 1-item order via WhatsApp"
+                    >
+                      <MessageCircle size={17} />
+                      <span>Order on WhatsApp</span>
+                    </a>
+
+                    <button
+                      onClick={handleShareLink}
+                      style={{
+                        padding: '0.7rem 0.85rem',
+                        background: 'var(--bg-subtle)',
+                        border: '1px solid var(--border-light)',
+                        borderRadius: 'var(--radius-md)',
+                        color: 'var(--green-primary)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.3rem',
+                        fontWeight: 600,
+                        fontSize: '0.8rem'
+                      }}
+                      title="Share cut link"
+                    >
+                      {copiedLink ? <CheckCircle2 size={16} color="var(--success-green)" /> : <Share2 size={16} />}
+                      <span>{copiedLink ? 'Copied!' : 'Share'}</span>
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Detailed Specs Table */}
