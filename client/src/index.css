@@ -1899,31 +1899,31 @@ input, select, textarea {
   border-bottom: 1px solid var(--border-light);
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: var(--gold-medium) transparent;
+  scrollbar-width: none;
   width: 100%;
   box-sizing: border-box;
-  display: flex;
-  justify-content: center;
+  display: block;
+}
+
+.ksf-admin-tab-bar::-webkit-scrollbar {
+  display: none;
 }
 
 .ksf-admin-tab-inner {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.5rem;
-  padding: 0.55rem 1rem;
+  padding: 0.55rem 0.85rem;
   width: max-content;
-  margin: 0 auto;
+  min-width: 100%;
+  box-sizing: border-box;
 }
 
-.ksf-admin-tab-bar::-webkit-scrollbar {
-  height: 4px;
-}
-
-.ksf-admin-tab-bar::-webkit-scrollbar-thumb {
-  background: var(--gold-medium);
-  border-radius: 9999px;
+@media (min-width: 768px) {
+  .ksf-admin-tab-inner {
+    justify-content: center;
+    padding: 0.65rem 1.5rem;
+  }
 }
 
 .btn-admin-tab {
