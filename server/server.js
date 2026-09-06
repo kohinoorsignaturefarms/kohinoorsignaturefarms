@@ -436,6 +436,167 @@ app.post('/api/store/reset-defaults', async (req, res) => {
   res.json({ success: true, message: 'Store reset to default catalog successfully' });
 });
 
+// 7. CLICK TRACKING API (anonymous, fire-and-forget)
+app.post('/api/track/click', async (req, res) => {
+  const { visitor_id, product_id, product_name, category, variant_label, selling_price, event_type, device } = req.body;
+  if (!visitor_id || !product_id) return res.status(400).json({ error: 'Missing required fields' });
+
+  if (supabase) {
+    try {
+      await supabase.from('ksf_clicks').insert({
+        visitor_id,
+        product_id,
+        product_name: product_name || '',
+        category: category || '',
+        variant_label: variant_label || '',
+        selling_price: selling_price || 0,
+        event_type: event_type || 'buy_click',
+        device: device || 'unknown',
+        created_at: new Date().toISOString()
+      });
+    } catch (err) {
+      // Silent — never block customer action for analytics failure
+    }
+  }
+  res.status(204).end();
+});
+
+// 8. ORDER TRACKING API
+app.post('/api/track/order', async (req, res) => {
+  const { visitor_id, items, total_amount, total_items } = req.body;
+  if (!visitor_id || !items) return res.status(400).json({ error: 'Missing required fields' });
+
+  // Generate human-readable order reference
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const rand = Array.from({ length: 4 }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+  const dateStr = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+  const order_ref = `KSF-${dateStr}-${rand}`;
+
+  if (supabase) {
+    try {
+      const { data, error } = await supabase.from('ksf_orders').insert({
+        order_ref,
+        visitor_id,
+        items,
+        total_amount: total_amount || 0,
+        total_items: total_items || 0,
+        status: 'pending',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      }).select('id, order_ref').single();
+
+      if (error) throw error;
+      return res.json({ success: true, order_ref, id: data?.id });
+    } catch (err) {
+      // Still return ok so WhatsApp always opens
+    }
+  }
+  res.json({ success: true, order_ref });
+});
+
+// 9. ANALYTICS API
+app.get('/api/analytics', async (req, res) => {
+  const { period = 'week' } = req.query;
+  if (!supabase) return res.json({ clicks: [], topProducts: [], totalClicks: 0, uniqueVisitors: 0, totalOrderValue: 0, repeatBuyers: 0 });
+
+  // Calculate date range
+  const now = new Date();
+  const periodMap = { day: 1, week: 7, month: 30, '6months': 183, year: 365 };
+  const days = periodMap[period] || 7;
+  const since = new Date(now.getTime() - days * 24 * 60 * 60 * 1000).toISOString();
+
+  try {
+    // Fetch clicks and orders in parallel
+    const [clicksRes, ordersRes] = await Promise.all([
+      supabase.from('ksf_clicks').select('*').gte('created_at', since).order('created_at', { ascending: false }),
+      supabase.from('ksf_orders').select('*').gte('created_at', since).order('created_at', { ascending: false })
+    ]);
+
+    const clicks = clicksRes.data || [];
+    const orders = ordersRes.data || [];
+
+    // Aggregate top products
+    const productMap = {};
+    clicks.forEach(c => {
+      const key = c.product_id;
+      if (!productMap[key]) productMap[key] = { product_id: key, product_name: c.product_name, category: c.category, clicks: 0 };
+      productMap[key].clicks++;
+    });
+    const topProducts = Object.values(productMap).sort((a, b) => b.clicks - a.clicks).slice(0, 8);
+
+    // Unique visitors
+    const uniqueVisitorSet = new Set(clicks.map(c => c.visitor_id));
+    const uniqueVisitors = uniqueVisitorSet.size;
+
+    // Event type breakdown
+    const eventBreakdown = {};
+    clicks.forEach(c => {
+      eventBreakdown[c.event_type || 'buy_click'] = (eventBreakdown[c.event_type || 'buy_click'] || 0) + 1;
+    });
+
+    // Orders aggregation
+    const totalOrderValue = orders.reduce((sum, o) => sum + (o.total_amount || 0), 0);
+    const visitorOrderCounts = {};
+    orders.forEach(o => { visitorOrderCounts[o.visitor_id] = (visitorOrderCounts[o.visitor_id] || 0) + 1; });
+    const repeatBuyers = Object.values(visitorOrderCounts).filter(c => c > 1).length;
+    const repeatBuyersPercent = uniqueVisitors > 0 ? Math.round((repeatBuyers / uniqueVisitors) * 100) : 0;
+
+    res.json({
+      period,
+      totalClicks: clicks.length,
+      uniqueVisitors,
+      totalOrders: orders.length,
+      totalOrderValue,
+      repeatBuyers,
+      repeatBuyersPercent,
+      topProducts,
+      eventBreakdown,
+      recentOrders: orders.slice(0, 5)
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Analytics query failed', message: err.message });
+  }
+});
+
+// 10. ORDERS LIST (admin only)
+app.get('/api/orders', async (req, res) => {
+  if (!supabase) return res.json([]);
+  const { status } = req.query;
+  try {
+    let query = supabase.from('ksf_orders').select('*').order('created_at', { ascending: false }).limit(200);
+    if (status && status !== 'all') query = query.eq('status', status);
+    const { data, error } = await query;
+    if (error) throw error;
+    res.json(data || []);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch orders' });
+  }
+});
+
+// 11. ORDER STATUS UPDATE (admin only)
+app.patch('/api/orders/:id', async (req, res) => {
+  const { id } = req.params;
+  const { status, note } = req.body;
+  if (!supabase) return res.status(503).json({ error: 'Database not connected' });
+
+  const validStatuses = ['pending', 'confirmed', 'delivered', 'cancelled'];
+  if (status && !validStatuses.includes(status)) {
+    return res.status(400).json({ error: 'Invalid status' });
+  }
+
+  try {
+    const updates = { updated_at: new Date().toISOString() };
+    if (status) updates.status = status;
+    if (note !== undefined) updates.note = note;
+
+    const { data, error } = await supabase.from('ksf_orders').update(updates).eq('id', id).select().single();
+    if (error) throw error;
+    res.json({ success: true, order: data });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update order' });
+  }
+});
+
 // Root / health
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString(), brand: 'Kohinoor Signature Farms' });

@@ -1,6 +1,20 @@
 // Centralized API client for Kohinoor Signature Farms
 const API_BASE = '/api';
 
+// Anonymous visitor fingerprint (localStorage, no login required)
+export const getOrCreateVisitorId = () => {
+  try {
+    let vid = localStorage.getItem('ksf_vid');
+    if (!vid) {
+      vid = 'v_' + Math.random().toString(36).slice(2, 10) + '_' + Date.now().toString(36);
+      localStorage.setItem('ksf_vid', vid);
+    }
+    return vid;
+  } catch (e) {
+    return 'v_anon_' + Math.random().toString(36).slice(2, 8);
+  }
+};
+
 export const api = {
   // Products
   async getProducts(params = {}) {
@@ -122,6 +136,90 @@ export const api = {
       body: formData
     });
     if (!res.ok) throw new Error('Image upload failed');
+    return res.json();
+  },
+
+  // ─── Analytics & Order Tracking ───────────────────────────────────────────
+
+  // Track buy/cart click (fire-and-forget, never throws)
+  trackClick(product, variant, eventType = 'buy_click') {
+    try {
+      const visitorId = getOrCreateVisitorId();
+      const device = window.innerWidth < 768 ? 'mobile' : 'desktop';
+      const payload = JSON.stringify({
+        visitor_id: visitorId,
+        product_id: product.id,
+        product_name: product.name,
+        category: product.category || '',
+        variant_label: variant?.label || variant?.weight || '',
+        selling_price: variant?.sellingPrice || 0,
+        event_type: eventType,
+        device
+      });
+      // Use sendBeacon for non-blocking fire-and-forget
+      if (navigator.sendBeacon) {
+        const blob = new Blob([payload], { type: 'application/json' });
+        navigator.sendBeacon(`${API_BASE}/track/click`, blob);
+      } else {
+        fetch(`${API_BASE}/track/click`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload, keepalive: true }).catch(() => {});
+      }
+    } catch (e) {
+      // Never block customer action
+    }
+  },
+
+  // Track WhatsApp order (returns order_ref)
+  async trackOrder(cartItems, totalAmount) {
+    try {
+      const visitorId = getOrCreateVisitorId();
+      const items = cartItems.map(item => ({
+        product_id: item.productId,
+        name: item.name,
+        variant_label: item.variantLabel || item.weight || '',
+        qty: item.quantity || 1,
+        selling_price: item.sellingPrice || 0,
+        subtotal: (item.sellingPrice || 0) * (item.quantity || 1)
+      }));
+      const res = await fetch(`${API_BASE}/track/order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          visitor_id: visitorId,
+          items,
+          total_amount: totalAmount,
+          total_items: cartItems.reduce((s, i) => s + (i.quantity || 1), 0)
+        })
+      });
+      if (res.ok) return res.json();
+    } catch (e) {
+      // Silent — never block WhatsApp
+    }
+    return null;
+  },
+
+  // Get analytics for admin panel
+  async getAnalytics(period = 'week') {
+    const res = await fetch(`${API_BASE}/analytics?period=${period}`);
+    if (!res.ok) throw new Error('Failed to fetch analytics');
+    return res.json();
+  },
+
+  // Get all orders for admin panel
+  async getOrders(status = 'all') {
+    const url = status && status !== 'all' ? `${API_BASE}/orders?status=${status}` : `${API_BASE}/orders`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch orders');
+    return res.json();
+  },
+
+  // Update order status from admin panel
+  async updateOrderStatus(id, status, note) {
+    const res = await fetch(`${API_BASE}/orders/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status, note })
+    });
+    if (!res.ok) throw new Error('Failed to update order');
     return res.json();
   }
 };

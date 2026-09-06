@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MessageCircle, Info, Sparkles, ShoppingBag, Plus, Minus } from 'lucide-react';
-import { formatCurrency, buildWhatsAppUrl } from '../api';
+import { formatCurrency, buildWhatsAppUrl, api } from '../api';
 
 export default function ProductCard({
   product,
@@ -57,6 +57,7 @@ export default function ProductCard({
     e.stopPropagation();
     if (onAddToCart && !isCurrentOutOfStock) {
       onAddToCart(product, activeVariant, 1);
+      api.trackClick(product, activeVariant, 'cart_add');
     }
   };
 
@@ -253,16 +254,19 @@ export default function ProductCard({
 
               {/* Secondary Row: WhatsApp Direct + Info Modal */}
               <div className="ksf-card-secondary-actions">
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  type="button"
                   className="btn-card-whatsapp-compact"
                   title="Direct 1-click WhatsApp Order"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    api.trackClick(product, activeVariant, 'buy_click');
+                    window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+                  }}
                 >
                   <MessageCircle size={15} />
                   <span>Order on WhatsApp</span>
-                </a>
+                </button>
 
                 <button
                   type="button"

@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Plus, Minus, Trash2, MessageCircle, ShoppingBag, ShieldCheck, ArrowRight } from 'lucide-react';
-import { formatCurrency, buildCartWhatsAppUrl } from '../api';
+import { formatCurrency, buildCartWhatsAppUrl, api } from '../api';
 
 export default function CartDrawer({
   isOpen,
@@ -214,12 +214,16 @@ export default function CartDrawer({
             </div>
 
             {/* Direct WhatsApp Order Action */}
-            <a
-              href={whatsappCheckoutUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              type="button"
               className="btn-cart-whatsapp-checkout"
               title="Send full order details to WhatsApp"
+              onClick={async () => {
+                // Track order in Supabase (non-blocking)
+                api.trackOrder(cartItems, totalSellingPrice).catch(() => {});
+                // Open WhatsApp immediately without waiting
+                window.open(whatsappCheckoutUrl, '_blank', 'noopener,noreferrer');
+              }}
             >
               <MessageCircle size={20} />
               <div className="ksf-btn-text-wrap">
@@ -227,7 +231,7 @@ export default function CartDrawer({
                 <span className="ksf-btn-sub">{totalCount} {totalCount === 1 ? 'Cut' : 'Cuts'} • {formatCurrency(totalSellingPrice)}</span>
               </div>
               <ArrowRight size={18} />
-            </a>
+            </button>
 
             <div className="ksf-cart-footer-note">
               Instant confirmation • Direct from Kohinoor Signature Farms
