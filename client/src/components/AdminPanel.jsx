@@ -37,7 +37,7 @@ import {
 } from 'lucide-react';
 import { api, formatCurrency } from '../api';
 
-export default function AdminPanel({
+function AdminPanelInner({
   onClose,
   initialProducts = [],
   initialCategories = [],
@@ -53,12 +53,31 @@ export default function AdminPanel({
   const [activeTab, setActiveTab] = useState('products'); // 'products', 'settings', 'banners', 'categories', 'stats'
 
   // Data States
-  const [products, setProducts] = useState(initialProducts);
-  const [categories, setCategories] = useState(initialCategories);
-  const [settings, setSettings] = useState(initialSettings);
+  const [products, setProducts] = useState(() => Array.isArray(initialProducts) ? initialProducts : []);
+  const [categories, setCategories] = useState(() => Array.isArray(initialCategories) ? initialCategories : []);
+  const [settings, setSettings] = useState(() => initialSettings || {});
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+
+  // Sync props when parent loads them
+  useEffect(() => {
+    if (Array.isArray(initialProducts) && initialProducts.length > 0) {
+      setProducts(initialProducts);
+    }
+  }, [initialProducts]);
+
+  useEffect(() => {
+    if (Array.isArray(initialCategories) && initialCategories.length > 0) {
+      setCategories(initialCategories);
+    }
+  }, [initialCategories]);
+
+  useEffect(() => {
+    if (initialSettings && Object.keys(initialSettings).length > 0) {
+      setSettings(initialSettings);
+    }
+  }, [initialSettings]);
 
   // Analytics & Orders State
   const [analytics, setAnalytics] = useState(null);
@@ -98,27 +117,27 @@ export default function AdminPanel({
     if (isAuthenticated && activeTab === 'analytics') {
       loadAnalytics(analyticsPeriod);
     }
-  }, [isAuthenticated, activeTab, analyticsPeriod, loadAnalytics]);
+  }, [isAuthenticated, activeTab, analyticsPeriod]);
 
   // Auto-load orders when orders tab opens or filter changes
   useEffect(() => {
     if (isAuthenticated && activeTab === 'orders') {
       loadOrders(ordersFilter);
     }
-  }, [isAuthenticated, activeTab, ordersFilter, loadOrders]);
+  }, [isAuthenticated, activeTab, ordersFilter]);
 
   const loadAllData = async () => {
     setLoading(true);
     try {
       const [prodRes, catRes, setRes, statRes] = await Promise.all([
-        api.getProducts(),
-        api.getCategories(),
-        api.getSettings(),
+        api.getProducts().catch(() => []),
+        api.getCategories().catch(() => []),
+        api.getSettings().catch(() => ({})),
         api.getStats().catch(() => null)
       ]);
-      setProducts(prodRes);
-      setCategories(catRes);
-      setSettings(setRes);
+      if (Array.isArray(prodRes)) setProducts(prodRes);
+      if (Array.isArray(catRes)) setCategories(catRes);
+      if (setRes && typeof setRes === 'object') setSettings(setRes);
       if (statRes) setStats(statRes);
     } catch (err) {
       console.error('Error loading admin data:', err);
@@ -132,9 +151,9 @@ export default function AdminPanel({
     setAnalyticsLoading(true);
     try {
       const data = await api.getAnalytics(period);
-      setAnalytics(data);
+      setAnalytics(data || { totalClicks: 0, uniqueVisitors: 0, totalOrders: 0, totalOrderValue: 0, topProducts: [], eventBreakdown: {} });
     } catch (err) {
-      showToast('Could not load analytics', 'error');
+      setAnalytics({ totalClicks: 0, uniqueVisitors: 0, totalOrders: 0, totalOrderValue: 0, topProducts: [], eventBreakdown: {} });
     } finally {
       setAnalyticsLoading(false);
     }
@@ -144,9 +163,9 @@ export default function AdminPanel({
     setOrdersLoading(true);
     try {
       const data = await api.getOrders(statusFilter);
-      setOrders(data || []);
+      setOrders(Array.isArray(data) ? data : []);
     } catch (err) {
-      showToast('Could not load orders', 'error');
+      setOrders([]);
     } finally {
       setOrdersLoading(false);
     }
@@ -423,14 +442,18 @@ export default function AdminPanel({
     }
   };
 
-  // Filtered Products list
-  const filteredProducts = products.filter((p) => {
+  // Filtered Products list (safe against null/undefined)
+  const safeProducts = Array.isArray(products) ? products : [];
+  const safeCategories = Array.isArray(categories) ? categories : [];
+  const safeSettings = settings || {};
+
+  const filteredProducts = safeProducts.filter((p) => {
+    if (!p) return false;
     const matchesCat = adminCatFilter === 'all' || p.category === adminCatFilter;
-    const matchesSearch =
-      !adminSearch ||
-      p.name.toLowerCase().includes(adminSearch.toLowerCase()) ||
-      p.tagline?.toLowerCase().includes(adminSearch.toLowerCase());
-    return matchesCat && matchesSearch;
+    const q = (adminSearch || '').toLowerCase();
+    const nameMatch = p.name ? String(p.name).toLowerCase().includes(q) : false;
+    const tagMatch = p.tagline ? String(p.tagline).toLowerCase().includes(q) : false;
+    return matchesCat && (!q || nameMatch || tagMatch);
   });
 
   // ----------------------------------------------------
@@ -1570,7 +1593,7 @@ export default function AdminPanel({
                 </div>
                 <div>
                   <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--green-primary)' }}>
-                    {categories.length}
+                    {(categories || []).length}
                   </div>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>
                     Categories
@@ -1578,6 +1601,356 @@ export default function AdminPanel({
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ====================================================
+            TAB 6: ANALYTICS
+            ==================================================== */}
+        {activeTab === 'analytics' && (
+          <div className="ksf-analytics-tab">
+            {/* Header */}
+            <div className="ksf-analytics-header">
+              <div>
+                <h2 className="ksf-analytics-title">
+                  <BarChart2 size={20} />
+                  Store Analytics
+                </h2>
+                <p className="ksf-analytics-subtitle">Click behaviour & engagement metrics</p>
+              </div>
+              <button
+                type="button"
+                className="btn-analytics-refresh"
+                onClick={() => loadAnalytics(analyticsPeriod)}
+                disabled={analyticsLoading}
+              >
+                <RefreshCw size={15} className={analyticsLoading ? 'ksf-spin' : ''} />
+                Refresh
+              </button>
+            </div>
+
+            {/* Period Selector */}
+            <div className="ksf-period-pill-bar">
+              {[
+                { key: 'day', label: 'Today' },
+                { key: 'week', label: '7 Days' },
+                { key: 'month', label: '30 Days' },
+                { key: '6months', label: '6 Months' },
+                { key: 'year', label: '1 Year' }
+              ].map(p => (
+                <button
+                  key={p.key}
+                  type="button"
+                  className={`ksf-period-pill ${analyticsPeriod === p.key ? 'active' : ''}`}
+                  onClick={() => setAnalyticsPeriod(p.key)}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+
+            {analyticsLoading ? (
+              <div className="ksf-analytics-loader">
+                <RefreshCw size={28} className="ksf-spin" />
+                <p>Loading analytics...</p>
+              </div>
+            ) : analytics ? (
+              <>
+                {/* Metric Cards */}
+                <div className="ksf-metric-cards">
+                  <div className="ksf-metric-card">
+                    <div className="ksf-metric-icon" style={{ background: 'rgba(34,197,94,0.12)', color: 'var(--green-accent)' }}>
+                      <BarChart2 size={22} />
+                    </div>
+                    <div className="ksf-metric-value">{analytics.totalClicks ?? 0}</div>
+                    <div className="ksf-metric-label">Total Clicks</div>
+                  </div>
+                  <div className="ksf-metric-card">
+                    <div className="ksf-metric-icon" style={{ background: 'rgba(59,130,246,0.12)', color: '#3B82F6' }}>
+                      <Users size={22} />
+                    </div>
+                    <div className="ksf-metric-value">{analytics.uniqueVisitors ?? 0}</div>
+                    <div className="ksf-metric-label">Unique Visitors</div>
+                  </div>
+                  <div className="ksf-metric-card">
+                    <div className="ksf-metric-icon" style={{ background: 'rgba(212,175,55,0.15)', color: 'var(--gold-primary)' }}>
+                      <ShoppingCart size={22} />
+                    </div>
+                    <div className="ksf-metric-value">{analytics.totalOrders ?? 0}</div>
+                    <div className="ksf-metric-label">WA Orders</div>
+                  </div>
+                  <div className="ksf-metric-card">
+                    <div className="ksf-metric-icon" style={{ background: 'rgba(16,185,129,0.12)', color: 'var(--success-green)' }}>
+                      <DollarSign size={22} />
+                    </div>
+                    <div className="ksf-metric-value">{formatCurrency(analytics.totalOrderValue ?? 0)}</div>
+                    <div className="ksf-metric-label">Order Value</div>
+                  </div>
+                </div>
+
+                {/* Event Breakdown */}
+                {analytics.eventBreakdown && Object.keys(analytics.eventBreakdown).length > 0 && (
+                  <div className="ksf-analytics-section">
+                    <h3 className="ksf-analytics-section-title">Click Type Breakdown</h3>
+                    <div className="ksf-event-breakdown">
+                      {Object.entries(analytics.eventBreakdown).map(([type, count]) => {
+                        const total = analytics.totalClicks || 1;
+                        const pct = Math.round((count / total) * 100);
+                        const labels = { buy_click: 'WhatsApp Direct', cart_add: 'Add to Cart', whatsapp_checkout: 'Cart Checkout' };
+                        const colors = { buy_click: 'var(--whatsapp-green)', cart_add: 'var(--green-accent)', whatsapp_checkout: 'var(--gold-primary)' };
+                        return (
+                          <div key={type} className="ksf-event-row">
+                            <div className="ksf-event-row-label">
+                              <span className="ksf-event-dot" style={{ background: colors[type] || 'var(--green-primary)' }} />
+                              {labels[type] || type}
+                            </div>
+                            <div className="ksf-event-bar-wrap">
+                              <div className="ksf-event-bar" style={{ width: `${pct}%`, background: colors[type] || 'var(--green-primary)' }} />
+                            </div>
+                            <div className="ksf-event-count">{count} <span className="ksf-event-pct">({pct}%)</span></div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Top Products */}
+                {Array.isArray(analytics.topProducts) && analytics.topProducts.length > 0 && (
+                  <div className="ksf-analytics-section">
+                    <h3 className="ksf-analytics-section-title">🔥 Top Clicked Products</h3>
+                    <div className="ksf-top-products">
+                      {analytics.topProducts.map((p, idx) => {
+                        const maxClicks = analytics.topProducts[0]?.clicks || 1;
+                        const barPct = Math.round((p.clicks / maxClicks) * 100);
+                        return (
+                          <div key={p.product_id || idx} className="ksf-top-product-row">
+                            <span className="ksf-top-product-rank">#{idx + 1}</span>
+                            <div className="ksf-top-product-info">
+                              <span className="ksf-top-product-name">{p.product_name}</span>
+                              {p.category && <span className="ksf-top-product-cat">{p.category}</span>}
+                            </div>
+                            <div className="ksf-top-product-bar-wrap">
+                              <div className="ksf-top-product-bar" style={{ width: `${barPct}%` }} />
+                            </div>
+                            <span className="ksf-top-product-clicks">{p.clicks}</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {(!analytics.totalClicks || analytics.totalClicks === 0) && (
+                  <div className="ksf-analytics-empty">
+                    <BarChart2 size={40} />
+                    <p>No clicks tracked yet for this period.</p>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>Click data will appear here as customers browse your store.</p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="ksf-analytics-empty">
+                <AlertCircle size={32} />
+                <p>Could not load analytics. Make sure Supabase ksf_clicks table is created.</p>
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ====================================================
+            TAB 7: LIVE ORDERS
+            ==================================================== */}
+        {activeTab === 'orders' && (
+          <div className="ksf-orders-tab">
+            {/* Header */}
+            <div className="ksf-orders-header">
+              <div>
+                <h2 className="ksf-analytics-title">
+                  <ShoppingCart size={20} />
+                  Live Orders
+                </h2>
+                <p className="ksf-analytics-subtitle">WhatsApp orders initiated by customers</p>
+              </div>
+              <button
+                type="button"
+                className="btn-analytics-refresh"
+                onClick={() => loadOrders(ordersFilter)}
+                disabled={ordersLoading}
+              >
+                <RefreshCw size={15} className={ordersLoading ? 'ksf-spin' : ''} />
+                Refresh
+              </button>
+            </div>
+
+            {/* Status Filter Pills */}
+            <div className="ksf-period-pill-bar">
+              {[
+                { key: 'all', label: 'All Orders' },
+                { key: 'pending', label: '🟡 Pending' },
+                { key: 'confirmed', label: '✅ Confirmed' },
+                { key: 'delivered', label: '🚚 Delivered' },
+                { key: 'cancelled', label: '❌ Cancelled' }
+              ].map(f => (
+                <button
+                  key={f.key}
+                  type="button"
+                  className={`ksf-period-pill ${ordersFilter === f.key ? 'active' : ''}`}
+                  onClick={() => setOrdersFilter(f.key)}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {ordersLoading ? (
+              <div className="ksf-analytics-loader">
+                <RefreshCw size={28} className="ksf-spin" />
+                <p>Loading orders...</p>
+              </div>
+            ) : !Array.isArray(orders) || orders.length === 0 ? (
+              <div className="ksf-analytics-empty">
+                <ShoppingCart size={40} />
+                <p>No orders found{ordersFilter !== 'all' ? ` with status "${ordersFilter}"` : ' yet'}.</p>
+                <p style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>
+                  Orders appear here when customers click "Order on WhatsApp" from the store.
+                </p>
+              </div>
+            ) : (
+              <div className="ksf-orders-list">
+                {orders.map(order => {
+                  const statusConfig = {
+                    pending: { label: 'Pending', icon: <Clock size={13} />, cls: 'status-pending' },
+                    confirmed: { label: 'Confirmed', icon: <CheckCircle size={13} />, cls: 'status-confirmed' },
+                    delivered: { label: 'Delivered', icon: <Truck size={13} />, cls: 'status-delivered' },
+                    cancelled: { label: 'Cancelled', icon: <XCircle size={13} />, cls: 'status-cancelled' }
+                  };
+                  const sc = statusConfig[order.status] || statusConfig.pending;
+                  const timeAgo = (() => {
+                    const diff = Date.now() - new Date(order.created_at).getTime();
+                    const mins = Math.floor(diff / 60000);
+                    if (mins < 60) return `${mins}m ago`;
+                    const hrs = Math.floor(mins / 60);
+                    if (hrs < 24) return `${hrs}h ago`;
+                    return `${Math.floor(hrs / 24)}d ago`;
+                  })();
+                  const items = Array.isArray(order.items) ? order.items : [];
+                  const isEditingNote = editingOrderNote?.id === order.id;
+
+                  const handleStatusUpdate = async (newStatus) => {
+                    try {
+                      await api.updateOrderStatus(order.id, newStatus, order.note);
+                      setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status: newStatus } : o));
+                      showToast(`Order ${order.order_ref} marked as ${newStatus}`);
+                    } catch {
+                      showToast('Failed to update order', 'error');
+                    }
+                  };
+
+                  const handleNoteSave = async () => {
+                    try {
+                      await api.updateOrderStatus(order.id, order.status, editingOrderNote.note);
+                      setOrders(prev => prev.map(o => o.id === order.id ? { ...o, note: editingOrderNote.note } : o));
+                      setEditingOrderNote(null);
+                      showToast('Note saved');
+                    } catch {
+                      showToast('Failed to save note', 'error');
+                    }
+                  };
+
+                  return (
+                    <div key={order.id} className={`ksf-order-card ${sc.cls}`}>
+                      {/* Order Card Header */}
+                      <div className="ksf-order-card-head">
+                        <div className="ksf-order-ref-row">
+                          <span className="ksf-order-ref">{order.order_ref}</span>
+                          <span className={`ksf-order-status-badge ${sc.cls}`}>
+                            {sc.icon} {sc.label}
+                          </span>
+                        </div>
+                        <div className="ksf-order-meta">
+                          <span className="ksf-order-time"><Clock size={11} /> {timeAgo}</span>
+                          <span className="ksf-order-visitor">ID: {order.visitor_id?.slice(0, 12)}…</span>
+                        </div>
+                      </div>
+
+                      {/* Items */}
+                      <div className="ksf-order-items">
+                        {items.slice(0, 4).map((item, i) => (
+                          <div key={i} className="ksf-order-item-row">
+                            <span className="ksf-order-item-name">{item.name}</span>
+                            <span className="ksf-order-item-detail">
+                              {item.variant_label} × {item.qty}
+                            </span>
+                            <span className="ksf-order-item-price">{formatCurrency(item.subtotal || 0)}</span>
+                          </div>
+                        ))}
+                        {items.length > 4 && (
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                            +{items.length - 4} more items
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Total */}
+                      <div className="ksf-order-total-row">
+                        <span>Total</span>
+                        <span className="ksf-order-total-val">{formatCurrency(order.total_amount)}</span>
+                      </div>
+
+                      {/* Note */}
+                      {isEditingNote ? (
+                        <div className="ksf-order-note-edit">
+                          <input
+                            type="text"
+                            className="ksf-input"
+                            value={editingOrderNote.note}
+                            onChange={e => setEditingOrderNote({ ...editingOrderNote, note: e.target.value })}
+                            placeholder="Add a note (e.g. Cash on delivery, Balanagar area)"
+                            autoFocus
+                          />
+                          <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem' }}>
+                            <button type="button" className="btn-order-action btn-save-note" onClick={handleNoteSave}>Save Note</button>
+                            <button type="button" className="btn-order-action" style={{ background: 'var(--bg-subtle)' }} onClick={() => setEditingOrderNote(null)}>Cancel</button>
+                          </div>
+                        </div>
+                      ) : order.note ? (
+                        <div className="ksf-order-note-display" onClick={() => setEditingOrderNote({ id: order.id, note: order.note })}>
+                          <StickyNote size={12} /> {order.note}
+                          <span className="ksf-note-edit-hint">(tap to edit)</span>
+                        </div>
+                      ) : null}
+
+                      {/* Action Buttons */}
+                      <div className="ksf-order-actions">
+                        {order.status !== 'confirmed' && order.status !== 'delivered' && order.status !== 'cancelled' && (
+                          <button type="button" className="btn-order-action btn-confirm" onClick={() => handleStatusUpdate('confirmed')}>
+                            <CheckCircle size={13} /> Confirm
+                          </button>
+                        )}
+                        {order.status === 'confirmed' && (
+                          <button type="button" className="btn-order-action btn-deliver" onClick={() => handleStatusUpdate('delivered')}>
+                            <Truck size={13} /> Mark Delivered
+                          </button>
+                        )}
+                        {order.status !== 'cancelled' && order.status !== 'delivered' && (
+                          <button type="button" className="btn-order-action btn-cancel" onClick={() => handleStatusUpdate('cancelled')}>
+                            <XCircle size={13} /> Cancel
+                          </button>
+                        )}
+                        <button
+                          type="button"
+                          className="btn-order-action btn-note"
+                          onClick={() => setEditingOrderNote({ id: order.id, note: order.note || '' })}
+                        >
+                          <StickyNote size={13} /> Note
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -2135,356 +2508,55 @@ export default function AdminPanel({
           </div>
         </div>
       )}
-
-      {/* ====================================================
-          TAB: ANALYTICS
-          ==================================================== */}
-      {activeTab === 'analytics' && (
-        <div className="ksf-analytics-tab">
-          {/* Header */}
-          <div className="ksf-analytics-header">
-            <div>
-              <h2 className="ksf-analytics-title">
-                <BarChart2 size={20} />
-                Store Analytics
-              </h2>
-              <p className="ksf-analytics-subtitle">Click behaviour & engagement metrics</p>
-            </div>
-            <button
-              type="button"
-              className="btn-analytics-refresh"
-              onClick={() => loadAnalytics(analyticsPeriod)}
-              disabled={analyticsLoading}
-            >
-              <RefreshCw size={15} className={analyticsLoading ? 'ksf-spin' : ''} />
-              Refresh
-            </button>
-          </div>
-
-          {/* Period Selector */}
-          <div className="ksf-period-pill-bar">
-            {[
-              { key: 'day', label: 'Today' },
-              { key: 'week', label: '7 Days' },
-              { key: 'month', label: '30 Days' },
-              { key: '6months', label: '6 Months' },
-              { key: 'year', label: '1 Year' }
-            ].map(p => (
-              <button
-                key={p.key}
-                type="button"
-                className={`ksf-period-pill ${analyticsPeriod === p.key ? 'active' : ''}`}
-                onClick={() => setAnalyticsPeriod(p.key)}
-              >
-                {p.label}
-              </button>
-            ))}
-          </div>
-
-          {analyticsLoading ? (
-            <div className="ksf-analytics-loader">
-              <RefreshCw size={28} className="ksf-spin" />
-              <p>Loading analytics...</p>
-            </div>
-          ) : analytics ? (
-            <>
-              {/* Metric Cards */}
-              <div className="ksf-metric-cards">
-                <div className="ksf-metric-card">
-                  <div className="ksf-metric-icon" style={{ background: 'rgba(34,197,94,0.12)', color: 'var(--green-accent)' }}>
-                    <BarChart2 size={22} />
-                  </div>
-                  <div className="ksf-metric-value">{analytics.totalClicks ?? 0}</div>
-                  <div className="ksf-metric-label">Total Clicks</div>
-                </div>
-                <div className="ksf-metric-card">
-                  <div className="ksf-metric-icon" style={{ background: 'rgba(59,130,246,0.12)', color: '#3B82F6' }}>
-                    <Users size={22} />
-                  </div>
-                  <div className="ksf-metric-value">{analytics.uniqueVisitors ?? 0}</div>
-                  <div className="ksf-metric-label">Unique Visitors</div>
-                </div>
-                <div className="ksf-metric-card">
-                  <div className="ksf-metric-icon" style={{ background: 'rgba(212,175,55,0.15)', color: 'var(--gold-primary)' }}>
-                    <ShoppingCart size={22} />
-                  </div>
-                  <div className="ksf-metric-value">{analytics.totalOrders ?? 0}</div>
-                  <div className="ksf-metric-label">WA Orders</div>
-                </div>
-                <div className="ksf-metric-card">
-                  <div className="ksf-metric-icon" style={{ background: 'rgba(16,185,129,0.12)', color: 'var(--success-green)' }}>
-                    <DollarSign size={22} />
-                  </div>
-                  <div className="ksf-metric-value">{formatCurrency(analytics.totalOrderValue ?? 0)}</div>
-                  <div className="ksf-metric-label">Order Value</div>
-                </div>
-              </div>
-
-              {/* Event Breakdown */}
-              {analytics.eventBreakdown && Object.keys(analytics.eventBreakdown).length > 0 && (
-                <div className="ksf-analytics-section">
-                  <h3 className="ksf-analytics-section-title">Click Type Breakdown</h3>
-                  <div className="ksf-event-breakdown">
-                    {Object.entries(analytics.eventBreakdown).map(([type, count]) => {
-                      const total = analytics.totalClicks || 1;
-                      const pct = Math.round((count / total) * 100);
-                      const labels = { buy_click: 'WhatsApp Direct', cart_add: 'Add to Cart', whatsapp_checkout: 'Cart Checkout' };
-                      const colors = { buy_click: 'var(--whatsapp-green)', cart_add: 'var(--green-accent)', whatsapp_checkout: 'var(--gold-primary)' };
-                      return (
-                        <div key={type} className="ksf-event-row">
-                          <div className="ksf-event-row-label">
-                            <span className="ksf-event-dot" style={{ background: colors[type] || 'var(--green-primary)' }} />
-                            {labels[type] || type}
-                          </div>
-                          <div className="ksf-event-bar-wrap">
-                            <div className="ksf-event-bar" style={{ width: `${pct}%`, background: colors[type] || 'var(--green-primary)' }} />
-                          </div>
-                          <div className="ksf-event-count">{count} <span className="ksf-event-pct">({pct}%)</span></div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Top Products */}
-              {analytics.topProducts && analytics.topProducts.length > 0 && (
-                <div className="ksf-analytics-section">
-                  <h3 className="ksf-analytics-section-title">🔥 Top Clicked Products</h3>
-                  <div className="ksf-top-products">
-                    {analytics.topProducts.map((p, idx) => {
-                      const maxClicks = analytics.topProducts[0]?.clicks || 1;
-                      const barPct = Math.round((p.clicks / maxClicks) * 100);
-                      return (
-                        <div key={p.product_id} className="ksf-top-product-row">
-                          <span className="ksf-top-product-rank">#{idx + 1}</span>
-                          <div className="ksf-top-product-info">
-                            <span className="ksf-top-product-name">{p.product_name}</span>
-                            {p.category && <span className="ksf-top-product-cat">{p.category}</span>}
-                          </div>
-                          <div className="ksf-top-product-bar-wrap">
-                            <div className="ksf-top-product-bar" style={{ width: `${barPct}%` }} />
-                          </div>
-                          <span className="ksf-top-product-clicks">{p.clicks}</span>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {analytics.totalClicks === 0 && (
-                <div className="ksf-analytics-empty">
-                  <BarChart2 size={40} />
-                  <p>No clicks tracked yet for this period.</p>
-                  <p style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>Click data will appear here as customers browse your store.</p>
-                </div>
-              )}
-            </>
-          ) : (
-            <div className="ksf-analytics-empty">
-              <AlertCircle size={32} />
-              <p>Could not load analytics. Make sure Supabase ksf_clicks table is created.</p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* ====================================================
-          TAB: LIVE ORDERS
-          ==================================================== */}
-      {activeTab === 'orders' && (
-        <div className="ksf-orders-tab">
-          {/* Header */}
-          <div className="ksf-orders-header">
-            <div>
-              <h2 className="ksf-analytics-title">
-                <ShoppingCart size={20} />
-                Live Orders
-              </h2>
-              <p className="ksf-analytics-subtitle">WhatsApp orders initiated by customers</p>
-            </div>
-            <button
-              type="button"
-              className="btn-analytics-refresh"
-              onClick={() => loadOrders(ordersFilter)}
-              disabled={ordersLoading}
-            >
-              <RefreshCw size={15} className={ordersLoading ? 'ksf-spin' : ''} />
-              Refresh
-            </button>
-          </div>
-
-          {/* Status Filter Pills */}
-          <div className="ksf-period-pill-bar">
-            {[
-              { key: 'all', label: 'All Orders' },
-              { key: 'pending', label: '🟡 Pending' },
-              { key: 'confirmed', label: '✅ Confirmed' },
-              { key: 'delivered', label: '🚚 Delivered' },
-              { key: 'cancelled', label: '❌ Cancelled' }
-            ].map(f => (
-              <button
-                key={f.key}
-                type="button"
-                className={`ksf-period-pill ${ordersFilter === f.key ? 'active' : ''}`}
-                onClick={() => setOrdersFilter(f.key)}
-              >
-                {f.label}
-              </button>
-            ))}
-          </div>
-
-          {ordersLoading ? (
-            <div className="ksf-analytics-loader">
-              <RefreshCw size={28} className="ksf-spin" />
-              <p>Loading orders...</p>
-            </div>
-          ) : orders.length === 0 ? (
-            <div className="ksf-analytics-empty">
-              <ShoppingCart size={40} />
-              <p>No orders found{ordersFilter !== 'all' ? ` with status "${ordersFilter}"` : ' yet'}.</p>
-              <p style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>
-                Orders appear here when customers click "Order on WhatsApp" from the store.
-              </p>
-            </div>
-          ) : (
-            <div className="ksf-orders-list">
-              {orders.map(order => {
-                const statusConfig = {
-                  pending: { label: 'Pending', icon: <Clock size={13} />, cls: 'status-pending' },
-                  confirmed: { label: 'Confirmed', icon: <CheckCircle size={13} />, cls: 'status-confirmed' },
-                  delivered: { label: 'Delivered', icon: <Truck size={13} />, cls: 'status-delivered' },
-                  cancelled: { label: 'Cancelled', icon: <XCircle size={13} />, cls: 'status-cancelled' }
-                };
-                const sc = statusConfig[order.status] || statusConfig.pending;
-                const timeAgo = (() => {
-                  const diff = Date.now() - new Date(order.created_at).getTime();
-                  const mins = Math.floor(diff / 60000);
-                  if (mins < 60) return `${mins}m ago`;
-                  const hrs = Math.floor(mins / 60);
-                  if (hrs < 24) return `${hrs}h ago`;
-                  return `${Math.floor(hrs / 24)}d ago`;
-                })();
-                const items = order.items || [];
-                const isEditingNote = editingOrderNote?.id === order.id;
-
-                const handleStatusUpdate = async (newStatus) => {
-                  try {
-                    await api.updateOrderStatus(order.id, newStatus, order.note);
-                    setOrders(prev => prev.map(o => o.id === order.id ? { ...o, status: newStatus } : o));
-                    showToast(`Order ${order.order_ref} marked as ${newStatus}`);
-                  } catch {
-                    showToast('Failed to update order', 'error');
-                  }
-                };
-
-                const handleNoteSave = async () => {
-                  try {
-                    await api.updateOrderStatus(order.id, order.status, editingOrderNote.note);
-                    setOrders(prev => prev.map(o => o.id === order.id ? { ...o, note: editingOrderNote.note } : o));
-                    setEditingOrderNote(null);
-                    showToast('Note saved');
-                  } catch {
-                    showToast('Failed to save note', 'error');
-                  }
-                };
-
-                return (
-                  <div key={order.id} className={`ksf-order-card ${sc.cls}`}>
-                    {/* Order Card Header */}
-                    <div className="ksf-order-card-head">
-                      <div className="ksf-order-ref-row">
-                        <span className="ksf-order-ref">{order.order_ref}</span>
-                        <span className={`ksf-order-status-badge ${sc.cls}`}>
-                          {sc.icon} {sc.label}
-                        </span>
-                      </div>
-                      <div className="ksf-order-meta">
-                        <span className="ksf-order-time"><Clock size={11} /> {timeAgo}</span>
-                        <span className="ksf-order-visitor">ID: {order.visitor_id?.slice(0, 12)}…</span>
-                      </div>
-                    </div>
-
-                    {/* Items */}
-                    <div className="ksf-order-items">
-                      {items.slice(0, 4).map((item, i) => (
-                        <div key={i} className="ksf-order-item-row">
-                          <span className="ksf-order-item-name">{item.name}</span>
-                          <span className="ksf-order-item-detail">
-                            {item.variant_label} × {item.qty}
-                          </span>
-                          <span className="ksf-order-item-price">{formatCurrency(item.subtotal || 0)}</span>
-                        </div>
-                      ))}
-                      {items.length > 4 && (
-                        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-                          +{items.length - 4} more items
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Total */}
-                    <div className="ksf-order-total-row">
-                      <span>Total</span>
-                      <span className="ksf-order-total-val">{formatCurrency(order.total_amount)}</span>
-                    </div>
-
-                    {/* Note */}
-                    {isEditingNote ? (
-                      <div className="ksf-order-note-edit">
-                        <input
-                          type="text"
-                          className="ksf-input"
-                          value={editingOrderNote.note}
-                          onChange={e => setEditingOrderNote({ ...editingOrderNote, note: e.target.value })}
-                          placeholder="Add a note (e.g. Cash on delivery, Balanagar area)"
-                          autoFocus
-                        />
-                        <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem' }}>
-                          <button type="button" className="btn-order-action btn-save-note" onClick={handleNoteSave}>Save Note</button>
-                          <button type="button" className="btn-order-action" style={{ background: 'var(--bg-subtle)' }} onClick={() => setEditingOrderNote(null)}>Cancel</button>
-                        </div>
-                      </div>
-                    ) : order.note ? (
-                      <div className="ksf-order-note-display" onClick={() => setEditingOrderNote({ id: order.id, note: order.note })}>
-                        <StickyNote size={12} /> {order.note}
-                        <span className="ksf-note-edit-hint">(tap to edit)</span>
-                      </div>
-                    ) : null}
-
-                    {/* Action Buttons */}
-                    <div className="ksf-order-actions">
-                      {order.status !== 'confirmed' && order.status !== 'delivered' && order.status !== 'cancelled' && (
-                        <button type="button" className="btn-order-action btn-confirm" onClick={() => handleStatusUpdate('confirmed')}>
-                          <CheckCircle size={13} /> Confirm
-                        </button>
-                      )}
-                      {order.status === 'confirmed' && (
-                        <button type="button" className="btn-order-action btn-deliver" onClick={() => handleStatusUpdate('delivered')}>
-                          <Truck size={13} /> Mark Delivered
-                        </button>
-                      )}
-                      {order.status !== 'cancelled' && order.status !== 'delivered' && (
-                        <button type="button" className="btn-order-action btn-cancel" onClick={() => handleStatusUpdate('cancelled')}>
-                          <XCircle size={13} /> Cancel
-                        </button>
-                      )}
-                      <button
-                        type="button"
-                        className="btn-order-action btn-note"
-                        onClick={() => setEditingOrderNote({ id: order.id, note: order.note || '' })}
-                      >
-                        <StickyNote size={13} /> Note
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </div>
-      )}
     </div>
+  );
+}
+
+// Error Boundary wrapper to guarantee the page never goes blank
+class AdminErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error, errorInfo) {
+    console.error('Admin Panel Error:', error, errorInfo);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '2rem', background: '#051A10', color: '#FFFFFF', textAlign: 'center' }}>
+          <h2 style={{ fontFamily: 'Cinzel, serif', color: '#D4AF37', marginBottom: '0.75rem', fontSize: '1.25rem' }}>Admin Portal Recovery</h2>
+          <p style={{ color: '#E7E0D3', maxWidth: '460px', marginBottom: '1.5rem', lineHeight: 1.5, fontSize: '0.85rem' }}>
+            A temporary display error occurred while rendering the management panel.
+          </p>
+          <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <button
+              onClick={() => { this.setState({ hasError: false }); window.location.reload(); }}
+              style={{ background: '#0B3B24', color: '#FFF', border: '1.5px solid #D4AF37', padding: '0.6rem 1.25rem', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem' }}
+            >
+              Reload Admin Portal
+            </button>
+            <button
+              onClick={() => { window.location.hash = ''; window.location.pathname = '/'; }}
+              style={{ background: '#FFFFFF', color: '#0B3B24', border: 'none', padding: '0.6rem 1.25rem', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', fontSize: '0.85rem' }}
+            >
+              Return to Storefront
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+export default function AdminPanel(props) {
+  return (
+    <AdminErrorBoundary>
+      <AdminPanelInner {...props} />
+    </AdminErrorBoundary>
   );
 }

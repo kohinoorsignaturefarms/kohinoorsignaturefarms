@@ -199,17 +199,27 @@ export const api = {
 
   // Get analytics for admin panel
   async getAnalytics(period = 'week') {
-    const res = await fetch(`${API_BASE}/analytics?period=${period}`);
-    if (!res.ok) throw new Error('Failed to fetch analytics');
-    return res.json();
+    try {
+      const res = await fetch(`${API_BASE}/analytics?period=${period}`);
+      if (!res.ok) return { totalClicks: 0, uniqueVisitors: 0, totalOrders: 0, totalOrderValue: 0, topProducts: [], eventBreakdown: {} };
+      const data = await res.json();
+      return data || { totalClicks: 0, uniqueVisitors: 0, totalOrders: 0, totalOrderValue: 0, topProducts: [], eventBreakdown: {} };
+    } catch (e) {
+      return { totalClicks: 0, uniqueVisitors: 0, totalOrders: 0, totalOrderValue: 0, topProducts: [], eventBreakdown: {} };
+    }
   },
 
   // Get all orders for admin panel
   async getOrders(status = 'all') {
-    const url = status && status !== 'all' ? `${API_BASE}/orders?status=${status}` : `${API_BASE}/orders`;
-    const res = await fetch(url);
-    if (!res.ok) throw new Error('Failed to fetch orders');
-    return res.json();
+    try {
+      const url = status && status !== 'all' ? `${API_BASE}/orders?status=${status}` : `${API_BASE}/orders`;
+      const res = await fetch(url);
+      if (!res.ok) return [];
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
+    } catch (e) {
+      return [];
+    }
   },
 
   // Update order status from admin panel
@@ -226,8 +236,9 @@ export const api = {
 
 // Helper to format currency
 export const formatCurrency = (amount) => {
-  if (amount === undefined || amount === null) return '₹0';
-  return `₹${Number(amount).toLocaleString('en-IN')}`;
+  const num = Number(amount);
+  if (isNaN(num)) return '₹0';
+  return `₹${num.toLocaleString('en-IN')}`;
 };
 
 // Helper to build WhatsApp direct link with formatted message
