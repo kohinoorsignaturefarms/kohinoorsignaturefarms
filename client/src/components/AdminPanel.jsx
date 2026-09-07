@@ -705,19 +705,11 @@ function AdminPanelInner({
           </button>
 
           <button
-            className={`btn-admin-tab ${activeTab === 'stats' ? 'active' : ''}`}
-            onClick={() => setActiveTab('stats')}
-          >
-            <TrendingUp size={15} />
-            <span>Farm Metrics</span>
-          </button>
-
-          <button
             className={`btn-admin-tab ${activeTab === 'analytics' ? 'active' : ''}`}
             onClick={() => setActiveTab('analytics')}
           >
             <BarChart2 size={15} />
-            <span>Analytics</span>
+            <span>Analytics & Farm Metrics</span>
           </button>
 
           <button
@@ -1553,241 +1545,255 @@ function AdminPanelInner({
         )}
 
         {/* ====================================================
-            TAB 5: STATS & OVERVIEW
-            ==================================================== */}
-        {activeTab === 'stats' && (
-          <div>
-            <h3 style={{ fontFamily: 'var(--font-cinzel)', fontSize: '1.2rem', fontWeight: 800, color: 'var(--green-primary)', marginBottom: '1.25rem' }}>
-              Farm Catalog Analytics & Summary
-            </h3>
-
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: '1rem', marginBottom: '2rem', width: '100%', boxSizing: 'border-box' }}>
-              <div className="ksf-stat-card">
-                <div className="ksf-stat-icon-box">
-                  <Package size={22} />
-                </div>
-                <div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--green-primary)' }}>
-                    {products.length}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                    Total Products
-                  </div>
-                </div>
-              </div>
-
-              <div className="ksf-stat-card">
-                <div className="ksf-stat-icon-box" style={{ background: '#DCFCE7', color: '#15803D' }}>
-                  <Check size={22} />
-                </div>
-                <div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#15803D' }}>
-                    {products.filter((p) => p.inStock !== false).length}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                    In-Stock Today
-                  </div>
-                </div>
-              </div>
-
-              <div className="ksf-stat-card">
-                <div className="ksf-stat-icon-box" style={{ background: 'var(--gold-shimmer)', color: 'var(--gold-dark)' }}>
-                  <DollarSign size={22} />
-                </div>
-                <div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--gold-dark)' }}>
-                    {stats?.avgDiscount || '16'}%
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                    Avg Customer Savings
-                  </div>
-                </div>
-              </div>
-
-              <div className="ksf-stat-card">
-                <div className="ksf-stat-icon-box">
-                  <Layers size={22} />
-                </div>
-                <div>
-                  <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--green-primary)' }}>
-                    {(categories || []).length}
-                  </div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: 600 }}>
-                    Categories
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* ====================================================
-            TAB 6: ANALYTICS
+            TAB 5: ANALYTICS & FARM METRICS (MERGED)
             ==================================================== */}
         {activeTab === 'analytics' && (
           <div className="ksf-analytics-tab">
             {/* Header */}
-            <div className="ksf-analytics-header">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.5rem' }}>
               <div>
-                <h2 className="ksf-analytics-title">
-                  <BarChart2 size={20} />
-                  Store Analytics
-                </h2>
-                <p className="ksf-analytics-subtitle">Click behaviour & engagement metrics</p>
+                <h3 className="ksf-analytics-title">
+                  <BarChart2 size={22} />
+                  Analytics & Farm Metrics
+                </h3>
+                <p className="ksf-analytics-subtitle">
+                  Live farm catalog snapshot, visitor engagement, and WhatsApp order conversions
+                </p>
               </div>
               <button
                 type="button"
                 className="btn-analytics-refresh"
-                onClick={() => loadAnalytics(analyticsPeriod)}
-                disabled={analyticsLoading}
+                onClick={() => {
+                  loadAllData();
+                  loadAnalytics(analyticsPeriod);
+                }}
+                disabled={analyticsLoading || loading}
               >
-                <RefreshCw size={15} className={analyticsLoading ? 'ksf-spin' : ''} />
-                Refresh
+                <RefreshCw size={15} className={analyticsLoading || loading ? 'ksf-spin' : ''} />
+                Sync Data
               </button>
             </div>
 
-            {/* Period Selector */}
-            <div className="ksf-period-pill-bar">
-              {[
-                { key: 'day', label: 'Today' },
-                { key: 'week', label: '7 Days' },
-                { key: 'month', label: '30 Days' },
-                { key: '6months', label: '6 Months' },
-                { key: 'year', label: '1 Year' }
-              ].map(p => (
-                <button
-                  key={p.key}
-                  type="button"
-                  className={`ksf-period-pill ${analyticsPeriod === p.key ? 'active' : ''}`}
-                  onClick={() => setAnalyticsPeriod(p.key)}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-
-            {analyticsLoading ? (
-              <div className="ksf-analytics-loader">
-                <RefreshCw size={28} className="ksf-spin" />
-                <p>Loading analytics...</p>
+            {/* Farm Catalog & Inventory Metrics */}
+            <div style={{ marginBottom: '2rem' }}>
+              <div style={{ fontFamily: 'var(--font-cinzel)', fontSize: '0.92rem', fontWeight: 800, color: 'var(--green-primary)', letterSpacing: '0.03em', marginBottom: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                <Layers size={17} />
+                Farm Inventory Snapshot
               </div>
-            ) : analytics ? (
-              <>
-                {/* Metric Cards */}
-                <div className="ksf-metric-cards">
-                  <div className="ksf-metric-card">
-                    <div className="ksf-metric-icon" style={{ background: 'rgba(34,197,94,0.12)', color: 'var(--green-accent)' }}>
-                      <BarChart2 size={22} />
-                    </div>
-                    <div className="ksf-metric-value">{analytics.totalClicks ?? 0}</div>
-                    <div className="ksf-metric-label">Total Clicks</div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '1rem', width: '100%', boxSizing: 'border-box' }}>
+                <div className="ksf-stat-card">
+                  <div className="ksf-stat-icon-box">
+                    <Package size={22} />
                   </div>
-                  <div className="ksf-metric-card">
-                    <div className="ksf-metric-icon" style={{ background: 'rgba(59,130,246,0.12)', color: '#3B82F6' }}>
-                      <Users size={22} />
+                  <div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--green-primary)', lineHeight: 1.1 }}>
+                      {products.length}
                     </div>
-                    <div className="ksf-metric-value">{analytics.uniqueVisitors ?? 0}</div>
-                    <div className="ksf-metric-label">Unique Visitors</div>
-                  </div>
-                  <div className="ksf-metric-card">
-                    <div className="ksf-metric-icon" style={{ background: 'rgba(212,175,55,0.15)', color: 'var(--gold-primary)' }}>
-                      <ShoppingCart size={22} />
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.2rem' }}>
+                      Active Farm Cuts
                     </div>
-                    <div className="ksf-metric-value">{analytics.totalOrders ?? 0}</div>
-                    <div className="ksf-metric-label">WA Orders</div>
-                  </div>
-                  <div className="ksf-metric-card">
-                    <div className="ksf-metric-icon" style={{ background: 'rgba(16,185,129,0.12)', color: 'var(--success-green)' }}>
-                      <DollarSign size={22} />
-                    </div>
-                    <div className="ksf-metric-value">{formatCurrency(analytics.totalOrderValue ?? 0)}</div>
-                    <div className="ksf-metric-label">Order Value</div>
                   </div>
                 </div>
 
-                {/* Event Breakdown */}
-                {analytics.eventBreakdown && Object.keys(analytics.eventBreakdown).length > 0 && (
-                  <div className="ksf-analytics-section">
-                    <h3 className="ksf-analytics-section-title">Click Type Breakdown</h3>
-                    <div className="ksf-event-breakdown">
-                      {Object.entries(analytics.eventBreakdown).map(([type, count]) => {
-                        const total = analytics.totalClicks || 1;
-                        const pct = Math.round((count / total) * 100);
-                        const labels = { buy_click: 'WhatsApp Direct', cart_add: 'Add to Cart', whatsapp_checkout: 'Cart Checkout' };
-                        const colors = { buy_click: 'var(--whatsapp-green)', cart_add: 'var(--green-accent)', whatsapp_checkout: 'var(--gold-primary)' };
-                        return (
-                          <div key={type} className="ksf-event-row">
-                            <div className="ksf-event-row-label">
-                              <span className="ksf-event-dot" style={{ background: colors[type] || 'var(--green-primary)' }} />
-                              {labels[type] || type}
-                            </div>
-                            <div className="ksf-event-bar-wrap">
-                              <div className="ksf-event-bar" style={{ width: `${pct}%`, background: colors[type] || 'var(--green-primary)' }} />
-                            </div>
-                            <div className="ksf-event-count">{count} <span className="ksf-event-pct">({pct}%)</span></div>
-                          </div>
-                        );
-                      })}
+                <div className="ksf-stat-card">
+                  <div className="ksf-stat-icon-box" style={{ background: '#DCFCE7', color: '#15803D' }}>
+                    <Check size={22} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#15803D', lineHeight: 1.1 }}>
+                      {products.filter((p) => p.inStock !== false).length}
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.2rem' }}>
+                      In-Stock Today
                     </div>
                   </div>
-                )}
+                </div>
 
-                {/* Top Products */}
-                {Array.isArray(analytics.topProducts) && analytics.topProducts.length > 0 && (
-                  <div className="ksf-analytics-section">
-                    <h3 className="ksf-analytics-section-title">🔥 Top Clicked Products</h3>
-                    <div className="ksf-top-products">
-                      {analytics.topProducts.map((p, idx) => {
-                        const maxClicks = analytics.topProducts[0]?.clicks || 1;
-                        const barPct = Math.round((p.clicks / maxClicks) * 100);
-                        return (
-                          <div key={p.product_id || idx} className="ksf-top-product-row">
-                            <span className="ksf-top-product-rank">#{idx + 1}</span>
-                            <div className="ksf-top-product-info">
-                              <span className="ksf-top-product-name">{p.product_name}</span>
-                              {p.category && <span className="ksf-top-product-cat">{p.category}</span>}
-                            </div>
-                            <div className="ksf-top-product-bar-wrap">
-                              <div className="ksf-top-product-bar" style={{ width: `${barPct}%` }} />
-                            </div>
-                            <span className="ksf-top-product-clicks">{p.clicks}</span>
-                          </div>
-                        );
-                      })}
+                <div className="ksf-stat-card">
+                  <div className="ksf-stat-icon-box" style={{ background: 'var(--gold-shimmer)', color: 'var(--gold-dark)' }}>
+                    <DollarSign size={22} />
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--gold-dark)', lineHeight: 1.1 }}>
+                      {stats?.avgDiscount || '16'}%
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.2rem' }}>
+                      Avg Customer Savings
                     </div>
                   </div>
-                )}
+                </div>
 
-                {(!analytics.totalClicks || analytics.totalClicks === 0) && (
-                  <div className="ksf-analytics-empty">
-                    <BarChart2 size={40} />
-                    <p>No clicks tracked yet for this period.</p>
-                    <p style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>Click data will appear here as customers browse your store.</p>
+                <div className="ksf-stat-card">
+                  <div className="ksf-stat-icon-box">
+                    <Layers size={22} />
                   </div>
-                )}
-              </>
-            ) : (
-              <div className="ksf-analytics-empty">
-                <AlertCircle size={32} />
-                <p>Could not load analytics. Make sure Supabase ksf_clicks table is created.</p>
+                  <div>
+                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--green-primary)', lineHeight: 1.1 }}>
+                      {(categories || []).length}
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.2rem' }}>
+                      Farm Categories
+                    </div>
+                  </div>
+                </div>
               </div>
-            )}
+            </div>
+
+            {/* Store Traffic & Conversions Sub-section */}
+            <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem' }}>
+                <div style={{ fontFamily: 'var(--font-cinzel)', fontSize: '0.92rem', fontWeight: 800, color: 'var(--green-primary)', letterSpacing: '0.03em', display: 'flex', alignItems: 'center', gap: '0.45rem' }}>
+                  <TrendingUp size={17} />
+                  Store Traffic & WhatsApp Conversions
+                </div>
+
+                {/* Period Selector */}
+                <div className="ksf-period-pill-bar" style={{ marginBottom: 0 }}>
+                  {[
+                    { key: 'day', label: 'Today' },
+                    { key: 'week', label: '7 Days' },
+                    { key: 'month', label: '30 Days' },
+                    { key: '6months', label: '6 Months' },
+                    { key: 'year', label: '1 Year' }
+                  ].map(p => (
+                    <button
+                      key={p.key}
+                      type="button"
+                      className={`ksf-period-pill ${analyticsPeriod === p.key ? 'active' : ''}`}
+                      onClick={() => setAnalyticsPeriod(p.key)}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {analyticsLoading ? (
+                <div className="ksf-analytics-loader">
+                  <RefreshCw size={28} className="ksf-spin" />
+                  <p>Loading analytics...</p>
+                </div>
+              ) : analytics ? (
+                <>
+                  {/* Metric Cards */}
+                  <div className="ksf-metric-cards">
+                    <div className="ksf-metric-card">
+                      <div className="ksf-metric-icon" style={{ background: 'rgba(34,197,94,0.12)', color: 'var(--green-accent)' }}>
+                        <BarChart2 size={22} />
+                      </div>
+                      <div className="ksf-metric-value">{analytics.totalClicks ?? 0}</div>
+                      <div className="ksf-metric-label">Total Clicks</div>
+                    </div>
+                    <div className="ksf-metric-card">
+                      <div className="ksf-metric-icon" style={{ background: 'rgba(59,130,246,0.12)', color: '#3B82F6' }}>
+                        <Users size={22} />
+                      </div>
+                      <div className="ksf-metric-value">{analytics.uniqueVisitors ?? 0}</div>
+                      <div className="ksf-metric-label">Unique Visitors</div>
+                    </div>
+                    <div className="ksf-metric-card">
+                      <div className="ksf-metric-icon" style={{ background: 'rgba(212,175,55,0.15)', color: 'var(--gold-primary)' }}>
+                        <ShoppingCart size={22} />
+                      </div>
+                      <div className="ksf-metric-value">{analytics.totalOrders ?? 0}</div>
+                      <div className="ksf-metric-label">WA Orders</div>
+                    </div>
+                    <div className="ksf-metric-card">
+                      <div className="ksf-metric-icon" style={{ background: 'rgba(16,185,129,0.12)', color: 'var(--success-green)' }}>
+                        <DollarSign size={22} />
+                      </div>
+                      <div className="ksf-metric-value">{formatCurrency(analytics.totalOrderValue ?? 0)}</div>
+                      <div className="ksf-metric-label">Order Value</div>
+                    </div>
+                  </div>
+
+                  {/* Event Breakdown */}
+                  {analytics.eventBreakdown && Object.keys(analytics.eventBreakdown).length > 0 && (
+                    <div className="ksf-analytics-section">
+                      <h3 className="ksf-analytics-section-title">Click Type Breakdown</h3>
+                      <div className="ksf-event-breakdown">
+                        {Object.entries(analytics.eventBreakdown).map(([type, count]) => {
+                          const total = analytics.totalClicks || 1;
+                          const pct = Math.round((count / total) * 100);
+                          const labels = { buy_click: 'WhatsApp Direct', cart_add: 'Add to Cart', whatsapp_checkout: 'Cart Checkout' };
+                          const colors = { buy_click: 'var(--whatsapp-green)', cart_add: 'var(--green-accent)', whatsapp_checkout: 'var(--gold-primary)' };
+                          return (
+                            <div key={type} className="ksf-event-row">
+                              <div className="ksf-event-row-label">
+                                <span className="ksf-event-dot" style={{ background: colors[type] || 'var(--green-primary)' }} />
+                                {labels[type] || type}
+                              </div>
+                              <div className="ksf-event-bar-wrap">
+                                <div className="ksf-event-bar" style={{ width: `${pct}%`, background: colors[type] || 'var(--green-primary)' }} />
+                              </div>
+                              <div className="ksf-event-count">{count} <span className="ksf-event-pct">({pct}%)</span></div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Top Products */}
+                  {Array.isArray(analytics.topProducts) && analytics.topProducts.length > 0 && (
+                    <div className="ksf-analytics-section">
+                      <h3 className="ksf-analytics-section-title">🔥 Top Clicked Products</h3>
+                      <div className="ksf-top-products">
+                        {analytics.topProducts.map((p, idx) => {
+                          const maxClicks = analytics.topProducts[0]?.clicks || 1;
+                          const barPct = Math.round((p.clicks / maxClicks) * 100);
+                          return (
+                            <div key={p.product_id || idx} className="ksf-top-product-row">
+                              <span className="ksf-top-product-rank">#{idx + 1}</span>
+                              <div className="ksf-top-product-info">
+                                <span className="ksf-top-product-name">{p.product_name}</span>
+                                {p.category && <span className="ksf-top-product-cat">{p.category}</span>}
+                              </div>
+                              <div className="ksf-top-product-bar-wrap">
+                                <div className="ksf-top-product-bar" style={{ width: `${barPct}%` }} />
+                              </div>
+                              <span className="ksf-top-product-clicks">{p.clicks}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {(!analytics.totalClicks || analytics.totalClicks === 0) && (
+                    <div className="ksf-analytics-empty">
+                      <BarChart2 size={40} />
+                      <p>No clicks tracked yet for this period.</p>
+                      <p style={{ fontSize: '0.85rem', color: 'var(--text-light)' }}>Click data will appear here as customers browse your store.</p>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="ksf-analytics-empty">
+                  <AlertCircle size={32} />
+                  <p>Could not load analytics. Make sure Supabase ksf_clicks table is created.</p>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
         {/* ====================================================
-            TAB 7: LIVE ORDERS
+            TAB 6: LIVE ORDERS
             ==================================================== */}
         {activeTab === 'orders' && (
           <div className="ksf-orders-tab">
             {/* Header */}
-            <div className="ksf-orders-header">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
               <div>
-                <h2 className="ksf-analytics-title">
-                  <ShoppingCart size={20} />
-                  Live Orders
-                </h2>
-                <p className="ksf-analytics-subtitle">WhatsApp orders initiated by customers</p>
+                <h3 className="ksf-analytics-title">
+                  <ShoppingCart size={22} />
+                  Live WhatsApp Orders
+                </h3>
+                <p className="ksf-analytics-subtitle">
+                  Real-time customer orders placed via WhatsApp checkout
+                </p>
               </div>
               <button
                 type="button"
@@ -1796,14 +1802,14 @@ function AdminPanelInner({
                 disabled={ordersLoading}
               >
                 <RefreshCw size={15} className={ordersLoading ? 'ksf-spin' : ''} />
-                Refresh
+                Refresh Orders
               </button>
             </div>
 
             {/* Status Filter Pills */}
             <div className="ksf-period-pill-bar">
               {[
-                { key: 'all', label: 'All Orders' },
+                { key: 'all', label: `All Orders (${orders.length})` },
                 { key: 'pending', label: '🟡 Pending' },
                 { key: 'confirmed', label: '✅ Confirmed' },
                 { key: 'delivered', label: '🚚 Delivered' },
@@ -1829,7 +1835,7 @@ function AdminPanelInner({
               <div className="ksf-analytics-empty">
                 <ShoppingCart size={40} />
                 <p>No orders found{ordersFilter !== 'all' ? ` with status "${ordersFilter}"` : ' yet'}.</p>
-                <p style={{ fontSize: '0.8rem', color: 'var(--text-light)' }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-light)' }}>
                   Orders appear here when customers click "Order on WhatsApp" from the store.
                 </p>
               </div>
@@ -1886,7 +1892,7 @@ function AdminPanelInner({
                           </span>
                         </div>
                         <div className="ksf-order-meta">
-                          <span className="ksf-order-time"><Clock size={11} /> {timeAgo}</span>
+                          <span className="ksf-order-time"><Clock size={13} /> {timeAgo}</span>
                           <span className="ksf-order-visitor">ID: {order.visitor_id?.slice(0, 12)}…</span>
                         </div>
                       </div>
@@ -1903,7 +1909,7 @@ function AdminPanelInner({
                           </div>
                         ))}
                         {items.length > 4 && (
-                          <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '0.35rem', fontWeight: 600 }}>
                             +{items.length - 4} more items
                           </div>
                         )}
@@ -1911,7 +1917,7 @@ function AdminPanelInner({
 
                       {/* Total */}
                       <div className="ksf-order-total-row">
-                        <span>Total</span>
+                        <span>Total Payable</span>
                         <span className="ksf-order-total-val">{formatCurrency(order.total_amount)}</span>
                       </div>
 
@@ -1926,15 +1932,15 @@ function AdminPanelInner({
                             placeholder="Add a note (e.g. Cash on delivery, Balanagar area)"
                             autoFocus
                           />
-                          <div style={{ display: 'flex', gap: '0.4rem', marginTop: '0.4rem' }}>
+                          <div style={{ display: 'flex', gap: '0.45rem', marginTop: '0.45rem' }}>
                             <button type="button" className="btn-order-action btn-save-note" onClick={handleNoteSave}>Save Note</button>
                             <button type="button" className="btn-order-action" style={{ background: 'var(--bg-subtle)' }} onClick={() => setEditingOrderNote(null)}>Cancel</button>
                           </div>
                         </div>
                       ) : order.note ? (
                         <div className="ksf-order-note-display" onClick={() => setEditingOrderNote({ id: order.id, note: order.note })}>
-                          <StickyNote size={12} /> {order.note}
-                          <span className="ksf-note-edit-hint">(tap to edit)</span>
+                          <StickyNote size={14} /> {order.note}
+                          <span className="ksf-note-edit-hint">(tap to edit note)</span>
                         </div>
                       ) : null}
 
@@ -1942,17 +1948,17 @@ function AdminPanelInner({
                       <div className="ksf-order-actions">
                         {order.status !== 'confirmed' && order.status !== 'delivered' && order.status !== 'cancelled' && (
                           <button type="button" className="btn-order-action btn-confirm" onClick={() => handleStatusUpdate('confirmed')}>
-                            <CheckCircle size={13} /> Confirm
+                            <CheckCircle size={14} /> Confirm
                           </button>
                         )}
                         {order.status === 'confirmed' && (
                           <button type="button" className="btn-order-action btn-deliver" onClick={() => handleStatusUpdate('delivered')}>
-                            <Truck size={13} /> Mark Delivered
+                            <Truck size={14} /> Mark Delivered
                           </button>
                         )}
                         {order.status !== 'cancelled' && order.status !== 'delivered' && (
                           <button type="button" className="btn-order-action btn-cancel" onClick={() => handleStatusUpdate('cancelled')}>
-                            <XCircle size={13} /> Cancel
+                            <XCircle size={14} /> Cancel
                           </button>
                         )}
                         <button
@@ -1960,7 +1966,7 @@ function AdminPanelInner({
                           className="btn-order-action btn-note"
                           onClick={() => setEditingOrderNote({ id: order.id, note: order.note || '' })}
                         >
-                          <StickyNote size={13} /> Note
+                          <StickyNote size={14} /> Note
                         </button>
                       </div>
                     </div>
