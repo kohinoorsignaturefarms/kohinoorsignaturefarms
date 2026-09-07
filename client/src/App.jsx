@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import Header from './components/Header';
 import AnnouncementBar from './components/AnnouncementBar';
 import HeroSlider from './components/HeroSlider';
-import CategoryBoxes from './components/CategoryBoxes';
 import CategoryFilterBar from './components/CategoryFilterBar';
 import ProductCard from './components/ProductCard';
 import ProductDetailPage from './components/ProductDetailPage';
@@ -284,17 +283,6 @@ export default function App() {
           setActiveCategory(catId);
           setOnlyBestSellers(false);
         }}
-      />
-
-      {/* 3 Main Spotlight Category Boxes (Goat, Chicken, Eggs) */}
-      <CategoryBoxes
-        categories={categories}
-        activeCategory={activeCategory}
-        onSelectCategory={(catId) => {
-          setActiveCategory(catId);
-          setOnlyBestSellers(false);
-        }}
-        products={products}
       />
 
       {/* Swiggy Sticky Category Filter Bar */}
