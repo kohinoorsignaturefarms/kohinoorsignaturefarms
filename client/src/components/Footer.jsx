@@ -1,7 +1,7 @@
 import React from 'react';
-import { ShieldCheck, MapPin, Phone, Clock, MessageCircle } from 'lucide-react';
+import { ShieldCheck, MapPin, Phone, Clock, MessageCircle, ArrowRight } from 'lucide-react';
 
-export default function Footer({ storeSettings }) {
+export default function Footer({ storeSettings, onOpenAbout }) {
   const whatsappNumber = (storeSettings?.whatsappNumber || '919876543210').replace(/[^0-9]/g, '');
   const fssaiNo = storeSettings?.masterFssai || '13624014000889';
 
@@ -45,23 +45,48 @@ export default function Footer({ storeSettings }) {
               {storeSettings?.tagline || 'Nurturing Life, Growing Prosperity'} — Premium pasture-raised goat meat, free-range country chicken, and organic farm eggs. Pure organic feed, zero antibiotics, 100% authentic Halal certified.
             </p>
 
-            {/* FSSAI License Badge */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '0.5rem',
-                background: 'rgba(212, 175, 55, 0.15)',
-                border: '1px solid rgba(212, 175, 55, 0.4)',
-                padding: '0.45rem 0.85rem',
-                borderRadius: 'var(--radius-md)',
-                color: 'var(--gold-light)',
-                fontSize: '0.8rem',
-                fontWeight: 700
-              }}
-            >
-              <ShieldCheck size={16} />
-              <span>FSSAI License: {fssaiNo}</span>
+            {/* FSSAI License Badge & About Us Shortcut */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  background: 'rgba(212, 175, 55, 0.15)',
+                  border: '1px solid rgba(212, 175, 55, 0.4)',
+                  padding: '0.45rem 0.85rem',
+                  borderRadius: 'var(--radius-md)',
+                  color: 'var(--gold-light)',
+                  fontSize: '0.8rem',
+                  fontWeight: 700
+                }}
+              >
+                <ShieldCheck size={16} />
+                <span>FSSAI License: {fssaiNo}</span>
+              </div>
+
+              {onOpenAbout && (
+                <button
+                  type="button"
+                  onClick={onOpenAbout}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.45rem',
+                    background: 'rgba(255, 255, 255, 0.12)',
+                    border: '1px solid rgba(255, 255, 255, 0.25)',
+                    padding: '0.45rem 0.85rem',
+                    borderRadius: 'var(--radius-md)',
+                    color: '#FFFFFF',
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  <span>About Us & The Kohinoor Standard</span>
+                  <ArrowRight size={13} />
+                </button>
+              )}
             </div>
           </div>
 

@@ -6,7 +6,7 @@ import CategoryFilterBar from './components/CategoryFilterBar';
 import ProductCard from './components/ProductCard';
 import ProductDetailPage from './components/ProductDetailPage';
 import CartDrawer from './components/CartDrawer';
-import WhyChooseUs from './components/WhyChooseUs';
+import AboutUsPage from './components/AboutUsPage';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
 import { api, formatCurrency } from './api';
@@ -114,9 +114,17 @@ export default function App() {
     );
   };
 
+  const checkIsAboutRoute = () => {
+    return (
+      window.location.pathname.includes('/about') ||
+      window.location.hash.includes('#about')
+    );
+  };
+
   // Modals & Navigation states
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [isAdminOpen, setIsAdminOpen] = useState(checkIsAdminRoute);
+  const [currentPage, setCurrentPage] = useState(() => checkIsAboutRoute() ? 'about' : 'store');
 
   // Fetch initial data from REST API backend ONCE
   const fetchData = useCallback(async () => {
@@ -151,6 +159,12 @@ export default function App() {
         setIsAdminOpen(true);
       } else {
         setIsAdminOpen(false);
+      }
+
+      if (checkIsAboutRoute()) {
+        setCurrentPage('about');
+      } else {
+        setCurrentPage('store');
       }
 
       // Check URL pathname (e.g. /product/:id or /p/:id)
@@ -242,10 +256,28 @@ export default function App() {
     fetchData(); // Refresh any updated inventory data
   };
 
+  const handleOpenAbout = () => {
+    setCurrentPage('about');
+    setSelectedProduct(null);
+    try {
+      history.pushState(null, '', '/about');
+    } catch (e) {
+      window.location.hash = 'about';
+    }
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleGoHome = () => {
+    setCurrentPage('store');
+    setSelectedProduct(null);
     setActiveCategory('all');
     setSearchTerm('');
     setOnlyBestSellers(false);
+    try {
+      history.pushState(null, '', '/');
+    } catch (e) {
+      window.location.hash = '';
+    }
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -272,12 +304,18 @@ export default function App() {
         setSearchTerm={setSearchTerm}
         storeSettings={settings}
         onGoHome={handleGoHome}
+        onOpenAbout={handleOpenAbout}
+        activePage={currentPage}
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
       />
 
-      {/* Hero Banner Slider */}
-      <HeroSlider
+      {currentPage === 'about' ? (
+        <AboutUsPage storeSettings={settings} onGoToStore={handleGoHome} />
+      ) : (
+        <>
+          {/* Hero Banner Slider */}
+          <HeroSlider
         banners={settings?.heroBanners}
         onSelectCategory={(catId) => {
           setActiveCategory(catId);
@@ -437,19 +475,8 @@ export default function App() {
           )}
         </div>
       </main>
-
-      {/* The Kohinoor Standard (Pillars, Collections & Standards Boxes) */}
-      <WhyChooseUs
-        founder={settings?.founder}
-        tagline={settings?.tagline}
-        categories={categories}
-        onSelectCategory={(catId) => {
-          setActiveCategory(catId);
-          setOnlyBestSellers(false);
-          const el = document.getElementById('products-section');
-          if (el) el.scrollIntoView({ behavior: 'smooth' });
-        }}
-      />
+    </>
+  )}
 
       {/* Footer */}
       <Footer
@@ -460,6 +487,7 @@ export default function App() {
           setOnlyBestSellers(false);
         }}
         onOpenAdmin={handleOpenAdmin}
+        onOpenAbout={handleOpenAbout}
       />
 
       {/* Product Detail Modal */}
