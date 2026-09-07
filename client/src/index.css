@@ -3897,97 +3897,12 @@ input, select, textarea {
 }
 
 /* ==========================================================
-   HEADER BOTTOM NAVIGATION SHORTCUTS
-   ========================================================== */
-.ksf-header-bottom-bar {
-  margin-top: 0.65rem;
-  padding-top: 0.55rem;
-  border-top: 1px solid rgba(11, 59, 36, 0.08);
-  width: 100%;
-}
-
-.ksf-header-nav-shortcuts {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 2px;
-}
-
-.ksf-header-nav-shortcuts::-webkit-scrollbar {
-  display: none;
-}
-
-.ksf-header-nav-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.95rem;
-  border-radius: var(--radius-full);
-  font-size: 0.8rem;
-  font-weight: 700;
-  border: 1px solid var(--border-light);
-  background: var(--bg-subtle);
-  color: var(--text-body);
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-  font-family: var(--font-sans);
-}
-
-.ksf-header-nav-link:hover {
-  background: var(--green-light-bg);
-  border-color: var(--green-accent);
-  color: var(--green-primary);
-}
-
-.ksf-header-nav-link.active {
-  background: var(--green-primary);
-  border-color: var(--gold-primary);
-  color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(11, 59, 36, 0.2);
-}
-
-.ksf-header-nav-link.active svg {
-  color: var(--gold-light);
-}
-
-/* ==========================================================
    DEDICATED ABOUT US & THE KOHINOOR STANDARD PAGE
    ========================================================== */
 .ksf-about-page {
   width: 100%;
   background: var(--bg-main);
   min-height: 80vh;
-}
-
-.ksf-about-topbar {
-  background: #FFFFFF;
-  border-bottom: 1px solid var(--border-light);
-  padding: 0.75rem 0;
-}
-
-.ksf-about-back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
-  color: var(--green-primary);
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.4rem 0.85rem;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.ksf-about-back-btn:hover {
-  background: var(--green-primary);
-  color: #FFFFFF;
-  border-color: var(--green-primary);
 }
 
 /* Hero Section */

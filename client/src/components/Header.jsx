@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, MessageCircle, X, ShoppingBag, Sparkles } from 'lucide-react';
+import { Search, MessageCircle, X, ShoppingBag } from 'lucide-react';
 
 export default function Header({
   searchTerm,
@@ -118,27 +118,6 @@ export default function Header({
               </button>
             )}
           </div>
-        </div>
-        {/* Bottom Header Navigation Shortcuts */}
-        <div className="ksf-header-bottom-bar">
-          <nav className="ksf-header-nav-shortcuts">
-            <button
-              type="button"
-              onClick={onGoHome}
-              className={`ksf-header-nav-link ${activePage === 'store' ? 'active' : ''}`}
-            >
-              <ShoppingBag size={14} />
-              <span>Fresh Farm Cuts</span>
-            </button>
-            <button
-              type="button"
-              onClick={onOpenAbout}
-              className={`ksf-header-nav-link ${activePage === 'about' ? 'active' : ''}`}
-            >
-              <Sparkles size={14} />
-              <span>About Us (The Kohinoor Standard)</span>
-            </button>
-          </nav>
         </div>
       </div>
     </header>

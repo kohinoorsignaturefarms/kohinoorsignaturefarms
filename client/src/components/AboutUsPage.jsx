@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import {
   Leaf,
   Award,
@@ -6,7 +6,6 @@ import {
   Users,
   ShieldCheck,
   Sparkles,
-  ArrowLeft,
   ShoppingBag,
   MessageCircle,
   Clock,
@@ -84,27 +83,6 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
 
   return (
     <div className="ksf-about-page animate-fade-in">
-      {/* Top Breadcrumb & Quick Action Bar */}
-      <div className="ksf-about-topbar">
-        <div className="ksf-container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem' }}>
-          <button
-            type="button"
-            onClick={onGoToStore}
-            className="ksf-about-back-btn"
-            title="Return to fresh cuts store"
-          >
-            <ArrowLeft size={16} />
-            <span>Return to Storefront</span>
-          </button>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.78rem', color: 'var(--text-muted)' }}>
-            <span>Home</span>
-            <span>/</span>
-            <span style={{ color: 'var(--green-primary)', fontWeight: 700 }}>About Us & Standards</span>
-          </div>
-        </div>
-      </div>
-
       {/* Hero Header Section */}
       <section className="ksf-about-hero">
         <div className="ksf-container" style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto' }}>
