@@ -37,6 +37,25 @@ import {
 } from 'lucide-react';
 import { api, formatCurrency } from '../api';
 
+const safeAdminAuth = {
+  get: () => {
+    try {
+      return sessionStorage.getItem('ksf_admin_auth') === 'true';
+    } catch (e) {
+      return false;
+    }
+  },
+  set: (val) => {
+    try {
+      if (val) {
+        sessionStorage.setItem('ksf_admin_auth', 'true');
+      } else {
+        sessionStorage.removeItem('ksf_admin_auth');
+      }
+    } catch (e) {}
+  }
+};
+
 function AdminPanelInner({
   onClose,
   initialProducts = [],
@@ -44,9 +63,7 @@ function AdminPanelInner({
   initialSettings = {},
   onDataRefresh
 }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(
-    () => sessionStorage.getItem('ksf_admin_auth') === 'true'
-  );
+  const [isAuthenticated, setIsAuthenticated] = useState(safeAdminAuth.get);
   const [pinInput, setPinInput] = useState('');
   const [pinError, setPinError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -183,7 +200,7 @@ function AdminPanelInner({
     try {
       await api.verifyAdminPin(pinInput);
       setIsAuthenticated(true);
-      sessionStorage.setItem('ksf_admin_auth', 'true');
+      safeAdminAuth.set(true);
       showToast('Welcome to Kohinoor Signature Farms Admin');
     } catch (err) {
       setPinError(err.message || 'Invalid PIN');
@@ -192,7 +209,7 @@ function AdminPanelInner({
 
   const handleLogout = () => {
     setIsAuthenticated(false);
-    sessionStorage.removeItem('ksf_admin_auth');
+    safeAdminAuth.set(false);
     onClose();
   };
 
