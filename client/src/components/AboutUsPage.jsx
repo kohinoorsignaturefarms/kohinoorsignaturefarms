@@ -8,8 +8,6 @@ import {
   Sparkles,
   ShoppingBag,
   MessageCircle,
-  Clock,
-  MapPin,
   CheckCircle2
 } from 'lucide-react';
 
@@ -179,59 +177,68 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
         </div>
       </section>
 
-      {/* SECTION 3: 100% Halal Guarantee & Founder Attribution */}
+      {/* SECTION 3: 100% Halal Guarantee & Founder Assurance */}
       <section className="ksf-about-section">
-        <div className="ksf-container">
-          <div className="ksf-founder-feature-card">
-            <div className="ksf-founder-feature-content">
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.45rem', background: 'rgba(212, 175, 55, 0.15)', border: '1px solid rgba(212, 175, 55, 0.35)', padding: '0.35rem 0.75rem', borderRadius: 'var(--radius-full)', color: 'var(--gold-light)', fontSize: '0.78rem', fontWeight: 800, marginBottom: '1rem' }}>
-                <ShieldCheck size={16} />
-                <span>AUTHENTIC HALAL & PURE FARM DIRECT GUARANTEE</span>
+        <div className="ksf-container" style={{ maxWidth: '920px' }}>
+          <div className="ksf-guarantee-card">
+            {/* Top Seal Badge */}
+            <div className="ksf-guarantee-badge">
+              <ShieldCheck size={18} />
+              <span>100% AUTHENTIC HALAL & PURE FARM-DIRECT GUARANTEE</span>
+            </div>
+
+            {/* Main Heading */}
+            <h3 className="ksf-guarantee-title">
+              Our Promise of Uncompromised Purity
+            </h3>
+
+            {/* Guarantee Statement */}
+            <p className="ksf-guarantee-statement">
+              Every harvest is prepared with strict adherence to authentic Halal principles, certified veterinary care, and pristine hygienic conditions. Never frozen, never chemically preserved—harvested fresh upon your order from our open pastures directly to your table.
+            </p>
+
+            {/* 3 Pillar Highlights */}
+            <div className="ksf-guarantee-pillars">
+              <div className="ksf-guarantee-pillar-item">
+                <span className="ksf-guarantee-pillar-icon">🌿</span>
+                <div>
+                  <div className="ksf-guarantee-pillar-label">Pasture-Raised</div>
+                  <div className="ksf-guarantee-pillar-sub">Organic Herb & Grass Fed</div>
+                </div>
               </div>
 
-              <h3 className="ksf-founder-feature-heading">
-                100% Halal & Pure Farm Direct Guarantee
-              </h3>
-
-              <p className="ksf-founder-feature-text">
-                Every order is prepared with strict adherence to authentic Halal principles, veterinary inspection, and temperature-controlled sanitization. From our farm directly to your dining table.
-              </p>
-
-              <div className="ksf-founder-meta-row">
-                <div className="ksf-founder-avatar-wrap">
-                  <img src="/logo.jpeg" alt="Kohinoor Signature Farms" className="ksf-founder-avatar" />
-                </div>
+              <div className="ksf-guarantee-pillar-item">
+                <span className="ksf-guarantee-pillar-icon">✨</span>
                 <div>
-                  <div style={{ fontSize: '0.75rem', color: 'var(--gold-light)', textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700 }}>
-                    Founded & Managed By
-                  </div>
-                  <div className="ksf-founder-name">
-                    {founder}
-                  </div>
-                  <div style={{ fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.8)' }}>
-                    Kohinoor Signature Farms
-                  </div>
+                  <div className="ksf-guarantee-pillar-label">100% Authentic Halal</div>
+                  <div className="ksf-guarantee-pillar-sub">Ethical & Compassionate</div>
+                </div>
+              </div>
+
+              <div className="ksf-guarantee-pillar-item">
+                <span className="ksf-guarantee-pillar-icon">❄️</span>
+                <div>
+                  <div className="ksf-guarantee-pillar-label">Cold-Chain Sanitized</div>
+                  <div className="ksf-guarantee-pillar-sub">Chilled at 0°C – 4°C</div>
                 </div>
               </div>
             </div>
 
-            <div className="ksf-founder-feature-aside">
-              <div className="ksf-founder-aside-box">
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--gold-light)', fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.65rem' }}>
-                  <MapPin size={18} />
-                  <span>Farm Location</span>
+            {/* Founder Sign-off */}
+            <div className="ksf-guarantee-founder">
+              <div className="ksf-guarantee-avatar-wrap">
+                <img src="/logo.jpeg" alt="Kohinoor Signature Farms" className="ksf-guarantee-avatar" />
+              </div>
+              <div className="ksf-guarantee-founder-info">
+                <div className="ksf-guarantee-founder-quote">
+                  "Honest farming, clean nutrition, and uncompromised trust for every family."
                 </div>
-                <p style={{ fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.5, marginBottom: '1.25rem' }}>
-                  {storeSettings?.farmAddress || 'Shankarpally - Chevella Corridor, Hyderabad, Telangana'}
-                </p>
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--gold-light)', fontWeight: 700, fontSize: '0.9rem', marginBottom: '0.65rem' }}>
-                  <Clock size={18} />
-                  <span>Daily Butchery Schedule</span>
+                <div className="ksf-guarantee-founder-name">
+                  {founder}
                 </div>
-                <p style={{ fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.5 }}>
-                  {storeSettings?.operatingHours || '6:00 AM - 9:00 PM (Fresh Morning Cuts)'}
-                </p>
+                <div className="ksf-guarantee-founder-role">
+                  Founder & Farm Director • Kohinoor Signature Farms
+                </div>
               </div>
             </div>
           </div>
