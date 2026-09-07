@@ -4172,248 +4172,215 @@ input, select, textarea {
   flex: 1;
 }
 
-/* Standards Clean Grid */
-.ksf-standards-clean-grid {
+/* ── QUALITY & HYGIENE STANDARDS (SQUARE CARDS) ──────── */
+.ksf-standards-square-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0.85rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
   max-width: 960px;
   margin: 0 auto;
 }
 
-@media (min-width: 680px) {
-  .ksf-standards-clean-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+@media (min-width: 768px) {
+  .ksf-standards-square-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
-.ksf-standard-item-card {
+.ksf-standard-square-card {
   background: #FFFFFF;
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-light);
-  padding: 1.15rem 1.25rem;
+  border-radius: var(--radius-xl);
+  border: 1.5px solid var(--border-light);
+  padding: 1.75rem 1.25rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(11, 59, 36, 0.05);
+  transition: all 0.25s ease;
+  min-height: 240px;
 }
 
-.ksf-standard-item-card:hover {
-  border-color: var(--green-accent);
-  box-shadow: var(--shadow-md);
-  transform: translateY(-2px);
+.ksf-standard-square-card:hover {
+  border-color: var(--gold-primary);
+  box-shadow: 0 12px 28px rgba(11, 59, 36, 0.12);
+  transform: translateY(-4px);
 }
 
-.ksf-std-icon-bubble {
+.ksf-std-square-icon {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: var(--green-light-bg);
+  border: 1.5px solid var(--green-border);
   font-size: 1.85rem;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-md);
-  background: var(--bg-subtle);
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
-  border: 1px solid var(--border-light);
+  margin-bottom: 0.95rem;
+  box-shadow: 0 2px 8px rgba(11, 59, 36, 0.06);
 }
 
-.ksf-std-card-text {
-  flex: 1;
-  min-width: 0;
-}
-
-.ksf-std-card-title {
-  font-size: 0.95rem;
+.ksf-std-square-title {
+  font-family: var(--font-cinzel);
+  font-size: 1.02rem;
   font-weight: 800;
   color: var(--green-primary);
-  margin-bottom: 0.2rem;
+  margin: 0 0 0.45rem;
+  line-height: 1.3;
 }
 
-.ksf-std-card-desc {
-  font-size: 0.78rem;
-  color: var(--text-muted);
-  line-height: 1.45;
+.ksf-std-square-desc {
+  font-size: 0.82rem;
+  color: var(--text-body);
+  line-height: 1.5;
+  margin: 0 0 auto;
+  max-width: 230px;
 }
 
-.ksf-std-check-icon {
-  color: var(--success-green);
-  flex-shrink: 0;
-}
-
-/* ── REDESIGNED GUARANTEE & FOUNDER CARD ──────────────── */
-.ksf-guarantee-card {
-  background: radial-gradient(circle at 50% 10%, #114B30 0%, #0B3B24 55%, #051A10 100%);
-  border: 1.5px solid rgba(212, 175, 55, 0.45);
-  border-radius: var(--radius-xl);
-  padding: 2.75rem 2rem 2.25rem;
-  box-shadow: 0 16px 45px rgba(11, 59, 36, 0.3), inset 0 1px 0 rgba(212, 175, 55, 0.25);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  color: #FFFFFF;
-}
-
-@media (min-width: 768px) {
-  .ksf-guarantee-card {
-    padding: 3.5rem 3.5rem 3rem;
-  }
-}
-
-.ksf-guarantee-badge {
+.ksf-std-square-badge {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  background: rgba(212, 175, 55, 0.14);
-  border: 1px solid rgba(212, 175, 55, 0.38);
-  padding: 0.45rem 1.1rem;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #15803D;
+  background: #DCFCE7;
+  padding: 0.25rem 0.7rem;
   border-radius: var(--radius-full);
-  color: var(--gold-light);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  margin-bottom: 1.25rem;
+  margin-top: 1rem;
 }
 
-.ksf-guarantee-title {
-  font-family: var(--font-cinzel);
-  font-size: 1.65rem;
-  font-weight: 800;
-  color: var(--gold-light);
-  line-height: 1.25;
-  margin: 0 0 1rem;
-  letter-spacing: 0.02em;
-}
-
-@media (min-width: 768px) {
-  .ksf-guarantee-title {
-    font-size: 2.15rem;
-  }
-}
-
-.ksf-guarantee-statement {
-  font-size: 0.96rem;
-  line-height: 1.75;
-  color: rgba(255, 255, 255, 0.9);
-  max-width: 720px;
-  margin: 0 auto 2.25rem;
-}
-
-/* 3 Pillar Highlight Pills */
-.ksf-guarantee-pillars {
+/* ── GUARANTEE & FOUNDER SQUARE CARDS ────────────────── */
+.ksf-guarantee-square-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 0.85rem;
-  max-width: 780px;
-  margin: 0 auto 2.25rem;
+  gap: 1.5rem;
+  max-width: 960px;
+  margin: 0 auto;
 }
 
-@media (min-width: 640px) {
-  .ksf-guarantee-pillars {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
+@media (min-width: 768px) {
+  .ksf-guarantee-square-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-.ksf-guarantee-pillar-item {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(212, 175, 55, 0.22);
-  border-radius: var(--radius-lg);
-  padding: 0.95rem 1rem;
+.ksf-guarantee-square-card {
+  background: radial-gradient(circle at 50% 15%, #134E32 0%, #0B3B24 65%, #051A10 100%);
+  border: 1.5px solid rgba(212, 175, 55, 0.45);
+  border-radius: var(--radius-xl);
+  padding: 2.5rem 1.85rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 0.85rem;
-  text-align: left;
-  backdrop-filter: blur(4px);
-  transition: all 0.2s ease;
+  justify-content: center;
+  text-align: center;
+  color: #FFFFFF;
+  box-shadow: 0 16px 40px rgba(11, 59, 36, 0.25), inset 0 1px 0 rgba(212, 175, 55, 0.25);
+  transition: all 0.25s ease;
+  min-height: 360px;
 }
 
-.ksf-guarantee-pillar-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(212, 175, 55, 0.45);
-  transform: translateY(-2px);
+.ksf-guarantee-square-card:hover {
+  border-color: var(--gold-light);
+  box-shadow: 0 20px 48px rgba(11, 59, 36, 0.35);
+  transform: translateY(-3px);
 }
 
-.ksf-guarantee-pillar-icon {
-  font-size: 1.6rem;
-  flex-shrink: 0;
-}
-
-.ksf-guarantee-pillar-label {
-  font-size: 0.86rem;
-  font-weight: 800;
-  color: var(--gold-light);
-  line-height: 1.2;
-}
-
-.ksf-guarantee-pillar-sub {
-  font-size: 0.74rem;
-  color: rgba(255, 255, 255, 0.75);
-  margin-top: 0.2rem;
-}
-
-/* Founder Sign-off */
-.ksf-guarantee-founder {
-  display: inline-flex;
-  align-items: center;
-  gap: 1.25rem;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(212, 175, 55, 0.25);
-  text-align: left;
-  max-width: 640px;
-}
-
-@media (max-width: 540px) {
-  .ksf-guarantee-founder {
-    flex-direction: column;
-    text-align: center;
-    gap: 0.85rem;
-  }
-}
-
-.ksf-guarantee-avatar-wrap {
+.ksf-guarantee-square-icon {
   width: 64px;
   height: 64px;
-  border-radius: var(--radius-full);
-  border: 2px solid var(--gold-primary);
-  overflow: hidden;
-  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
-  flex-shrink: 0;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.16);
+  border: 1.5px solid var(--gold-primary);
+  color: var(--gold-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.15rem;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.3);
 }
 
-.ksf-guarantee-avatar {
+.ksf-guarantee-square-avatar-wrap {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  border: 2.5px solid var(--gold-primary);
+  overflow: hidden;
+  margin-bottom: 1.15rem;
+  box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+}
+
+.ksf-guarantee-square-avatar {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.ksf-guarantee-founder-info {
-  flex: 1;
+.ksf-guarantee-square-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-light);
+  background: rgba(212, 175, 55, 0.14);
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  padding: 0.28rem 0.75rem;
+  border-radius: var(--radius-full);
+  margin-bottom: 0.75rem;
 }
 
-.ksf-guarantee-founder-quote {
-  font-size: 0.88rem;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.9);
-  line-height: 1.45;
-  margin-bottom: 0.45rem;
-}
-
-.ksf-guarantee-founder-name {
+.ksf-guarantee-square-title {
   font-family: var(--font-cinzel);
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 800;
   color: var(--gold-light);
-  letter-spacing: 0.04em;
-  line-height: 1.2;
+  line-height: 1.3;
+  margin: 0 0 0.75rem;
+  letter-spacing: 0.02em;
 }
 
-.ksf-guarantee-founder-role {
-  font-size: 0.78rem;
-  color: rgba(255, 255, 255, 0.7);
+.ksf-guarantee-square-org {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.75);
+  font-weight: 600;
+  margin-top: -0.35rem;
+  margin-bottom: 0.75rem;
   letter-spacing: 0.03em;
-  margin-top: 0.2rem;
+}
+
+.ksf-guarantee-square-text {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0 0 1.25rem;
+  max-width: 380px;
+}
+
+.ksf-guarantee-square-quote {
+  font-size: 0.86rem;
+  font-style: italic;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 1.25rem;
+  max-width: 380px;
+}
+
+.ksf-guarantee-square-pills {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--gold-light);
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(212, 175, 55, 0.25);
+  width: 100%;
 }
 
 /* Call to action */
