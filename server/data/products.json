@@ -3,722 +3,722 @@
     "id": "ksf-goat-01",
     "name": "Signature Grass-Fed Goat Curry Cut",
     "slug": "signature-grass-fed-goat-curry-cut",
-    "category": "goat",
-    "tagline": "Tender bone-in & boneless pieces from young pasture-raised goats",
-    "description": "Our signature goat curry cut is crafted from young, pasture-raised goats that feed on natural herbal greens. Hand-trimmed by master butchers to give you the perfect balance of tender meat, succulent fat, and bone marrow for deep, flavorful gravies.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours. Keep refrigerated at 0°C to 4°C.",
-    "storageInstructions": "Keep stored in cold refrigeration (0°C - 4°C). Wash gently under cold tap water right before cooking. Do not refreeze once thawed.",
-    "feedType": "100% Organic Pasture Grass, Alfalfa & Herbal Forage",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Perfect for traditional Hyderabadi Mutton Curry, Dalcha, Rogan Josh, and slow-braised curries.",
-    "piecesEstimate": "16 to 20 tender pieces per kg",
-    "images": [
-      "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Best Seller",
       "Grass Fed",
       "100% Halal"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "Tender bone-in & boneless pieces from young pasture-raised goats",
+    "category": "goat",
+    "feedType": "100% Organic Pasture Grass, Alfalfa & Herbal Forage",
     "variants": [
       {
         "id": "v-g1-500",
+        "mrp": 540,
         "label": "500 g",
         "weight": "500g",
-        "netWeight": "480g - 500g",
-        "mrp": 540,
-        "sellingPrice": 469,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 469
       },
       {
         "id": "v-g1-1000",
+        "mrp": 1050,
         "label": "1 kg (Best Value)",
         "weight": "1000g",
-        "netWeight": "980g - 1000g",
-        "mrp": 1050,
-        "sellingPrice": 889,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 889
       },
       {
         "id": "v-g1-2000",
+        "mrp": 2100,
         "label": "2 kg (Family Pack)",
         "weight": "2000g",
-        "netWeight": "1960g - 2000g",
-        "mrp": 2100,
-        "sellingPrice": 1699,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "1960g - 2000g",
+        "sellingPrice": 1699
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours. Keep refrigerated at 0°C to 4°C.",
+    "description": "Our signature goat curry cut is crafted from young, pasture-raised goats that feed on natural herbal greens. Hand-trimmed by master butchers to give you the perfect balance of tender meat, succulent fat, and bone marrow for deep, flavorful gravies.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Perfect for traditional Hyderabadi Mutton Curry, Dalcha, Rogan Josh, and slow-braised curries.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "16 to 20 tender pieces per kg",
+    "storageInstructions": "Keep stored in cold refrigeration (0°C - 4°C). Wash gently under cold tap water right before cooking. Do not refreeze once thawed."
   },
   {
     "id": "ksf-goat-02",
     "name": "Royal Goat Biryani Cut (Rich Cuts)",
     "slug": "royal-goat-biryani-cut",
-    "category": "goat",
-    "tagline": "Large succulent pieces with shoulder, shank & ribs crafted for Dum Biryani",
-    "description": "Specially cut in larger 40-50g portions featuring prime cuts from shoulder, chops, and marrow shanks. These larger pieces lock in the juices during slow dum cooking, delivering meltingly tender meat that absorbs aromatic saffron and spices.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours. Keep refrigerated at 0°C to 4°C.",
-    "storageInstructions": "Keep chilled at 0°C - 4°C. Marinate with yogurt and spices 2-4 hours prior to cooking for maximum tenderness.",
-    "feedType": "100% Organic Pasture Grazing & Whole Grains",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Formulated specifically for Authentic Hyderabadi Dum Biryani, Mandi, and Pulao.",
-    "piecesEstimate": "10 to 14 large biryani cuts per kg",
-    "images": [
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Chef's Pick",
       "Dum Biryani Special",
       "100% Halal"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "Large succulent pieces with shoulder, shank & ribs crafted for Dum Biryani",
+    "category": "goat",
+    "feedType": "100% Organic Pasture Grazing & Whole Grains",
     "variants": [
       {
         "id": "v-g2-500",
+        "mrp": 580,
         "label": "500 g",
         "weight": "500g",
-        "netWeight": "480g - 500g",
-        "mrp": 580,
-        "sellingPrice": 499,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 499
       },
       {
         "id": "v-g2-1000",
+        "mrp": 1120,
         "label": "1 kg (Recommended)",
         "weight": "1000g",
-        "netWeight": "980g - 1000g",
-        "mrp": 1120,
-        "sellingPrice": 949,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 949
       },
       {
         "id": "v-g2-2000",
+        "mrp": 2240,
         "label": "2 kg (Feast Pack)",
         "weight": "2000g",
-        "netWeight": "1960g - 2000g",
-        "mrp": 2240,
-        "sellingPrice": 1849,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "1960g - 2000g",
+        "sellingPrice": 1849
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours. Keep refrigerated at 0°C to 4°C.",
+    "description": "Specially cut in larger 40-50g portions featuring prime cuts from shoulder, chops, and marrow shanks. These larger pieces lock in the juices during slow dum cooking, delivering meltingly tender meat that absorbs aromatic saffron and spices.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Formulated specifically for Authentic Hyderabadi Dum Biryani, Mandi, and Pulao.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "10 to 14 large biryani cuts per kg",
+    "storageInstructions": "Keep chilled at 0°C - 4°C. Marinate with yogurt and spices 2-4 hours prior to cooking for maximum tenderness."
   },
   {
     "id": "ksf-goat-03",
     "name": "Pure Goat Boneless Meat",
     "slug": "pure-goat-boneless-meat",
-    "category": "goat",
-    "tagline": "100% pure tender muscle meat, zero bone, trimmed to perfection",
-    "description": "Ultra-lean yet juicy boneless goat meat carved from the leg and shoulder. Cleaned thoroughly, membrane-trimmed, and ready for gourmet cooking without any bone wastage.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "storageInstructions": "Refrigerate at 0-4°C. Ideal for mincing or dicing into bite-sized tikka cubes.",
-    "feedType": "Natural Grazed Grass & Mineral Water",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Sensational for Mutton Tikka, Boti Kebab, Mutton Sukka, and Kashmiri Rogan Josh.",
-    "piecesEstimate": "100% edible meat, 25-30 bite sized chunks per 500g",
-    "images": [
-      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "100% Edible",
       "High Protein",
       "100% Halal"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "100% pure tender muscle meat, zero bone, trimmed to perfection",
+    "category": "goat",
+    "feedType": "Natural Grazed Grass & Mineral Water",
     "variants": [
       {
         "id": "v-g3-500",
+        "mrp": 690,
         "label": "500 g",
         "weight": "500g",
-        "netWeight": "500g",
-        "mrp": 690,
-        "sellingPrice": 599,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "500g",
+        "sellingPrice": 599
       },
       {
         "id": "v-g3-1000",
+        "mrp": 1350,
         "label": "1 kg (Chef Pack)",
         "weight": "1000g",
-        "netWeight": "1000g",
-        "mrp": 1350,
-        "sellingPrice": 1149,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "1000g",
+        "sellingPrice": 1149
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Ultra-lean yet juicy boneless goat meat carved from the leg and shoulder. Cleaned thoroughly, membrane-trimmed, and ready for gourmet cooking without any bone wastage.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Sensational for Mutton Tikka, Boti Kebab, Mutton Sukka, and Kashmiri Rogan Josh.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "100% edible meat, 25-30 bite sized chunks per 500g",
+    "storageInstructions": "Refrigerate at 0-4°C. Ideal for mincing or dicing into bite-sized tikka cubes."
   },
   {
     "id": "ksf-goat-04",
     "name": "Fresh Goat Mince (Fine Keema)",
     "slug": "fresh-goat-mince-keema",
-    "category": "goat",
-    "tagline": "Finely ground fresh goat meat with optimum lean-to-fat balance",
-    "description": "Double-minced fresh goat meat with just the right 85:15 lean-to-natural fat ratio for juicy kebabs and rich keema curries. Freshly ground upon order, never frozen or pre-packaged.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 24-36 hours at 0°C to 4°C.",
-    "storageInstructions": "Keep stored in cold chiller. Use immediately after opening.",
-    "feedType": "Natural Grazing Grass & Organically Raised",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Shami Kebabs, Keema Pav, Seekh Kebabs, and Keema Matar.",
-    "piecesEstimate": "Double ground fine keema mince",
-    "images": [
-      "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Fresh Ground",
       "Juicy & Tender",
       "100% Halal"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "Finely ground fresh goat meat with optimum lean-to-fat balance",
+    "category": "goat",
+    "feedType": "Natural Grazing Grass & Organically Raised",
     "variants": [
       {
         "id": "v-g4-500",
+        "mrp": 599,
         "label": "500 g",
         "weight": "500g",
-        "netWeight": "500g",
-        "mrp": 599,
-        "sellingPrice": 519,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "500g",
+        "sellingPrice": 519
       },
       {
         "id": "v-g4-1000",
+        "mrp": 1180,
         "label": "1 kg",
         "weight": "1000g",
-        "netWeight": "1000g",
-        "mrp": 1180,
-        "sellingPrice": 999,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "1000g",
+        "sellingPrice": 999
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 24-36 hours at 0°C to 4°C.",
+    "description": "Double-minced fresh goat meat with just the right 85:15 lean-to-natural fat ratio for juicy kebabs and rich keema curries. Freshly ground upon order, never frozen or pre-packaged.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Shami Kebabs, Keema Pav, Seekh Kebabs, and Keema Matar.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "Double ground fine keema mince",
+    "storageInstructions": "Keep stored in cold chiller. Use immediately after opening."
   },
   {
     "id": "ksf-goat-05",
     "name": "Goat Chops & Ribs (Chaap)",
     "slug": "goat-chops-and-ribs-chaap",
-    "category": "goat",
-    "tagline": "Tender rib bones with prime meat, ideal for pan-searing & tandoor",
-    "description": "Prime French-trimmed rib chops with rich marbling. Sourced from young goats to ensure supreme tenderness when grilled, pan-roasted, or spiced for dry fry.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "storageInstructions": "Store at 0°C - 4°C. Marinate with ginger-garlic and freshly crushed peppercorns.",
-    "feedType": "100% Pasture Raised & Foraged Greens",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Mutton Chaap Fry, Tandoori Chops, Grilled Ribs, and Shahi Korma.",
-    "piecesEstimate": "8 - 10 rib chops per 500g",
-    "images": [
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Gourmet Cut",
       "Grass Fed",
       "100% Halal"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "Tender rib bones with prime meat, ideal for pan-searing & tandoor",
+    "category": "goat",
+    "feedType": "100% Pasture Raised & Foraged Greens",
     "variants": [
       {
         "id": "v-g5-500",
+        "mrp": 590,
         "label": "500 g",
         "weight": "500g",
-        "netWeight": "480g - 500g",
-        "mrp": 590,
-        "sellingPrice": 519,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 519
       },
       {
         "id": "v-g5-1000",
+        "mrp": 1150,
         "label": "1 kg",
         "weight": "1000g",
-        "netWeight": "980g - 1000g",
-        "mrp": 1150,
-        "sellingPrice": 989,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 989
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Prime French-trimmed rib chops with rich marbling. Sourced from young goats to ensure supreme tenderness when grilled, pan-roasted, or spiced for dry fry.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Mutton Chaap Fry, Tandoori Chops, Grilled Ribs, and Shahi Korma.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "8 - 10 rib chops per 500g",
+    "storageInstructions": "Store at 0°C - 4°C. Marinate with ginger-garlic and freshly crushed peppercorns."
   },
   {
     "id": "ksf-goat-06",
     "name": "Cleaned Goat Paya (Trotters)",
     "slug": "cleaned-goat-paya-trotters",
-    "category": "goat",
-    "tagline": "Flame-scorched, de-haired and thoroughly scraped clean trotters",
-    "description": "Traditional flame-roasted trotters, scraped immaculately clean and portioned into neat roundels. Rich in natural gelatin, collagen, and bone marrow for restorative broths and Hyderabadi Paya Shorba.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "storageInstructions": "Refrigerate at 0-4°C. Simmer slowly on low flame with whole spices for 3-4 hours.",
-    "feedType": "Natural Grazing Grass & Organic Minerals",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Authentic Hyderabadi Mutton Paya Shorba, Nihari, and bone marrow broth.",
-    "piecesEstimate": "Set of 4 trotters (cut into 8-12 pieces)",
-    "images": [
-      "https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Flame Scorched",
       "Collagen Rich",
       "100% Halal"
     ],
-    "inStock": true,
+    "images": [
+      "https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": false,
+    "tagline": "Flame-scorched, de-haired and thoroughly scraped clean trotters",
+    "category": "goat",
+    "feedType": "Natural Grazing Grass & Organic Minerals",
     "variants": [
       {
         "id": "v-g6-4pcs",
+        "mrp": 450,
         "label": "4 Legs (Set of 4)",
         "weight": "approx 600g",
-        "netWeight": "600g",
-        "mrp": 450,
-        "sellingPrice": 379,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "600g",
+        "sellingPrice": 379
       },
       {
         "id": "v-g6-8pcs",
+        "mrp": 890,
         "label": "8 Legs (Set of 8)",
         "weight": "approx 1200g",
-        "netWeight": "1200g",
-        "mrp": 890,
-        "sellingPrice": 729,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "1200g",
+        "sellingPrice": 729
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Traditional flame-roasted trotters, scraped immaculately clean and portioned into neat roundels. Rich in natural gelatin, collagen, and bone marrow for restorative broths and Hyderabadi Paya Shorba.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Authentic Hyderabadi Mutton Paya Shorba, Nihari, and bone marrow broth.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "Set of 4 trotters (cut into 8-12 pieces)",
+    "storageInstructions": "Refrigerate at 0-4°C. Simmer slowly on low flame with whole spices for 3-4 hours."
   },
   {
     "id": "ksf-chk-01",
     "name": "Country Chicken (Original Natukodi)",
     "slug": "country-chicken-original-natukodi",
-    "category": "chicken",
-    "tagline": "100% Free-Range country fowls raised on open fields with earthy rich aroma",
-    "description": "Authentic desi country chicken raised in open sunlit pastures feeding on green grasses, seeds, and insects. Characterized by lean, firm, flavorful red meat that cooks into an intensely aromatic, spicy village-style curry.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "storageInstructions": "Keep chilled at 0°C - 4°C. Pressure cook or slow simmer for tender fall-off-the-bone texture.",
-    "feedType": "100% Free-Range Foraging, Whole Grains & Seeds",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Natukodi Pulusu, Andhra Country Chicken Curry, Country Chicken Fry with steamed rice.",
-    "piecesEstimate": "14 to 18 curry cut pieces per kg",
-    "images": [
-      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "100% Desi Natukodi",
       "Free-Range",
       "Zero Antibiotics"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "100% Free-Range country fowls raised on open fields with earthy rich aroma",
+    "category": "chicken",
+    "feedType": "100% Free-Range Foraging, Whole Grains & Seeds",
     "variants": [
       {
         "id": "v-c1-500",
+        "mrp": 320,
         "label": "500 g (Skinless)",
         "weight": "500g",
-        "netWeight": "480g - 500g",
-        "mrp": 320,
-        "sellingPrice": 269,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 269
       },
       {
         "id": "v-c1-1000",
+        "mrp": 599,
         "label": "1 kg (Skinless - Popular)",
         "weight": "1000g",
-        "netWeight": "950g - 1000g",
-        "mrp": 599,
-        "sellingPrice": 499,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "950g - 1000g",
+        "sellingPrice": 499
       },
       {
         "id": "v-c1-1000-skin",
+        "mrp": 620,
         "label": "1 kg (With Skin / Roasted)",
         "weight": "1000g",
-        "netWeight": "980g - 1000g",
-        "mrp": 620,
-        "sellingPrice": 529,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 529
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Authentic desi country chicken raised in open sunlit pastures feeding on green grasses, seeds, and insects. Characterized by lean, firm, flavorful red meat that cooks into an intensely aromatic, spicy village-style curry.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Natukodi Pulusu, Andhra Country Chicken Curry, Country Chicken Fry with steamed rice.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "14 to 18 curry cut pieces per kg",
+    "storageInstructions": "Keep chilled at 0°C - 4°C. Pressure cook or slow simmer for tender fall-off-the-bone texture."
   },
   {
     "id": "ksf-chk-02",
     "name": "Farm Tender Chicken Curry Cut",
     "slug": "farm-tender-chicken-curry-cut",
-    "category": "chicken",
-    "tagline": "Juicy bone-in & boneless pieces from tender young farm chicken",
-    "description": "Sourced from young farm-raised chickens fed with vegetarian grain diets and probiotic water. Cleaned in RO water, skinned, and trimmed with zero slime or excess fat.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "storageInstructions": "Store at 0°C to 4°C. Wash gently with cold water before seasoning.",
-    "feedType": "100% Vegetarian Grains, Soya & Maize",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Butter Chicken, Chicken Masala, Korma, and Chicken Biryani.",
-    "piecesEstimate": "14 to 16 neat pieces per kg",
-    "images": [
-      "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Daily Fresh Cut",
       "100% Halal",
       "Antibiotic-Free"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "Juicy bone-in & boneless pieces from tender young farm chicken",
+    "category": "chicken",
+    "feedType": "100% Vegetarian Grains, Soya & Maize",
     "variants": [
       {
         "id": "v-c2-500",
+        "mrp": 190,
         "label": "500 g",
         "weight": "500g",
-        "netWeight": "480g - 500g",
-        "mrp": 190,
-        "sellingPrice": 149,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 149
       },
       {
         "id": "v-c2-1000",
+        "mrp": 360,
         "label": "1 kg (Best Value)",
         "weight": "1000g",
-        "netWeight": "980g - 1000g",
-        "mrp": 360,
-        "sellingPrice": 279,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 279
       },
       {
         "id": "v-c2-2000",
+        "mrp": 720,
         "label": "2 kg (Family Pack)",
         "weight": "2000g",
-        "netWeight": "1960g - 2000g",
-        "mrp": 720,
-        "sellingPrice": 539,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "1960g - 2000g",
+        "sellingPrice": 539
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Sourced from young farm-raised chickens fed with vegetarian grain diets and probiotic water. Cleaned in RO water, skinned, and trimmed with zero slime or excess fat.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Butter Chicken, Chicken Masala, Korma, and Chicken Biryani.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "14 to 16 neat pieces per kg",
+    "storageInstructions": "Store at 0°C to 4°C. Wash gently with cold water before seasoning."
   },
   {
     "id": "ksf-chk-03",
     "name": "Fresh Boneless Chicken Breast Fillet",
     "slug": "fresh-boneless-chicken-breast-fillet",
-    "category": "chicken",
-    "tagline": "High-protein lean fillets, tenderized and trimmed of all visible fat",
-    "description": "Pure prime whole chicken breast fillets with zero bones and minimal fat. Packed with 25g+ lean protein per 100g, perfect for fitness enthusiasts and gourmet grilling.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "storageInstructions": "Refrigerate at 0°C - 4°C. Slice across grain or pound lightly for extra softness.",
-    "feedType": "All-Natural Grain & Mineral Feed",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Grilled Chicken, Pasta, Tikka, Meal Prep, and Crispy Chicken Strips.",
-    "piecesEstimate": "2 to 4 whole prime fillets per 500g",
-    "images": [
-      "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Gym & Keto Choice",
       "High Protein",
       "100% Halal"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "High-protein lean fillets, tenderized and trimmed of all visible fat",
+    "category": "chicken",
+    "feedType": "All-Natural Grain & Mineral Feed",
     "variants": [
       {
         "id": "v-c3-500",
+        "mrp": 250,
         "label": "500 g",
         "weight": "500g",
-        "netWeight": "500g",
-        "mrp": 250,
-        "sellingPrice": 199,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "500g",
+        "sellingPrice": 199
       },
       {
         "id": "v-c3-1000",
+        "mrp": 480,
         "label": "1 kg (Saver Pack)",
         "weight": "1000g",
-        "netWeight": "1000g",
-        "mrp": 480,
-        "sellingPrice": 379,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "1000g",
+        "sellingPrice": 379
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Pure prime whole chicken breast fillets with zero bones and minimal fat. Packed with 25g+ lean protein per 100g, perfect for fitness enthusiasts and gourmet grilling.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Grilled Chicken, Pasta, Tikka, Meal Prep, and Crispy Chicken Strips.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "2 to 4 whole prime fillets per 500g",
+    "storageInstructions": "Refrigerate at 0°C - 4°C. Slice across grain or pound lightly for extra softness."
   },
   {
     "id": "ksf-chk-04",
     "name": "Juicy Chicken Drumsticks (Tangdi)",
     "slug": "juicy-chicken-drumsticks-tangdi",
-    "category": "chicken",
-    "tagline": "Tender, skinless chicken legs perfect for tandoori and juicy fries",
-    "description": "Selected plump chicken drumsticks with skin removed and cleanly trimmed at the bone joints. Meat stays exceptionally moist and juicy whether roasted, baked, or fried.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "storageInstructions": "Keep chilled at 0-4°C. Make light surface slits before marinating.",
-    "feedType": "Natural Whole Grain Feed",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Tangdi Kebab, Fried Chicken, Tandoori Chicken, and Drumstick Masala.",
-    "piecesEstimate": "5 to 6 juicy drumsticks per 500g",
-    "images": [
-      "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Party Favorite",
       "Juicy Meat",
       "100% Halal"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "Tender, skinless chicken legs perfect for tandoori and juicy fries",
+    "category": "chicken",
+    "feedType": "Natural Whole Grain Feed",
     "variants": [
       {
         "id": "v-c4-500",
+        "mrp": 240,
         "label": "500 g (5-6 Pcs)",
         "weight": "500g",
-        "netWeight": "480g - 500g",
-        "mrp": 240,
-        "sellingPrice": 189,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 189
       },
       {
         "id": "v-c4-1000",
+        "mrp": 460,
         "label": "1 kg (10-12 Pcs)",
         "weight": "1000g",
-        "netWeight": "980g - 1000g",
-        "mrp": 460,
-        "sellingPrice": 359,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 359
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Selected plump chicken drumsticks with skin removed and cleanly trimmed at the bone joints. Meat stays exceptionally moist and juicy whether roasted, baked, or fried.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Tangdi Kebab, Fried Chicken, Tandoori Chicken, and Drumstick Masala.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "5 to 6 juicy drumsticks per 500g",
+    "storageInstructions": "Keep chilled at 0-4°C. Make light surface slits before marinating."
   },
   {
     "id": "ksf-egg-01",
     "name": "Pasture-Raised Country Brown Eggs (Desi Gaddi Guddu)",
     "slug": "pasture-raised-country-brown-eggs",
-    "category": "eggs",
-    "tagline": "Organic eggs from free-roaming country hens with dark golden yolks",
-    "description": "Laid by native country hens foraging freely in sunshine and pasture. Naturally abundant in Omega-3, lutein, and bioavailable vitamins. Noted for their rich creamy texture and deep orange-gold yolks.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best before 21 days from harvest date. Store in cool, dry place or refrigerate.",
-    "storageInstructions": "Store with pointed end down in refrigerator at 4°C - 8°C for optimal freshness.",
-    "feedType": "100% Natural Forage, Greens, Flaxseed & Grains",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Half-boiled, sunny side up, poached eggs, egg bhurji, and baking.",
-    "piecesEstimate": "Graded medium-to-large desi eggs",
-    "images": [
-      "https://images.unsplash.com/photo-1590559832921-995275586619?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Golden Yolk",
       "Omega-3 Rich",
       "Free-Range"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1590559832921-995275586619?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "Organic eggs from free-roaming country hens with dark golden yolks",
+    "category": "eggs",
+    "feedType": "100% Natural Forage, Greens, Flaxseed & Grains",
     "variants": [
       {
         "id": "v-e1-6",
+        "mrp": 120,
         "label": "Pack of 6",
         "weight": "6 Eggs",
-        "netWeight": "approx 320g",
-        "mrp": 120,
-        "sellingPrice": 99,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "approx 320g",
+        "sellingPrice": 99
       },
       {
         "id": "v-e1-12",
+        "mrp": 230,
         "label": "Pack of 12 (Most Popular)",
         "weight": "12 Eggs",
-        "netWeight": "approx 640g",
-        "mrp": 230,
-        "sellingPrice": 189,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "approx 640g",
+        "sellingPrice": 189
       },
       {
         "id": "v-e1-30",
+        "mrp": 550,
         "label": "Crate of 30 (Monthly Saver)",
         "weight": "30 Eggs",
-        "netWeight": "approx 1600g",
-        "mrp": 550,
-        "sellingPrice": 449,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "approx 1600g",
+        "sellingPrice": 449
       }
-    ]
+    ],
+    "shelfLife": "Best before 21 days from harvest date. Store in cool, dry place or refrigerate.",
+    "description": "Laid by native country hens foraging freely in sunshine and pasture. Naturally abundant in Omega-3, lutein, and bioavailable vitamins. Noted for their rich creamy texture and deep orange-gold yolks.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Half-boiled, sunny side up, poached eggs, egg bhurji, and baking.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "Graded medium-to-large desi eggs",
+    "storageInstructions": "Store with pointed end down in refrigerator at 4°C - 8°C for optimal freshness."
   },
   {
     "id": "ksf-egg-02",
     "name": "Kadaknath Heritage Black Fowl Eggs",
     "slug": "kadaknath-heritage-black-fowl-eggs",
-    "category": "eggs",
-    "tagline": "Rare Ayurvedic heritage eggs known for maximum iron, protein & low cholesterol",
-    "description": "Produced by authentic purebred Kadaknath black fowls. Highly revered in traditional wellness for superior protein content, amino acids, high iron, and low cholesterol content.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best before 21 days from harvest date. Keep in cool ventilated place.",
-    "storageInstructions": "Refrigerate at 4°C - 8°C. Do not wash shells until ready to cook.",
-    "feedType": "Herbal Greens, Spirulina & Organic Millet",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Boiled eggs, omelettes, nutritious breakfast tonic bowls.",
-    "piecesEstimate": "Rare heritage brown-tinted eggs",
-    "images": [
-      "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Superfood",
       "High Iron & Low Fat",
       "Ayurvedic Heritage"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "Rare Ayurvedic heritage eggs known for maximum iron, protein & low cholesterol",
+    "category": "eggs",
+    "feedType": "Herbal Greens, Spirulina & Organic Millet",
     "variants": [
       {
         "id": "v-e2-6",
+        "mrp": 180,
         "label": "Pack of 6",
         "weight": "6 Eggs",
-        "netWeight": "approx 300g",
-        "mrp": 180,
-        "sellingPrice": 149,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "approx 300g",
+        "sellingPrice": 149
       },
       {
         "id": "v-e2-12",
+        "mrp": 350,
         "label": "Pack of 12 (Special)",
         "weight": "12 Eggs",
-        "netWeight": "approx 600g",
-        "mrp": 350,
-        "sellingPrice": 279,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "approx 600g",
+        "sellingPrice": 279
       }
-    ]
+    ],
+    "shelfLife": "Best before 21 days from harvest date. Keep in cool ventilated place.",
+    "description": "Produced by authentic purebred Kadaknath black fowls. Highly revered in traditional wellness for superior protein content, amino acids, high iron, and low cholesterol content.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Boiled eggs, omelettes, nutritious breakfast tonic bowls.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "Rare heritage brown-tinted eggs",
+    "storageInstructions": "Refrigerate at 4°C - 8°C. Do not wash shells until ready to cook."
   },
   {
     "id": "ksf-egg-03",
     "name": "Classic Farm Fresh Table Eggs",
     "slug": "classic-farm-fresh-table-eggs",
-    "category": "eggs",
-    "tagline": "Daily morning gathered white eggs, clean shells & high freshness",
-    "description": "Hygienically collected from healthy farm hens fed with mineral-enriched corn and grain feeds. Graded, sanitized, and delivered within 24 hours of laying.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best before 25 days from packing date.",
-    "storageInstructions": "Store in clean refrigerator tray. Use for daily baking & cooking.",
-    "feedType": "Clean Grains & Fortified Mineral Feed",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Baking cakes, daily omelettes, French toast, scrambled eggs.",
-    "piecesEstimate": "Graded table eggs",
-    "images": [
-      "https://images.unsplash.com/photo-1616852924107-1647e3351d3b?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Daily Breakfast Staple",
       "Farm Fresh",
       "Hygienic"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1616852924107-1647e3351d3b?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "Daily morning gathered white eggs, clean shells & high freshness",
+    "category": "eggs",
+    "feedType": "Clean Grains & Fortified Mineral Feed",
     "variants": [
       {
         "id": "v-e3-6",
+        "mrp": 70,
         "label": "Pack of 6",
         "weight": "6 Eggs",
-        "netWeight": "approx 310g",
-        "mrp": 70,
-        "sellingPrice": 59,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "approx 310g",
+        "sellingPrice": 59
       },
       {
         "id": "v-e3-12",
+        "mrp": 135,
         "label": "Pack of 12",
         "weight": "12 Eggs",
-        "netWeight": "approx 620g",
-        "mrp": 135,
-        "sellingPrice": 109,
         "inStock": true,
-        "isDefault": false
+        "isDefault": false,
+        "netWeight": "approx 620g",
+        "sellingPrice": 109
       },
       {
         "id": "v-e3-30",
+        "mrp": 310,
         "label": "Tray of 30 (Value Saver)",
         "weight": "30 Eggs",
-        "netWeight": "approx 1550g",
-        "mrp": 310,
-        "sellingPrice": 249,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "approx 1550g",
+        "sellingPrice": 249
       }
-    ]
+    ],
+    "shelfLife": "Best before 25 days from packing date.",
+    "description": "Hygienically collected from healthy farm hens fed with mineral-enriched corn and grain feeds. Graded, sanitized, and delivered within 24 hours of laying.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Baking cakes, daily omelettes, French toast, scrambled eggs.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "Graded table eggs",
+    "storageInstructions": "Store in clean refrigerator tray. Use for daily baking & cooking."
   },
   {
     "id": "ksf-combo-01",
     "name": "Sunday Feast Combo: Tender Goat (1kg) + Country Chicken (1kg)",
     "slug": "sunday-feast-combo-goat-and-chicken",
-    "category": "combos",
-    "tagline": "The ultimate weekend meat combo with maximum freshness & savings",
-    "description": "Double the feast on your dining table! Includes 1 kg of our signature grass-fed Goat Curry Cut + 1 kg of authentic Free-Range Country Chicken (Natukodi). Specially packed in insulated chill boxes.",
-    "fssaiNumber": "13624014000889",
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "storageInstructions": "Keep stored chilled between 0°C and 4°C until cooking.",
-    "feedType": "100% Natural Organic Feed & Grass Grazing",
-    "halalCertified": true,
-    "antibioticFree": true,
-    "culinaryUses": "Weekend Family Biryani, Sunday Feast curries, and gatherings.",
-    "piecesEstimate": "1 kg Goat Cut + 1 kg Country Chicken Cut",
-    "images": [
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
-    ],
     "badges": [
       "Mega Saver",
       "Weekend Special",
       "100% Halal"
     ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
+    ],
     "inStock": true,
+    "tagline": "The ultimate weekend meat combo with maximum freshness & savings",
+    "category": "combos",
+    "feedType": "100% Natural Organic Feed & Grass Grazing",
     "variants": [
       {
         "id": "v-cb1-standard",
+        "mrp": 1650,
         "label": "Combo Pack (2 kg Total)",
         "weight": "2000g",
-        "netWeight": "1950g - 2000g",
-        "mrp": 1650,
-        "sellingPrice": 1349,
         "inStock": true,
-        "isDefault": true
+        "isDefault": true,
+        "netWeight": "1950g - 2000g",
+        "sellingPrice": 1349
       }
-    ]
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Double the feast on your dining table! Includes 1 kg of our signature grass-fed Goat Curry Cut + 1 kg of authentic Free-Range Country Chicken (Natukodi). Specially packed in insulated chill boxes.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Weekend Family Biryani, Sunday Feast curries, and gatherings.",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "1 kg Goat Cut + 1 kg Country Chicken Cut",
+    "storageInstructions": "Keep stored chilled between 0°C and 4°C until cooking."
   }
 ]
