@@ -127,63 +127,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
         </div>
       </section>
 
-      {/* SECTION 1: Core Agricultural & Ethical Pillars */}
-      <section className="ksf-about-section">
-        <div className="ksf-container">
-          <div className="ksf-section-title-wrap">
-            <span className="ksf-section-badge">INTEGRITY & HERITAGE</span>
-            <h2 className="ksf-section-h2">Core Agricultural & Ethical Pillars</h2>
-            <p className="ksf-section-p">
-              From pasture soil to table, our four founding pillars ensure authentic taste, peak nutrition, and uncompromised food safety.
-            </p>
-          </div>
-
-          <div className="ksf-pillars-grid">
-            {pillars.map((pillar, idx) => (
-              <div key={idx} className="ksf-pillar-card">
-                <div className="ksf-pillar-card-head">
-                  <div className="ksf-pillar-icon-box">
-                    {pillar.icon}
-                  </div>
-                  <span className="ksf-pillar-badge">{pillar.badge}</span>
-                </div>
-                <h3 className="ksf-pillar-title">{pillar.title}</h3>
-                <div className="ksf-pillar-subtitle">{pillar.subtitle}</div>
-                <p className="ksf-pillar-desc">{pillar.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 2: Quality & Hygiene Standards */}
-      <section className="ksf-about-section ksf-about-section-alt">
-        <div className="ksf-container">
-          <div className="ksf-section-title-wrap">
-            <span className="ksf-section-badge">FOOD SAFETY & HYGIENE</span>
-            <h2 className="ksf-section-h2">Our Quality & Hygiene Standards</h2>
-            <p className="ksf-section-p">
-              Zero compromises on purity. We enforce rigorous cold-chain protocols and traditional methods at every step.
-            </p>
-          </div>
-
-          <div className="ksf-standards-square-grid">
-            {standards.map((std, idx) => (
-              <div key={idx} className="ksf-standard-square-card">
-                <div className="ksf-std-square-icon">{std.icon}</div>
-                <h4 className="ksf-std-square-title">{std.title}</h4>
-                <p className="ksf-std-square-desc">{std.desc}</p>
-                <div className="ksf-std-square-badge">
-                  <CheckCircle2 size={13} />
-                  <span>Verified Standard</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 3: 100% Halal Guarantee & Founder Assurance (Square Cards) */}
+      {/* SECTION 1: 100% Halal Guarantee & Founder Assurance (Square Cards) */}
       <section className="ksf-about-section">
         <div className="ksf-container" style={{ maxWidth: '960px' }}>
           <div className="ksf-guarantee-square-grid">
@@ -231,6 +175,62 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
                 <span>Pure Trust</span>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 2: Core Agricultural & Ethical Pillars */}
+      <section className="ksf-about-section ksf-about-section-alt">
+        <div className="ksf-container">
+          <div className="ksf-section-title-wrap">
+            <span className="ksf-section-badge">INTEGRITY & HERITAGE</span>
+            <h2 className="ksf-section-h2">Core Agricultural & Ethical Pillars</h2>
+            <p className="ksf-section-p">
+              From pasture soil to table, our four founding pillars ensure authentic taste, peak nutrition, and uncompromised food safety.
+            </p>
+          </div>
+
+          <div className="ksf-pillars-grid">
+            {pillars.map((pillar, idx) => (
+              <div key={idx} className="ksf-pillar-card">
+                <div className="ksf-pillar-card-head">
+                  <div className="ksf-pillar-icon-box">
+                    {pillar.icon}
+                  </div>
+                  <span className="ksf-pillar-badge">{pillar.badge}</span>
+                </div>
+                <h3 className="ksf-pillar-title">{pillar.title}</h3>
+                <div className="ksf-pillar-subtitle">{pillar.subtitle}</div>
+                <p className="ksf-pillar-desc">{pillar.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* SECTION 3: Quality & Hygiene Standards */}
+      <section className="ksf-about-section">
+        <div className="ksf-container">
+          <div className="ksf-section-title-wrap">
+            <span className="ksf-section-badge">FOOD SAFETY & HYGIENE</span>
+            <h2 className="ksf-section-h2">Our Quality & Hygiene Standards</h2>
+            <p className="ksf-section-p">
+              Zero compromises on purity. We enforce rigorous cold-chain protocols and traditional methods at every step.
+            </p>
+          </div>
+
+          <div className="ksf-standards-square-grid">
+            {standards.map((std, idx) => (
+              <div key={idx} className="ksf-standard-square-card">
+                <div className="ksf-std-square-icon">{std.icon}</div>
+                <h4 className="ksf-std-square-title">{std.title}</h4>
+                <p className="ksf-std-square-desc">{std.desc}</p>
+                <div className="ksf-std-square-badge">
+                  <CheckCircle2 size={13} />
+                  <span>Verified Standard</span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
