@@ -2098,6 +2098,17 @@ function AdminPanelInner({
                     }
                   };
 
+                  const handleDeleteOrder = async () => {
+                    if (!window.confirm(`Are you sure you want to permanently delete order ${order.order_ref}?`)) return;
+                    try {
+                      await api.deleteOrder(order.id);
+                      setOrders(prev => prev.filter(o => o.id !== order.id));
+                      showToast(`Order ${order.order_ref} deleted`);
+                    } catch {
+                      showToast('Failed to delete order', 'error');
+                    }
+                  };
+
                   return (
                     <div key={order.id} className={`ksf-order-card ${sc.cls}`}>
                       {/* Order Card Header */}
@@ -2184,6 +2195,19 @@ function AdminPanelInner({
                           onClick={() => setEditingOrderNote({ id: order.id, note: order.note || '' })}
                         >
                           <StickyNote size={14} /> Note
+                        </button>
+                        <button
+                          type="button"
+                          className="btn-order-action"
+                          style={{
+                            background: '#FEF2F2',
+                            color: 'var(--error-red)',
+                            border: '1px solid #FCA5A5'
+                          }}
+                          onClick={handleDeleteOrder}
+                          title="Delete test or invalid order"
+                        >
+                          <Trash2 size={14} /> Delete
                         </button>
                       </div>
                     </div>

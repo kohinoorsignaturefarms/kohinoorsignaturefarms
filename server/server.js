@@ -742,6 +742,24 @@ app.patch('/api/orders/:id', async (req, res) => {
   }
 });
 
+// 12. DELETE ORDER (admin only)
+app.delete('/api/orders/:id', async (req, res) => {
+  const { id } = req.params;
+  if (!supabase) return res.status(503).json({ error: 'Database not connected' });
+
+  try {
+    const { error } = await supabase
+      .from('ksf_orders')
+      .delete()
+      .or(`id.eq.${id},order_ref.eq.${id}`);
+
+    if (error) throw error;
+    res.json({ success: true, message: 'Order deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete order' });
+  }
+});
+
 // Root / health
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', time: new Date().toISOString(), brand: 'Kohinoor Signature Farms' });

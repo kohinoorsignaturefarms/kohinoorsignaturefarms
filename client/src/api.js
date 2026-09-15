@@ -303,6 +303,15 @@ export const api = {
     });
     if (!res.ok) throw new Error('Failed to update order');
     return res.json();
+  },
+
+  // Delete order from admin panel
+  async deleteOrder(id) {
+    const res = await fetch(`${API_BASE}/orders/${id}`, {
+      method: 'DELETE'
+    });
+    if (!res.ok) throw new Error('Failed to delete order');
+    return res.json();
   }
 };
 
