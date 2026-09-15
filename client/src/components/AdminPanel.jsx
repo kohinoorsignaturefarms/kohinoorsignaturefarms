@@ -74,6 +74,12 @@ function AdminPanelInner({
   const [products, setProducts] = useState(() => Array.isArray(initialProducts) ? initialProducts : []);
   const [categories, setCategories] = useState(() => Array.isArray(initialCategories) ? initialCategories : []);
   const [settings, setSettings] = useState(() => initialSettings || {});
+  const [locations, setLocations] = useState(() => {
+    if (Array.isArray(initialSettings?.deliveryLocations) && initialSettings.deliveryLocations.length > 0) {
+      return initialSettings.deliveryLocations;
+    }
+    return [];
+  });
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
@@ -94,6 +100,9 @@ function AdminPanelInner({
   useEffect(() => {
     if (initialSettings && Object.keys(initialSettings).length > 0) {
       setSettings(initialSettings);
+      if (Array.isArray(initialSettings.deliveryLocations) && initialSettings.deliveryLocations.length > 0) {
+        setLocations(initialSettings.deliveryLocations);
+      }
     }
   }, [initialSettings]);
 
@@ -147,16 +156,22 @@ function AdminPanelInner({
   const loadAllData = async () => {
     setLoading(true);
     try {
-      const [prodRes, catRes, setRes, statRes] = await Promise.all([
+      const [prodRes, catRes, setRes, statRes, locRes] = await Promise.all([
         api.getProducts().catch(() => []),
         api.getCategories().catch(() => []),
         api.getSettings().catch(() => ({})),
-        api.getStats().catch(() => null)
+        api.getStats().catch(() => null),
+        api.getLocations().catch(() => [])
       ]);
       if (Array.isArray(prodRes)) setProducts(prodRes);
       if (Array.isArray(catRes)) setCategories(catRes);
       if (setRes && typeof setRes === 'object') setSettings(setRes);
       if (statRes) setStats(statRes);
+      if (Array.isArray(locRes) && locRes.length > 0) {
+        setLocations(locRes);
+      } else if (Array.isArray(setRes?.deliveryLocations)) {
+        setLocations(setRes.deliveryLocations);
+      }
     } catch (err) {
       console.error('Error loading admin data:', err);
       showToast('Error loading database', 'error');
@@ -463,7 +478,9 @@ function AdminPanelInner({
   // ----------------------------------------------------
   // GATED COMMUNITY DELIVERY LOCATIONS ACTIONS
   // ----------------------------------------------------
-  const deliveryLocations = Array.isArray(settings?.deliveryLocations) ? settings.deliveryLocations : [];
+  const deliveryLocations = Array.isArray(locations) && locations.length > 0
+    ? locations
+    : (Array.isArray(settings?.deliveryLocations) ? settings.deliveryLocations : []);
   const [editingLocation, setEditingLocation] = useState(null);
   const [isNewLocation, setIsNewLocation] = useState(false);
 
@@ -490,38 +507,21 @@ function AdminPanelInner({
     if (!editingLocation || !editingLocation.name.trim()) return;
 
     try {
-      let updatedList;
-      if (isNewLocation || !editingLocation.id) {
-        const newLoc = {
-          ...editingLocation,
-          id: 'loc-' + Date.now(),
-          name: editingLocation.name.trim(),
-          area: (editingLocation.area || '').trim(),
-          city: (editingLocation.city || 'Hyderabad').trim(),
-          pincode: (editingLocation.pincode || '').toString().trim(),
-          deliverySlot: (editingLocation.deliverySlot || 'Morning 7:00 AM - 9:30 AM').trim(),
-          active: editingLocation.active !== false
-        };
-        updatedList = [...deliveryLocations, newLoc];
-      } else {
-        updatedList = deliveryLocations.map((l) =>
-          l.id === editingLocation.id
-            ? {
-                ...editingLocation,
-                name: editingLocation.name.trim(),
-                area: (editingLocation.area || '').trim(),
-                city: (editingLocation.city || 'Hyderabad').trim(),
-                pincode: (editingLocation.pincode || '').toString().trim(),
-                deliverySlot: (editingLocation.deliverySlot || 'Morning 7:00 AM - 9:30 AM').trim(),
-                active: editingLocation.active !== false
-              }
-            : l
-        );
-      }
+      const payload = {
+        ...editingLocation,
+        id: isNewLocation || !editingLocation.id ? '' : editingLocation.id,
+        name: editingLocation.name.trim(),
+        area: (editingLocation.area || '').trim(),
+        city: (editingLocation.city || 'Hyderabad').trim(),
+        pincode: (editingLocation.pincode || '').toString().trim(),
+        deliverySlot: (editingLocation.deliverySlot || 'Morning 7:00 AM - 9:30 AM').trim(),
+        active: editingLocation.active !== false
+      };
 
-      const newSettings = { ...settings, deliveryLocations: updatedList };
-      await api.updateSettings(newSettings);
-      setSettings(newSettings);
+      await api.saveLocation(payload);
+      const freshList = await api.getLocations();
+      setLocations(freshList);
+      setSettings((prev) => ({ ...prev, deliveryLocations: freshList }));
       setEditingLocation(null);
       showToast('Delivery society saved successfully!');
       if (onDataRefresh) onDataRefresh();
@@ -533,10 +533,10 @@ function AdminPanelInner({
   const handleDeleteLocation = async (locId, locName) => {
     if (!window.confirm(`Are you sure you want to remove "${locName}" from delivery locations?`)) return;
     try {
-      const updatedList = deliveryLocations.filter((l) => l.id !== locId);
-      const newSettings = { ...settings, deliveryLocations: updatedList };
-      await api.updateSettings(newSettings);
-      setSettings(newSettings);
+      await api.deleteLocation(locId);
+      const freshList = await api.getLocations();
+      setLocations(freshList);
+      setSettings((prev) => ({ ...prev, deliveryLocations: freshList }));
       showToast(`Removed "${locName}" from delivery locations`);
       if (onDataRefresh) onDataRefresh();
     } catch (err) {
@@ -546,12 +546,10 @@ function AdminPanelInner({
 
   const handleToggleLocationActive = async (locId) => {
     try {
-      const updatedList = deliveryLocations.map((l) =>
-        l.id === locId ? { ...l, active: !l.active } : l
-      );
-      const newSettings = { ...settings, deliveryLocations: updatedList };
-      await api.updateSettings(newSettings);
-      setSettings(newSettings);
+      await api.toggleLocation(locId);
+      const freshList = await api.getLocations();
+      setLocations(freshList);
+      setSettings((prev) => ({ ...prev, deliveryLocations: freshList }));
       showToast('Delivery location status updated');
       if (onDataRefresh) onDataRefresh();
     } catch (err) {

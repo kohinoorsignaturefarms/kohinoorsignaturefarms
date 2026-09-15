@@ -106,6 +106,78 @@ export const api = {
     return res.json();
   },
 
+  // Delivery Locations (Gated Communities) API
+  async getLocations() {
+    try {
+      const res = await fetch(`${API_BASE}/locations`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) return data;
+      }
+    } catch (e) {}
+    try {
+      const settings = await this.getSettings();
+      if (Array.isArray(settings?.deliveryLocations)) return settings.deliveryLocations;
+    } catch (e) {}
+    return [];
+  },
+
+  async saveLocation(locationData) {
+    const isEdit = Boolean(locationData.id);
+    const url = isEdit ? `${API_BASE}/locations/${locationData.id}` : `${API_BASE}/locations`;
+    const method = isEdit ? 'PUT' : 'POST';
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(locationData)
+      });
+      if (res.ok) return res.json();
+    } catch (e) {}
+    // Fallback: update via settings if standalone endpoint not reachable
+    const settings = await this.getSettings().catch(() => ({}));
+    const currentList = Array.isArray(settings.deliveryLocations) ? settings.deliveryLocations : [];
+    let updatedList;
+    if (isEdit) {
+      updatedList = currentList.map((l) => (l.id === locationData.id ? { ...l, ...locationData } : l));
+    } else {
+      const newLoc = { ...locationData, id: locationData.id || 'loc-' + Date.now() };
+      updatedList = [...currentList, newLoc];
+    }
+    await this.updateSettings({ ...settings, deliveryLocations: updatedList });
+    return { success: true, location: locationData, locations: updatedList };
+  },
+
+  async deleteLocation(locationId) {
+    try {
+      const res = await fetch(`${API_BASE}/locations/${locationId}`, {
+        method: 'DELETE'
+      });
+      if (res.ok) return res.json();
+    } catch (e) {}
+    // Fallback: delete via settings
+    const settings = await this.getSettings().catch(() => ({}));
+    const currentList = Array.isArray(settings.deliveryLocations) ? settings.deliveryLocations : [];
+    const updatedList = currentList.filter((l) => l.id !== locationId);
+    await this.updateSettings({ ...settings, deliveryLocations: updatedList });
+    return { success: true, locations: updatedList };
+  },
+
+  async toggleLocation(locationId) {
+    try {
+      const res = await fetch(`${API_BASE}/locations/${locationId}/toggle`, {
+        method: 'PATCH'
+      });
+      if (res.ok) return res.json();
+    } catch (e) {}
+    // Fallback: toggle via settings
+    const settings = await this.getSettings().catch(() => ({}));
+    const currentList = Array.isArray(settings.deliveryLocations) ? settings.deliveryLocations : [];
+    const updatedList = currentList.map((l) => (l.id === locationId ? { ...l, active: !l.active } : l));
+    await this.updateSettings({ ...settings, deliveryLocations: updatedList });
+    return { success: true, locations: updatedList };
+  },
+
   // Admin Auth
   async verifyAdminPin(pin) {
     const res = await fetch(`${API_BASE}/auth/verify-pin`, {

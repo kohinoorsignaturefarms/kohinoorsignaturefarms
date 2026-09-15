@@ -176,6 +176,10 @@ const setStoreData = async (key, data) => {
 // 1. SETTINGS API
 app.get('/api/settings', async (req, res) => {
   const settings = (await getStoreData('settings')) || {};
+  const locations = await getStoreData('delivery_locations');
+  if (Array.isArray(locations) && locations.length > 0) {
+    settings.deliveryLocations = locations;
+  }
   // Don't expose plain admin PIN directly in public response, send hasPin boolean or pin in admin mode
   const { adminPin, ...safeSettings } = settings;
   res.json({ ...safeSettings, hasCustomPin: Boolean(adminPin) });
@@ -188,6 +192,10 @@ app.put('/api/settings', async (req, res) => {
     ...req.body
   };
   await setStoreData('settings', updatedSettings);
+  if (Array.isArray(req.body.deliveryLocations)) {
+    await setStoreData('delivery_locations', req.body.deliveryLocations);
+    writeData('locations.json', req.body.deliveryLocations);
+  }
   res.json({ success: true, message: 'Settings updated successfully', settings: updatedSettings });
 });
 
@@ -240,6 +248,139 @@ app.delete('/api/categories/:id', async (req, res) => {
   categories = categories.filter((c) => c.id !== id && c.slug !== id);
   await setStoreData('categories', categories);
   res.json({ success: true, message: 'Category deleted' });
+});
+
+// ------------------------------------
+// 2.5 DELIVERY LOCATIONS (GATED COMMUNITIES) API
+// ------------------------------------
+const getDeliveryLocationsData = async () => {
+  let locations = await getStoreData('delivery_locations');
+  if (!Array.isArray(locations) || locations.length === 0) {
+    const settings = (await getStoreData('settings')) || {};
+    if (Array.isArray(settings.deliveryLocations) && settings.deliveryLocations.length > 0) {
+      locations = settings.deliveryLocations;
+      await setStoreData('delivery_locations', locations);
+    } else {
+      locations = readData('locations.json') || [];
+    }
+  }
+  return Array.isArray(locations) ? locations : [];
+};
+
+const saveDeliveryLocationsData = async (locations) => {
+  await setStoreData('delivery_locations', locations);
+  const currentSettings = (await getStoreData('settings')) || {};
+  currentSettings.deliveryLocations = locations;
+  await setStoreData('settings', currentSettings);
+  writeData('locations.json', locations);
+  return locations;
+};
+
+app.get('/api/locations', async (req, res) => {
+  const locations = await getDeliveryLocationsData();
+  res.json(locations);
+});
+
+app.get('/api/delivery-locations', async (req, res) => {
+  const locations = await getDeliveryLocationsData();
+  res.json(locations);
+});
+
+app.post('/api/locations', async (req, res) => {
+  const locations = await getDeliveryLocationsData();
+  const newLoc = {
+    id: req.body.id || 'loc-' + Date.now(),
+    name: (req.body.name || '').trim(),
+    area: (req.body.area || '').trim(),
+    city: (req.body.city || 'Hyderabad').trim(),
+    pincode: (req.body.pincode || '').toString().trim(),
+    deliverySlot: (req.body.deliverySlot || 'Morning 7:00 AM - 9:30 AM').trim(),
+    active: req.body.active !== false
+  };
+
+  const existingIdx = locations.findIndex((l) => l.id === newLoc.id);
+  if (existingIdx >= 0) {
+    locations[existingIdx] = { ...locations[existingIdx], ...newLoc };
+  } else {
+    locations.push(newLoc);
+  }
+
+  await saveDeliveryLocationsData(locations);
+  res.json({ success: true, location: newLoc, locations });
+});
+
+app.post('/api/delivery-locations', async (req, res) => {
+  const locations = await getDeliveryLocationsData();
+  const newLoc = {
+    id: req.body.id || 'loc-' + Date.now(),
+    name: (req.body.name || '').trim(),
+    area: (req.body.area || '').trim(),
+    city: (req.body.city || 'Hyderabad').trim(),
+    pincode: (req.body.pincode || '').toString().trim(),
+    deliverySlot: (req.body.deliverySlot || 'Morning 7:00 AM - 9:30 AM').trim(),
+    active: req.body.active !== false
+  };
+
+  const existingIdx = locations.findIndex((l) => l.id === newLoc.id);
+  if (existingIdx >= 0) {
+    locations[existingIdx] = { ...locations[existingIdx], ...newLoc };
+  } else {
+    locations.push(newLoc);
+  }
+
+  await saveDeliveryLocationsData(locations);
+  res.json({ success: true, location: newLoc, locations });
+});
+
+app.put('/api/locations/:id', async (req, res) => {
+  const { id } = req.params;
+  let locations = await getDeliveryLocationsData();
+  const idx = locations.findIndex((l) => l.id === id);
+  if (idx === -1) {
+    return res.status(404).json({ success: false, message: 'Delivery location not found' });
+  }
+
+  locations[idx] = {
+    ...locations[idx],
+    ...req.body,
+    id,
+    name: (req.body.name || locations[idx].name || '').trim(),
+    area: (req.body.area || locations[idx].area || '').trim(),
+    city: (req.body.city || locations[idx].city || 'Hyderabad').trim(),
+    pincode: (req.body.pincode !== undefined ? req.body.pincode : locations[idx].pincode).toString().trim(),
+    deliverySlot: (req.body.deliverySlot || locations[idx].deliverySlot || 'Morning 7:00 AM - 9:30 AM').trim(),
+    active: req.body.active !== undefined ? req.body.active : locations[idx].active
+  };
+
+  await saveDeliveryLocationsData(locations);
+  res.json({ success: true, location: locations[idx], locations });
+});
+
+app.delete('/api/locations/:id', async (req, res) => {
+  const { id } = req.params;
+  let locations = await getDeliveryLocationsData();
+  locations = locations.filter((l) => l.id !== id);
+  await saveDeliveryLocationsData(locations);
+  res.json({ success: true, message: 'Location deleted successfully', locations });
+});
+
+app.delete('/api/delivery-locations/:id', async (req, res) => {
+  const { id } = req.params;
+  let locations = await getDeliveryLocationsData();
+  locations = locations.filter((l) => l.id !== id);
+  await saveDeliveryLocationsData(locations);
+  res.json({ success: true, message: 'Location deleted successfully', locations });
+});
+
+app.patch('/api/locations/:id/toggle', async (req, res) => {
+  const { id } = req.params;
+  let locations = await getDeliveryLocationsData();
+  const idx = locations.findIndex((l) => l.id === id);
+  if (idx !== -1) {
+    locations[idx].active = !locations[idx].active;
+    await saveDeliveryLocationsData(locations);
+  }
+  res.json({ success: true, locations });
 });
 
 // 3. PRODUCTS API

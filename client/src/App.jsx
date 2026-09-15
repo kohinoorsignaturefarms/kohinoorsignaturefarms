@@ -170,14 +170,19 @@ export default function App() {
     setLoading(true);
     setError(null);
     try {
-      const [prodRes, catRes, setRes] = await Promise.all([
-        api.getProducts(),
-        api.getCategories(),
-        api.getSettings()
+      const [prodRes, catRes, setRes, locRes] = await Promise.all([
+        api.getProducts().catch(() => []),
+        api.getCategories().catch(() => []),
+        api.getSettings().catch(() => ({})),
+        api.getLocations().catch(() => [])
       ]);
       setProducts(prodRes || []);
       setCategories(catRes || []);
-      setSettings(setRes || null);
+      const mergedSettings = setRes || {};
+      if (Array.isArray(locRes) && locRes.length > 0) {
+        mergedSettings.deliveryLocations = locRes;
+      }
+      setSettings(mergedSettings);
     } catch (err) {
       console.error('Error fetching farm data:', err);
       setError('Unable to connect to farm server. Please check your connection.');

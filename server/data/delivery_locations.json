@@ -1,0 +1,20 @@
+[
+  {
+    "id": "loc-1789479520949",
+    "area": "beside Malaysian Township, Kukatpally Housing Board Colony",
+    "city": "Hyderabad",
+    "name": "Indis One City",
+    "active": true,
+    "pincode": "500085",
+    "deliverySlot": "On Sunday  & Holidays From  7:00 AM to 6:30 PM Only"
+  },
+  {
+    "id": "loc-1789480170820",
+    "area": "near HITEC City MMTS Station, Weaker Section Colony, Izzathnagar",
+    "city": "Hyderabad",
+    "name": "Kohinoor by Auro Realty",
+    "active": true,
+    "pincode": "500085",
+    "deliverySlot": "On Sundays & Holidays From 7:00AM To 6:00PM"
+  }
+]
