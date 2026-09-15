@@ -1,5 +1,7 @@
 import React from 'react';
 import { Search, MessageCircle, X, ShoppingBag, MapPin, ChevronDown } from 'lucide-react';
+import { InstagramIcon, XIcon, FacebookIcon, YouTubeIcon } from './SocialIcons';
+import { DEFAULT_SOCIAL_LINKS } from '../api';
 
 export default function Header({
   searchTerm,
@@ -19,6 +21,11 @@ export default function Header({
     : 'Hello Kohinoor Signature Farms! I would like to inquire about today\'s available fresh farm cuts.';
 
   const farmWhatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(locationMsg)}`;
+
+  const socialLinks = {
+    ...DEFAULT_SOCIAL_LINKS,
+    ...(storeSettings?.socialLinks || {})
+  };
 
   return (
     <header className="ksf-header">
@@ -165,6 +172,70 @@ export default function Header({
                 <X size={15} />
               </button>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Header Bar: Luxury Social Channels */}
+      <div className="ksf-header-bottom-bar">
+        <div className="ksf-container ksf-header-bottom-container">
+          <div className="ksf-header-bottom-left">
+            <span className="ksf-bottom-dot">●</span>
+            <span className="ksf-bottom-tagline">Pure Pasture-Raised • 100% Halal Direct Dispatch</span>
+          </div>
+
+          <div className="ksf-header-socials">
+            <span className="ksf-social-title">Follow Us:</span>
+            <div className="ksf-social-icons-group">
+              {socialLinks.instagram && (
+                <a
+                  href={socialLinks.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ksf-social-btn ksf-social-instagram"
+                  title="Follow Kohinoor Signature Farms on Instagram"
+                  aria-label="Follow us on Instagram"
+                >
+                  <InstagramIcon size={14} />
+                </a>
+              )}
+              {socialLinks.x && (
+                <a
+                  href={socialLinks.x}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ksf-social-btn ksf-social-x"
+                  title="Follow Kohinoor Signature Farms on X"
+                  aria-label="Follow us on X"
+                >
+                  <XIcon size={13} />
+                </a>
+              )}
+              {socialLinks.facebook && (
+                <a
+                  href={socialLinks.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ksf-social-btn ksf-social-facebook"
+                  title="Follow Kohinoor Signature Farms on Facebook"
+                  aria-label="Follow us on Facebook"
+                >
+                  <FacebookIcon size={14} />
+                </a>
+              )}
+              {socialLinks.youtube && (
+                <a
+                  href={socialLinks.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ksf-social-btn ksf-social-youtube"
+                  title="Subscribe to Kohinoor Signature Farms on YouTube"
+                  aria-label="Subscribe on YouTube"
+                >
+                  <YouTubeIcon size={15} />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </div>

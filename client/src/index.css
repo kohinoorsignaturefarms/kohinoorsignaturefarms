@@ -4977,3 +4977,126 @@ input, select, textarea {
   font-weight: 800;
 }
 
+/* ============================================================
+   BOTTOM HEADER BAR & LUXURY SOCIAL MEDIA STYLES
+   ============================================================ */
+
+.ksf-header-bottom-bar {
+  background: linear-gradient(180deg, #FFFFFF 0%, #FAF8F3 100%);
+  border-top: 1px solid rgba(11, 59, 36, 0.08);
+  border-bottom: 1px solid rgba(212, 175, 55, 0.22);
+  padding: 0.35rem 0;
+  width: 100%;
+}
+
+.ksf-header-bottom-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.ksf-header-bottom-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.735rem;
+  font-weight: 700;
+  color: var(--green-primary);
+  letter-spacing: 0.02em;
+}
+
+.ksf-bottom-dot {
+  color: var(--gold-dark);
+  font-size: 0.65rem;
+}
+
+.ksf-header-socials {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.ksf-social-title {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+}
+
+.ksf-social-icons-group {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Luxury Social Media Icon Buttons */
+.ksf-social-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(212, 175, 55, 0.35);
+  color: var(--green-primary);
+  box-shadow: 0 1.5px 5px rgba(11, 59, 36, 0.06);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.ksf-social-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+}
+
+/* Instagram Luxury Gradient Hover */
+.ksf-social-instagram:hover {
+  background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+  color: #FFFFFF;
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(214, 36, 159, 0.4);
+}
+
+/* X (Twitter) Minimalist Black & Metallic Hover */
+.ksf-social-x:hover {
+  background: #0F1419;
+  color: #FFFFFF;
+  border-color: #0F1419;
+  box-shadow: 0 4px 14px rgba(15, 20, 25, 0.35);
+}
+
+/* Facebook Royal Blue Hover */
+.ksf-social-facebook:hover {
+  background: #1877F2;
+  color: #FFFFFF;
+  border-color: #1877F2;
+  box-shadow: 0 4px 14px rgba(24, 119, 242, 0.4);
+}
+
+/* YouTube Vivid Crimson Hover */
+.ksf-social-youtube:hover {
+  background: #FF0000;
+  color: #FFFFFF;
+  border-color: #FF0000;
+  box-shadow: 0 4px 14px rgba(255, 0, 0, 0.4);
+}
+
+@media (max-width: 640px) {
+  .ksf-header-bottom-container {
+    justify-content: center;
+  }
+
+  .ksf-header-bottom-left {
+    display: none;
+  }
+
+  .ksf-social-btn {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+

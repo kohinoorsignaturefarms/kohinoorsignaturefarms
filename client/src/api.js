@@ -281,6 +281,14 @@ export const DEFAULT_DELIVERY_LOCATIONS = [
   }
 ];
 
+// Default Official Social Media Handles
+export const DEFAULT_SOCIAL_LINKS = {
+  instagram: 'https://instagram.com/kohinoorsignaturefarms',
+  x: 'https://x.com/kohinoorfarms',
+  facebook: 'https://facebook.com/kohinoorsignaturefarms',
+  youtube: 'https://youtube.com/@kohinoorsignaturefarms'
+};
+
 // Helper to build WhatsApp direct link with formatted message and selected delivery community
 export const buildWhatsAppUrl = (whatsappNumber, product, variant, storeSettings, selectedLocation = null) => {
   const cleanNumber = (whatsappNumber || storeSettings?.whatsappNumber || '919876543210')

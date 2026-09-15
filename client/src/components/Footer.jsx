@@ -1,9 +1,15 @@
 import React from 'react';
 import { ShieldCheck, MapPin, Phone, Clock, MessageCircle, ArrowRight } from 'lucide-react';
+import { InstagramIcon, XIcon, FacebookIcon, YouTubeIcon } from './SocialIcons';
+import { DEFAULT_SOCIAL_LINKS } from '../api';
 
 export default function Footer({ storeSettings, onOpenAbout }) {
   const whatsappNumber = (storeSettings?.whatsappNumber || '919876543210').replace(/[^0-9]/g, '');
   const fssaiNo = storeSettings?.masterFssai || '13624014000889';
+  const socialLinks = {
+    ...DEFAULT_SOCIAL_LINKS,
+    ...(storeSettings?.socialLinks || {})
+  };
 
   return (
     <footer className="ksf-footer">
@@ -87,6 +93,63 @@ export default function Footer({ storeSettings, onOpenAbout }) {
                   <ArrowRight size={13} />
                 </button>
               )}
+            </div>
+
+            {/* Official Social Media Channels */}
+            <div style={{ marginTop: '1.25rem' }}>
+              <div style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--gold-light)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+                Follow Our Farm Journey
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                {socialLinks.instagram && (
+                  <a
+                    href={socialLinks.instagram}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ksf-social-btn ksf-social-instagram"
+                    title="Follow on Instagram"
+                    aria-label="Instagram"
+                  >
+                    <InstagramIcon size={16} />
+                  </a>
+                )}
+                {socialLinks.x && (
+                  <a
+                    href={socialLinks.x}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ksf-social-btn ksf-social-x"
+                    title="Follow on X"
+                    aria-label="X"
+                  >
+                    <XIcon size={15} />
+                  </a>
+                )}
+                {socialLinks.facebook && (
+                  <a
+                    href={socialLinks.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ksf-social-btn ksf-social-facebook"
+                    title="Follow on Facebook"
+                    aria-label="Facebook"
+                  >
+                    <FacebookIcon size={16} />
+                  </a>
+                )}
+                {socialLinks.youtube && (
+                  <a
+                    href={socialLinks.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="ksf-social-btn ksf-social-youtube"
+                    title="Subscribe on YouTube"
+                    aria-label="YouTube"
+                  >
+                    <YouTubeIcon size={17} />
+                  </a>
+                )}
+              </div>
             </div>
           </div>
 

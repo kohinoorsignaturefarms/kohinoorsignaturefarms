@@ -1332,6 +1332,117 @@ function AdminPanelInner({
                 </div>
               </div>
 
+              {/* Official Social Media Channels */}
+              <div
+                style={{
+                  background: '#FBF9F4',
+                  border: '1.5px solid var(--border-light)',
+                  padding: '1.15rem',
+                  borderRadius: 'var(--radius-lg)',
+                  marginBottom: '1.5rem',
+                  width: '100%',
+                  boxSizing: 'border-box'
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                  <Sparkles size={18} style={{ color: 'var(--gold-dark)' }} />
+                  <strong style={{ color: 'var(--green-primary)', fontSize: '0.95rem' }}>
+                    Official Social Media Channels (Header & Footer)
+                  </strong>
+                </div>
+                <p style={{ fontSize: '0.785rem', color: 'var(--text-muted)', marginBottom: '1rem', lineHeight: '1.4' }}>
+                  Manage the social media links displayed at the bottom of the header and in the site footer. Leave any field blank to hide that platform.
+                </p>
+
+                <div className="ksf-admin-grid-2col">
+                  <div className="ksf-form-group">
+                    <label className="ksf-form-label">
+                      <span>📸 Instagram Profile URL</span>
+                    </label>
+                    <input
+                      type="url"
+                      className="ksf-input"
+                      value={settings.socialLinks?.instagram || ''}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          socialLinks: {
+                            ...(settings.socialLinks || {}),
+                            instagram: e.target.value
+                          }
+                        })
+                      }
+                      placeholder="https://instagram.com/kohinoorsignaturefarms"
+                    />
+                  </div>
+
+                  <div className="ksf-form-group">
+                    <label className="ksf-form-label">
+                      <span>𝕏 X (formerly Twitter) Profile URL</span>
+                    </label>
+                    <input
+                      type="url"
+                      className="ksf-input"
+                      value={settings.socialLinks?.x || ''}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          socialLinks: {
+                            ...(settings.socialLinks || {}),
+                            x: e.target.value
+                          }
+                        })
+                      }
+                      placeholder="https://x.com/kohinoorfarms"
+                    />
+                  </div>
+                </div>
+
+                <div className="ksf-admin-grid-2col">
+                  <div className="ksf-form-group">
+                    <label className="ksf-form-label">
+                      <span>👤 Facebook Page URL</span>
+                    </label>
+                    <input
+                      type="url"
+                      className="ksf-input"
+                      value={settings.socialLinks?.facebook || ''}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          socialLinks: {
+                            ...(settings.socialLinks || {}),
+                            facebook: e.target.value
+                          }
+                        })
+                      }
+                      placeholder="https://facebook.com/kohinoorsignaturefarms"
+                    />
+                  </div>
+
+                  <div className="ksf-form-group">
+                    <label className="ksf-form-label">
+                      <span>▶️ YouTube Channel URL</span>
+                    </label>
+                    <input
+                      type="url"
+                      className="ksf-input"
+                      value={settings.socialLinks?.youtube || ''}
+                      onChange={(e) =>
+                        setSettings({
+                          ...settings,
+                          socialLinks: {
+                            ...(settings.socialLinks || {}),
+                            youtube: e.target.value
+                          }
+                        })
+                      }
+                      placeholder="https://youtube.com/@kohinoorsignaturefarms"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <button
                 type="submit"
                 style={{

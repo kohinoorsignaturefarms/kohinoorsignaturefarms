@@ -92,5 +92,11 @@
       "deliverySlot": "Morning 7:00 AM - 9:30 AM",
       "active": true
     }
-  ]
+  ],
+  "socialLinks": {
+    "instagram": "https://instagram.com/kohinoorsignaturefarms",
+    "x": "https://x.com/kohinoorfarms",
+    "facebook": "https://facebook.com/kohinoorsignaturefarms",
+    "youtube": "https://youtube.com/@kohinoorsignaturefarms"
+  }
 }
