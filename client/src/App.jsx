@@ -9,7 +9,8 @@ import CartDrawer from './components/CartDrawer';
 import AboutUsPage from './components/AboutUsPage';
 import Footer from './components/Footer';
 import AdminPanel from './components/AdminPanel';
-import { api, formatCurrency } from './api';
+import LocationModal from './components/LocationModal';
+import { api, formatCurrency, DEFAULT_DELIVERY_LOCATIONS } from './api';
 import { Sparkles, MessageCircle, AlertCircle, RefreshCw, Settings, ShieldCheck, ShoppingBag, ArrowRight } from 'lucide-react';
 
 export default function App() {
@@ -18,6 +19,37 @@ export default function App() {
   const [settings, setSettings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Delivery Location State (Persisted in localStorage)
+  const [selectedLocation, setSelectedLocation] = useState(() => {
+    try {
+      const saved = localStorage.getItem('ksf_selected_location');
+      if (saved) return JSON.parse(saved);
+    } catch (e) {}
+    return DEFAULT_DELIVERY_LOCATIONS[0];
+  });
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+
+  // Sync selected location when backend settings are fetched
+  useEffect(() => {
+    if (settings?.deliveryLocations && settings.deliveryLocations.length > 0) {
+      const active = settings.deliveryLocations.filter((l) => l.active !== false);
+      if (active.length > 0) {
+        setSelectedLocation((prev) => {
+          if (!prev) return active[0];
+          const matched = active.find((l) => l.id === prev.id || l.name === prev.name);
+          return matched || active[0];
+        });
+      }
+    }
+  }, [settings]);
+
+  const handleSelectLocation = (loc) => {
+    setSelectedLocation(loc);
+    try {
+      localStorage.setItem('ksf_selected_location', JSON.stringify(loc));
+    } catch (e) {}
+  };
 
   // Cart State (Persisted in localStorage)
   const [cartItems, setCartItems] = useState(() => {
@@ -308,6 +340,8 @@ export default function App() {
         activePage={currentPage}
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
+        selectedLocation={selectedLocation}
+        onOpenLocationModal={() => setIsLocationModalOpen(true)}
       />
 
       {currentPage === 'about' ? (
@@ -431,6 +465,7 @@ export default function App() {
                   onAddToCart={handleAddToCart}
                   onUpdateQuantity={handleUpdateCartQuantity}
                   cartItems={cartItems}
+                  selectedLocation={selectedLocation}
                 />
               ))}
 
@@ -499,6 +534,7 @@ export default function App() {
           onAddToCart={handleAddToCart}
           onOpenCart={() => setIsCartOpen(true)}
           cartItems={cartItems}
+          selectedLocation={selectedLocation}
         />
       )}
 
@@ -515,6 +551,8 @@ export default function App() {
           const el = document.getElementById('products-section');
           if (el) el.scrollIntoView({ behavior: 'smooth' });
         }}
+        selectedLocation={selectedLocation}
+        onOpenLocationModal={() => setIsLocationModalOpen(true)}
       />
 
       {/* Mobile Floating Sticky Cart Bar (Shown when items in cart) */}
@@ -550,7 +588,9 @@ export default function App() {
       >
         <a
           href={`https://wa.me/${(settings?.whatsappNumber || '919876543210').replace(/[^0-9]/g, '')}?text=${encodeURIComponent(
-            'Hello Kohinoor Signature Farms! I would like to inquire about today\'s available fresh farm cuts.'
+            selectedLocation?.name
+              ? `Hello Kohinoor Signature Farms! I would like to inquire about today's available fresh cuts for delivery to ${selectedLocation.name}.`
+              : 'Hello Kohinoor Signature Farms! I would like to inquire about today\'s available fresh farm cuts.'
           )}`}
           target="_blank"
           rel="noopener noreferrer"
@@ -573,6 +613,16 @@ export default function App() {
           <span>Chat on WhatsApp</span>
         </a>
       </div>
+
+      {/* Gated Community Delivery Location Modal */}
+      <LocationModal
+        isOpen={isLocationModalOpen}
+        onClose={() => setIsLocationModalOpen(false)}
+        locations={settings?.deliveryLocations || DEFAULT_DELIVERY_LOCATIONS}
+        selectedLocation={selectedLocation}
+        onSelectLocation={handleSelectLocation}
+        storeSettings={settings}
+      />
     </div>
   );
 }

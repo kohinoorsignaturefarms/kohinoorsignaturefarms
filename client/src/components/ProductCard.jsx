@@ -8,7 +8,8 @@ export default function ProductCard({
   onOpenDetail,
   onAddToCart,
   onUpdateQuantity,
-  cartItems = []
+  cartItems = [],
+  selectedLocation
 }) {
   const variants = product.variants && product.variants.length > 0
     ? product.variants
@@ -46,7 +47,8 @@ export default function ProductCard({
     storeSettings?.whatsappNumber,
     product,
     activeVariant,
-    storeSettings
+    storeSettings,
+    selectedLocation
   );
 
   const mainImage = product.images && product.images.length > 0

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Plus, Minus, Trash2, MessageCircle, ShoppingBag, ShieldCheck, ArrowRight } from 'lucide-react';
+import { X, Plus, Minus, Trash2, MessageCircle, ShoppingBag, ShieldCheck, ArrowRight, MapPin } from 'lucide-react';
 import { formatCurrency, buildCartWhatsAppUrl, api } from '../api';
 
 export default function CartDrawer({
@@ -10,7 +10,9 @@ export default function CartDrawer({
   onRemoveItem,
   onClearCart,
   storeSettings,
-  onExploreCuts
+  onExploreCuts,
+  selectedLocation,
+  onOpenLocationModal
 }) {
   if (!isOpen) return null;
 
@@ -22,7 +24,8 @@ export default function CartDrawer({
   const whatsappCheckoutUrl = buildCartWhatsAppUrl(
     storeSettings?.whatsappNumber,
     cartItems,
-    storeSettings
+    storeSettings,
+    selectedLocation
   );
 
   return (
@@ -186,6 +189,26 @@ export default function CartDrawer({
         {/* Drawer Footer / Bill Summary & WhatsApp Checkout */}
         {cartItems.length > 0 && (
           <div className="ksf-cart-footer">
+            {/* Delivery Destination Selector Bar */}
+            <div
+              className="ksf-cart-delivery-badge"
+              onClick={onOpenLocationModal}
+              role="button"
+              tabIndex={0}
+              title="Change delivery location"
+            >
+              <div className="ksf-cart-delivery-info">
+                <MapPin size={16} className="ksf-cart-pin-icon" />
+                <div>
+                  <div className="ksf-cart-delivery-label">Delivering To</div>
+                  <div className="ksf-cart-delivery-val">
+                    {selectedLocation?.name || 'Select Gated Community'}
+                  </div>
+                </div>
+              </div>
+              <span className="btn-cart-change-loc">Change</span>
+            </div>
+
             {/* Bill Summary */}
             <div className="ksf-cart-bill-summary">
               <div className="ksf-bill-row">

@@ -13,7 +13,8 @@ import {
   ShoppingBag,
   Plus,
   Minus,
-  Check
+  Check,
+  MapPin
 } from 'lucide-react';
 import { formatCurrency, buildWhatsAppUrl } from '../api';
 
@@ -23,7 +24,8 @@ export default function ProductDetailPage({
   onClose,
   onAddToCart,
   onOpenCart,
-  cartItems = []
+  cartItems = [],
+  selectedLocation
 }) {
   if (!product) return null;
 
@@ -61,7 +63,8 @@ export default function ProductDetailPage({
     storeSettings?.whatsappNumber,
     product,
     activeVariant,
-    storeSettings
+    storeSettings,
+    selectedLocation
   );
 
   const images = product.images && product.images.length > 0
@@ -473,6 +476,14 @@ export default function ProductDetailPage({
                 </div>
               )}
             </div>
+
+            {/* Delivery Destination Badge */}
+            {selectedLocation?.name && (
+              <div className="ksf-detail-delivery-banner">
+                <MapPin size={14} className="ksf-loc-pin" />
+                <span>Morning Dispatch to <strong>{selectedLocation.name}</strong></span>
+              </div>
+            )}
 
             {/* Detailed Specs Table */}
             <h4 style={{ fontFamily: 'var(--font-cinzel)', fontSize: '0.875rem', fontWeight: 800, color: 'var(--green-primary)', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.35rem', marginBottom: '0.5rem' }}>

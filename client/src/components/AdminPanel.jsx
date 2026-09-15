@@ -33,7 +33,8 @@ import {
   Truck,
   XCircle,
   StickyNote,
-  Filter
+  Filter,
+  MapPin
 } from 'lucide-react';
 import { api, formatCurrency } from '../api';
 
@@ -459,6 +460,105 @@ function AdminPanelInner({
     }
   };
 
+  // ----------------------------------------------------
+  // GATED COMMUNITY DELIVERY LOCATIONS ACTIONS
+  // ----------------------------------------------------
+  const deliveryLocations = Array.isArray(settings?.deliveryLocations) ? settings.deliveryLocations : [];
+  const [editingLocation, setEditingLocation] = useState(null);
+  const [isNewLocation, setIsNewLocation] = useState(false);
+
+  const handleOpenAddLocation = () => {
+    setIsNewLocation(true);
+    setEditingLocation({
+      id: '',
+      name: '',
+      area: '',
+      city: 'Hyderabad',
+      pincode: '',
+      deliverySlot: 'Morning 7:00 AM - 9:30 AM',
+      active: true
+    });
+  };
+
+  const handleOpenEditLocation = (loc) => {
+    setIsNewLocation(false);
+    setEditingLocation({ ...loc });
+  };
+
+  const handleSaveLocation = async (e) => {
+    e.preventDefault();
+    if (!editingLocation || !editingLocation.name.trim()) return;
+
+    try {
+      let updatedList;
+      if (isNewLocation || !editingLocation.id) {
+        const newLoc = {
+          ...editingLocation,
+          id: 'loc-' + Date.now(),
+          name: editingLocation.name.trim(),
+          area: (editingLocation.area || '').trim(),
+          city: (editingLocation.city || 'Hyderabad').trim(),
+          pincode: (editingLocation.pincode || '').toString().trim(),
+          deliverySlot: (editingLocation.deliverySlot || 'Morning 7:00 AM - 9:30 AM').trim(),
+          active: editingLocation.active !== false
+        };
+        updatedList = [...deliveryLocations, newLoc];
+      } else {
+        updatedList = deliveryLocations.map((l) =>
+          l.id === editingLocation.id
+            ? {
+                ...editingLocation,
+                name: editingLocation.name.trim(),
+                area: (editingLocation.area || '').trim(),
+                city: (editingLocation.city || 'Hyderabad').trim(),
+                pincode: (editingLocation.pincode || '').toString().trim(),
+                deliverySlot: (editingLocation.deliverySlot || 'Morning 7:00 AM - 9:30 AM').trim(),
+                active: editingLocation.active !== false
+              }
+            : l
+        );
+      }
+
+      const newSettings = { ...settings, deliveryLocations: updatedList };
+      await api.updateSettings(newSettings);
+      setSettings(newSettings);
+      setEditingLocation(null);
+      showToast('Delivery society saved successfully!');
+      if (onDataRefresh) onDataRefresh();
+    } catch (err) {
+      showToast('Failed to save delivery location', 'error');
+    }
+  };
+
+  const handleDeleteLocation = async (locId, locName) => {
+    if (!window.confirm(`Are you sure you want to remove "${locName}" from delivery locations?`)) return;
+    try {
+      const updatedList = deliveryLocations.filter((l) => l.id !== locId);
+      const newSettings = { ...settings, deliveryLocations: updatedList };
+      await api.updateSettings(newSettings);
+      setSettings(newSettings);
+      showToast(`Removed "${locName}" from delivery locations`);
+      if (onDataRefresh) onDataRefresh();
+    } catch (err) {
+      showToast('Failed to delete delivery location', 'error');
+    }
+  };
+
+  const handleToggleLocationActive = async (locId) => {
+    try {
+      const updatedList = deliveryLocations.map((l) =>
+        l.id === locId ? { ...l, active: !l.active } : l
+      );
+      const newSettings = { ...settings, deliveryLocations: updatedList };
+      await api.updateSettings(newSettings);
+      setSettings(newSettings);
+      showToast('Delivery location status updated');
+      if (onDataRefresh) onDataRefresh();
+    } catch (err) {
+      showToast('Failed to update status', 'error');
+    }
+  };
+
   // Filtered Products list (safe against null/undefined)
   const safeProducts = Array.isArray(products) ? products : [];
   const safeCategories = Array.isArray(categories) ? categories : [];
@@ -718,6 +818,14 @@ function AdminPanelInner({
           >
             <ShoppingCart size={15} />
             <span>Live Orders {orders.length > 0 ? `(${orders.length})` : ''}</span>
+          </button>
+
+          <button
+            className={`btn-admin-tab ${activeTab === 'locations' ? 'active' : ''}`}
+            onClick={() => setActiveTab('locations')}
+          >
+            <MapPin size={15} />
+            <span>Delivery Societies ({deliveryLocations.length})</span>
           </button>
         </div>
       </div>
@@ -1976,6 +2084,245 @@ function AdminPanelInner({
             )}
           </div>
         )}
+
+        {/* ====================================================
+            TAB 7: EXCLUSIVE GATED COMMUNITIES DELIVERY
+            ==================================================== */}
+        {activeTab === 'locations' && (
+          <div>
+            {/* Header & Quick Action Row */}
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                flexWrap: 'wrap',
+                gap: '0.75rem',
+                marginBottom: '1.25rem',
+                width: '100%'
+              }}
+            >
+              <div>
+                <h3
+                  style={{
+                    fontFamily: 'var(--font-cinzel)',
+                    fontWeight: 800,
+                    fontSize: '1.2rem',
+                    color: 'var(--green-primary)',
+                    marginBottom: '0.2rem'
+                  }}
+                >
+                  Exclusive Delivery Gated Communities
+                </h3>
+                <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', margin: 0 }}>
+                  Manage the gated societies where Kohinoor Signature Farms currently delivers. Selected community auto-populates on the storefront and WhatsApp checkout.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleOpenAddLocation}
+                style={{
+                  background: 'var(--green-primary)',
+                  color: '#FFFFFF',
+                  padding: '0.55rem 1.1rem',
+                  borderRadius: 'var(--radius-md)',
+                  fontWeight: 700,
+                  fontSize: '0.85rem',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.4rem',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: 'var(--shadow-sm)'
+                }}
+              >
+                <Plus size={16} />
+                <span>Add Gated Community</span>
+              </button>
+            </div>
+
+            {/* Communities Grid */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                gap: '1rem'
+              }}
+            >
+              {deliveryLocations.map((loc, idx) => (
+                <div
+                  key={loc.id || idx}
+                  style={{
+                    background: '#FFFFFF',
+                    border: `1.5px solid ${loc.active !== false ? 'var(--border-light)' : '#FCA5A5'}`,
+                    borderRadius: 'var(--radius-lg)',
+                    padding: '1.15rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'space-between',
+                    gap: '0.75rem',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+                    opacity: loc.active !== false ? 1 : 0.75
+                  }}
+                >
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.4rem' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div
+                          style={{
+                            width: '32px',
+                            height: '32px',
+                            borderRadius: '8px',
+                            background: loc.active !== false ? '#EAF3ED' : '#FEE2E2',
+                            color: loc.active !== false ? 'var(--green-primary)' : '#B91C1C',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexShrink: 0
+                          }}
+                        >
+                          <MapPin size={16} />
+                        </div>
+                        <h4 style={{ margin: 0, fontSize: '0.98rem', fontWeight: 800, color: 'var(--green-primary)' }}>
+                          {loc.name}
+                        </h4>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleToggleLocationActive(loc.id)}
+                        style={{
+                          padding: '0.2rem 0.6rem',
+                          borderRadius: 'var(--radius-full)',
+                          fontSize: '0.72rem',
+                          fontWeight: 700,
+                          cursor: 'pointer',
+                          background: loc.active !== false ? '#DCFCE7' : '#FEE2E2',
+                          color: loc.active !== false ? '#15803D' : '#B91C1C',
+                          border: `1px solid ${loc.active !== false ? '#86EFAC' : '#FCA5A5'}`
+                        }}
+                        title="Toggle active status"
+                      >
+                        {loc.active !== false ? '● Active' : '○ Inactive'}
+                      </button>
+                    </div>
+
+                    <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.4rem', lineHeight: '1.4' }}>
+                      📍 {loc.area}{loc.city ? `, ${loc.city}` : ''}{loc.pincode ? ` - ${loc.pincode}` : ''}
+                    </div>
+
+                    {loc.deliverySlot && (
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '0.3rem',
+                          background: 'var(--bg-subtle)',
+                          padding: '0.25rem 0.6rem',
+                          borderRadius: 'var(--radius-sm)',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          color: 'var(--green-darkest)'
+                        }}
+                      >
+                        <span>⏰ {loc.deliverySlot}</span>
+                      </div>
+                    )}
+                  </div>
+
+                  <div
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      gap: '0.5rem',
+                      borderTop: '1px solid var(--border-light)',
+                      paddingTop: '0.65rem'
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEditLocation(loc)}
+                      style={{
+                        padding: '0.35rem 0.75rem',
+                        borderRadius: 'var(--radius-md)',
+                        fontSize: '0.785rem',
+                        fontWeight: 600,
+                        background: 'var(--bg-subtle)',
+                        color: 'var(--text-dark)',
+                        border: '1px solid var(--border-light)',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Edit2 size={13} />
+                      <span>Edit</span>
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteLocation(loc.id, loc.name)}
+                      style={{
+                        padding: '0.35rem 0.75rem',
+                        borderRadius: 'var(--radius-md)',
+                        fontSize: '0.785rem',
+                        fontWeight: 600,
+                        background: '#FEF2F2',
+                        color: 'var(--error-red)',
+                        border: '1px solid #FCA5A5',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.25rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <Trash2 size={13} />
+                      <span>Delete</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {deliveryLocations.length === 0 && (
+              <div
+                style={{
+                  textAlign: 'center',
+                  padding: '3.5rem 1rem',
+                  background: '#FFFFFF',
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px dashed var(--border-light)'
+                }}
+              >
+                <MapPin size={40} style={{ color: 'var(--gold-dark)', margin: '0 auto 0.75rem' }} />
+                <h4 style={{ fontFamily: 'var(--font-cinzel)', color: 'var(--green-primary)', marginBottom: '0.4rem' }}>
+                  No Delivery Gated Communities Configured
+                </h4>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>
+                  Add your target gated communities so customers can pick their society from the header.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleOpenAddLocation}
+                  style={{
+                    background: 'var(--green-primary)',
+                    color: '#FFFFFF',
+                    padding: '0.55rem 1.25rem',
+                    borderRadius: 'var(--radius-full)',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  + Add First Gated Community
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* ====================================================
@@ -2525,6 +2872,137 @@ function AdminPanelInner({
                   }}
                 >
                   Save Category
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ====================================================
+          MODAL: GATED COMMUNITY EDITOR
+          ==================================================== */}
+      {editingLocation && (
+        <div className="ksf-modal-overlay" onClick={() => setEditingLocation(null)}>
+          <div
+            className="ksf-admin-modal-card animate-fade-in"
+            style={{ maxWidth: '520px', width: '92vw', padding: '1.25rem' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3
+              style={{
+                fontFamily: 'var(--font-cinzel)',
+                fontWeight: 800,
+                fontSize: '1.1rem',
+                color: 'var(--green-primary)',
+                marginBottom: '0.85rem'
+              }}
+            >
+              {isNewLocation ? 'Add Gated Community' : `Edit: ${editingLocation.name}`}
+            </h3>
+
+            <form onSubmit={handleSaveLocation}>
+              <div className="ksf-form-group">
+                <label className="ksf-form-label">Gated Community / Society Name *</label>
+                <input
+                  type="text"
+                  required
+                  className="ksf-input"
+                  placeholder="e.g. My Home Bhooja"
+                  value={editingLocation.name}
+                  onChange={(e) => setEditingLocation({ ...editingLocation, name: e.target.value })}
+                />
+              </div>
+
+              <div className="ksf-form-group">
+                <label className="ksf-form-label">Area / Locality / Landmark *</label>
+                <input
+                  type="text"
+                  required
+                  className="ksf-input"
+                  placeholder="e.g. Silpa Gram Craft Village, Rai Durg"
+                  value={editingLocation.area}
+                  onChange={(e) => setEditingLocation({ ...editingLocation, area: e.target.value })}
+                />
+              </div>
+
+              <div className="ksf-admin-grid-2col">
+                <div className="ksf-form-group">
+                  <label className="ksf-form-label">City</label>
+                  <input
+                    type="text"
+                    className="ksf-input"
+                    placeholder="Hyderabad"
+                    value={editingLocation.city || 'Hyderabad'}
+                    onChange={(e) => setEditingLocation({ ...editingLocation, city: e.target.value })}
+                  />
+                </div>
+
+                <div className="ksf-form-group">
+                  <label className="ksf-form-label">Pincode</label>
+                  <input
+                    type="text"
+                    className="ksf-input"
+                    placeholder="500081"
+                    value={editingLocation.pincode || ''}
+                    onChange={(e) => setEditingLocation({ ...editingLocation, pincode: e.target.value })}
+                  />
+                </div>
+              </div>
+
+              <div className="ksf-form-group">
+                <label className="ksf-form-label">Delivery Slot / Schedule Window</label>
+                <input
+                  type="text"
+                  className="ksf-input"
+                  placeholder="e.g. Morning 7:00 AM - 9:30 AM"
+                  value={editingLocation.deliverySlot || ''}
+                  onChange={(e) => setEditingLocation({ ...editingLocation, deliverySlot: e.target.value })}
+                />
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginTop: '0.75rem', marginBottom: '1.25rem' }}>
+                <input
+                  type="checkbox"
+                  id="locActiveCheck"
+                  checked={editingLocation.active !== false}
+                  onChange={(e) => setEditingLocation({ ...editingLocation, active: e.target.checked })}
+                  style={{ width: '17px', height: '17px', accentColor: 'var(--green-primary)', cursor: 'pointer' }}
+                />
+                <label htmlFor="locActiveCheck" style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-dark)', cursor: 'pointer' }}>
+                  Active for deliveries (visible on storefront & WhatsApp)
+                </label>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem' }}>
+                <button
+                  type="button"
+                  onClick={() => setEditingLocation(null)}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: 'var(--radius-md)',
+                    background: 'var(--bg-subtle)',
+                    fontSize: '0.85rem',
+                    border: '1px solid var(--border-light)',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  style={{
+                    background: 'var(--green-primary)',
+                    color: '#FFFFFF',
+                    padding: '0.5rem 1.25rem',
+                    borderRadius: 'var(--radius-md)',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Save Community
                 </button>
               </div>
             </form>

@@ -241,8 +241,48 @@ export const formatCurrency = (amount) => {
   return `₹${num.toLocaleString('en-IN')}`;
 };
 
-// Helper to build WhatsApp direct link with formatted message
-export const buildWhatsAppUrl = (whatsappNumber, product, variant, storeSettings) => {
+// Default Fallback Gated Communities
+export const DEFAULT_DELIVERY_LOCATIONS = [
+  {
+    id: 'loc-1',
+    name: 'My Home Bhooja',
+    area: 'Silpa Gram Craft Village, Rai Durg',
+    city: 'Hyderabad',
+    pincode: '500081',
+    deliverySlot: 'Morning 7:00 AM - 9:30 AM',
+    active: true
+  },
+  {
+    id: 'loc-2',
+    name: 'Aparna Sarovar Zenith',
+    area: 'Nallagandla, Gachibowli',
+    city: 'Hyderabad',
+    pincode: '500019',
+    deliverySlot: 'Morning 7:00 AM - 9:30 AM',
+    active: true
+  },
+  {
+    id: 'loc-3',
+    name: 'Jayabheri Silicon County',
+    area: 'Hitec City, Kondapur',
+    city: 'Hyderabad',
+    pincode: '500084',
+    deliverySlot: 'Morning 7:00 AM - 9:30 AM',
+    active: true
+  },
+  {
+    id: 'loc-4',
+    name: 'Rainbow Vistas RockGarden',
+    area: 'Moosapet',
+    city: 'Hyderabad',
+    pincode: '500018',
+    deliverySlot: 'Morning 7:00 AM - 9:30 AM',
+    active: true
+  }
+];
+
+// Helper to build WhatsApp direct link with formatted message and selected delivery community
+export const buildWhatsAppUrl = (whatsappNumber, product, variant, storeSettings, selectedLocation = null) => {
   const cleanNumber = (whatsappNumber || storeSettings?.whatsappNumber || '919876543210')
     .replace(/[^0-9]/g, '');
 
@@ -253,6 +293,10 @@ export const buildWhatsAppUrl = (whatsappNumber, product, variant, storeSettings
   
   const currentUrl = typeof window !== 'undefined' ? `${window.location.origin}/#product-${product.id}` : '';
   const fssaiNo = product.fssaiNumber || storeSettings?.masterFssai || '13624014000889';
+
+  const locationLine = selectedLocation?.name 
+    ? `* 📍 Delivery Location: *${selectedLocation.name}*${selectedLocation.area ? ` (${selectedLocation.area})` : ''}\n` 
+    : '';
 
   let template = storeSettings?.whatsappTemplate;
 
@@ -267,22 +311,26 @@ export const buildWhatsAppUrl = (whatsappNumber, product, variant, storeSettings
       .replace(/{discount_amount}/g, discountAmount)
       .replace(/{fssai_no}/g, fssaiNo)
       .replace(/{product_url}/g, currentUrl);
+    if (locationLine) {
+      message = locationLine + message;
+    }
   } else {
     message = `*ORDER ENQUIRY - KOHINOOR SIGNATURE FARMS*\n` +
       `----------------------------------------\n` +
       `* Item: ${product.name}\n` +
       `* Weight / Size: ${variant?.label || variant?.weight || '1 kg'}\n` +
       `* Price: Rs. ${selling} (MRP: Rs. ${mrp} | ${discountPercent}% OFF)\n` +
+      (locationLine ? locationLine : '') +
       `* Product Link: ${currentUrl}\n` +
       `----------------------------------------\n` +
-      `Hello Kohinoor Farms team! I would like to place an order for this fresh item. Please confirm availability and delivery slot.`;
+      `Hello Kohinoor Farms team! I would like to place an order for ${selectedLocation?.name ? `delivery to *${selectedLocation.name}*` : 'this fresh cut'}. Please confirm availability and morning slot.`;
   }
 
   return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
 };
 
-// Helper to build multi-item WhatsApp direct link from Cart
-export const buildCartWhatsAppUrl = (whatsappNumber, cartItems, storeSettings) => {
+// Helper to build multi-item WhatsApp direct link from Cart with delivery community
+export const buildCartWhatsAppUrl = (whatsappNumber, cartItems, storeSettings, selectedLocation = null) => {
   const cleanNumber = (whatsappNumber || storeSettings?.whatsappNumber || '919876543210')
     .replace(/[^0-9]/g, '');
 
@@ -310,15 +358,22 @@ export const buildCartWhatsAppUrl = (whatsappNumber, cartItems, storeSettings) =
       `\n\n`;
   });
 
-  const message = `*NEW FARM ORDER - KOHINOOR SIGNATURE FARMS*\n` +
+  const locationSection = selectedLocation?.name 
+    ? `* 📍 Delivering To: *${selectedLocation.name}*${selectedLocation.area ? ` (${selectedLocation.area})` : ''}\n` +
+      (selectedLocation.deliverySlot ? `* ⏰ Delivery Schedule: ${selectedLocation.deliverySlot}\n` : '') +
+      `----------------------------------------\n`
+    : '';
+
+  const message = `*NEW FARM BASKET ORDER - KOHINOOR SIGNATURE FARMS*\n` +
     `----------------------------------------\n` +
+    (locationSection ? locationSection : '') +
     `*ORDER SUMMARY (${totalItemsCount} ${totalItemsCount === 1 ? 'Item' : 'Items'}):*\n\n` +
     itemsListText +
     `----------------------------------------\n` +
     `* Total Bill: *Rs. ${totalSelling.toLocaleString('en-IN')}*\n` +
     (totalSavings > 0 ? `* Total Savings: *Rs. ${totalSavings.toLocaleString('en-IN')}*\n` : '') +
     `----------------------------------------\n` +
-    `Hello Kohinoor Farms team! Please confirm availability for my basket and dispatch slot.`;
+    `Hello Kohinoor Farms team! Please confirm availability for my basket and dispatch to ${selectedLocation?.name ? `*${selectedLocation.name}*` : 'my gated community'}.`;
 
   return `https://wa.me/${cleanNumber}?text=${encodeURIComponent(message)}`;
 };
