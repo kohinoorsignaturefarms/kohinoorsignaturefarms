@@ -14,7 +14,7 @@ export default function LocationModal({
 
   if (!isOpen) return null;
 
-  const rawList = Array.isArray(locations) && locations.length > 0 ? locations : DEFAULT_DELIVERY_LOCATIONS;
+  const rawList = Array.isArray(locations) ? locations : [];
   const activeLocations = rawList.filter((loc) => loc.active !== false);
 
   const filteredLocations = activeLocations.filter((loc) => {
@@ -133,12 +133,22 @@ export default function LocationModal({
             );
           })}
 
-          {filteredLocations.length === 0 && (
+          {activeLocations.length === 0 ? (
+            <div className="ksf-location-empty">
+              <Building2 size={36} style={{ color: 'var(--gold-dark)', margin: '0 auto 0.5rem' }} />
+              <p style={{ fontWeight: 600, color: 'var(--text-primary)', marginBottom: '0.25rem' }}>
+                No delivery communities configured yet
+              </p>
+              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                Societies added in the Admin Panel will appear here.
+              </p>
+            </div>
+          ) : filteredLocations.length === 0 ? (
             <div className="ksf-location-empty">
               <Building2 size={36} style={{ color: 'var(--gold-dark)', margin: '0 auto 0.5rem' }} />
               <p>No active delivery community found matching &ldquo;{search}&rdquo;.</p>
             </div>
-          )}
+          ) : null}
         </div>
 
         {/* Request Society Footer */}

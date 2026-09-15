@@ -3019,7 +3019,7 @@ function AdminPanelInner({
                   type="text"
                   required
                   className="ksf-input"
-                  placeholder="e.g. My Home Bhooja"
+                  placeholder="e.g. Society / Community Name"
                   value={editingLocation.name}
                   onChange={(e) => setEditingLocation({ ...editingLocation, name: e.target.value })}
                 />
@@ -3031,7 +3031,7 @@ function AdminPanelInner({
                   type="text"
                   required
                   className="ksf-input"
-                  placeholder="e.g. Silpa Gram Craft Village, Rai Durg"
+                  placeholder="e.g. Phase 1, Financial District"
                   value={editingLocation.area}
                   onChange={(e) => setEditingLocation({ ...editingLocation, area: e.target.value })}
                 />

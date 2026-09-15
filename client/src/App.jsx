@@ -26,7 +26,7 @@ export default function App() {
       const saved = localStorage.getItem('ksf_selected_location');
       if (saved) return JSON.parse(saved);
     } catch (e) {}
-    return DEFAULT_DELIVERY_LOCATIONS[0];
+    return null;
   });
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
 
@@ -40,7 +40,14 @@ export default function App() {
           const matched = active.find((l) => l.id === prev.id || l.name === prev.name);
           return matched || active[0];
         });
+      } else {
+        setSelectedLocation(null);
       }
+    } else if (settings && Array.isArray(settings.deliveryLocations) && settings.deliveryLocations.length === 0) {
+      setSelectedLocation(null);
+      try {
+        localStorage.removeItem('ksf_selected_location');
+      } catch (e) {}
     }
   }, [settings]);
 

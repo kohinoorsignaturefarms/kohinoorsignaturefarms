@@ -241,45 +241,8 @@ export const formatCurrency = (amount) => {
   return `₹${num.toLocaleString('en-IN')}`;
 };
 
-// Default Fallback Gated Communities
-export const DEFAULT_DELIVERY_LOCATIONS = [
-  {
-    id: 'loc-1',
-    name: 'My Home Bhooja',
-    area: 'Silpa Gram Craft Village, Rai Durg',
-    city: 'Hyderabad',
-    pincode: '500081',
-    deliverySlot: 'Morning 7:00 AM - 9:30 AM',
-    active: true
-  },
-  {
-    id: 'loc-2',
-    name: 'Aparna Sarovar Zenith',
-    area: 'Nallagandla, Gachibowli',
-    city: 'Hyderabad',
-    pincode: '500019',
-    deliverySlot: 'Morning 7:00 AM - 9:30 AM',
-    active: true
-  },
-  {
-    id: 'loc-3',
-    name: 'Jayabheri Silicon County',
-    area: 'Hitec City, Kondapur',
-    city: 'Hyderabad',
-    pincode: '500084',
-    deliverySlot: 'Morning 7:00 AM - 9:30 AM',
-    active: true
-  },
-  {
-    id: 'loc-4',
-    name: 'Rainbow Vistas RockGarden',
-    area: 'Moosapet',
-    city: 'Hyderabad',
-    pincode: '500018',
-    deliverySlot: 'Morning 7:00 AM - 9:30 AM',
-    active: true
-  }
-];
+// Default Fallback Gated Communities (Empty by default, managed via Admin Panel)
+export const DEFAULT_DELIVERY_LOCATIONS = [];
 
 // Default Official Social Media Handles
 export const DEFAULT_SOCIAL_LINKS = {
