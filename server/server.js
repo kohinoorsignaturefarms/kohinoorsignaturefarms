@@ -449,9 +449,7 @@ app.post('/api/products', async (req, res) => {
     antibioticFree: req.body.antibioticFree !== false,
     culinaryUses: req.body.culinaryUses || '',
     piecesEstimate: req.body.piecesEstimate || '',
-    images: Array.isArray(req.body.images) && req.body.images.length > 0 
-      ? req.body.images 
-      : ['https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80'],
+    images: Array.isArray(req.body.images) ? req.body.images : [],
     badges: req.body.badges || ['Farm Fresh', '100% Halal'],
     inStock: req.body.inStock !== false,
     variants: Array.isArray(req.body.variants) && req.body.variants.length > 0 
@@ -512,13 +510,59 @@ app.delete('/api/products/:id', async (req, res) => {
   res.json({ success: true, message: 'Product deleted successfully' });
 });
 
-// 4. IMAGE UPLOAD API
-app.post('/api/upload', upload.single('image'), (req, res) => {
+// 4. IMAGE UPLOAD API — Supabase Storage with local fallback
+app.post('/api/upload', upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No image file uploaded' });
   }
+
+  // Try Supabase Storage upload (requires service role key for bucket write access)
+  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (supabase && serviceRoleKey) {
+    try {
+      const { createClient: createAdminClient } = await import('@supabase/supabase-js');
+      const adminSupabase = createAdminClient(supabaseUrl, serviceRoleKey);
+
+      const fileBuffer = fs.readFileSync(req.file.path);
+      const ext = (req.file.originalname.split('.').pop() || 'jpg').toLowerCase();
+      const filename = `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      const contentType = req.file.mimetype || 'image/jpeg';
+
+      const { data: uploadData, error: uploadError } = await adminSupabase.storage
+        .from('product-images')
+        .upload(filename, fileBuffer, { contentType, upsert: false });
+
+      if (!uploadError && uploadData) {
+        const { data: urlData } = adminSupabase.storage.from('product-images').getPublicUrl(filename);
+        const publicUrl = urlData?.publicUrl;
+        // Clean up local temp file
+        try { fs.unlinkSync(req.file.path); } catch(e) {}
+        return res.json({ success: true, url: publicUrl, filename, storage: 'supabase' });
+      }
+    } catch (err) {
+      console.warn('Supabase Storage upload note:', err.message, '— falling back to local');
+    }
+  }
+
+  // Fallback: local /uploads (works in dev, but NOT on Vercel production)
+  const isVercelEnv = Boolean(process.env.VERCEL || process.env.NOW_REGION);
   const fileUrl = `/uploads/${req.file.filename}`;
-  res.json({ success: true, url: fileUrl, filename: req.file.filename });
+
+  if (isVercelEnv) {
+    // On Vercel with no service role key — can't store files. Return the data URL instead.
+    try {
+      const fileBuffer = fs.readFileSync(req.file.path);
+      const b64 = fileBuffer.toString('base64');
+      const dataUrl = `data:${req.file.mimetype};base64,${b64}`;
+      try { fs.unlinkSync(req.file.path); } catch(e) {}
+      return res.json({ success: true, url: dataUrl, filename: req.file.filename, storage: 'base64',
+        warning: 'No SUPABASE_SERVICE_ROLE_KEY set — image stored as base64 data URL. Add the key in Vercel env vars for persistent CDN storage.' });
+    } catch(err) {
+      return res.status(500).json({ error: 'Upload failed on serverless: no persistent storage available. Set SUPABASE_SERVICE_ROLE_KEY env var.' });
+    }
+  }
+
+  res.json({ success: true, url: fileUrl, filename: req.file.filename, storage: 'local' });
 });
 
 // 5. ADMIN STATS & OVERVIEW API
