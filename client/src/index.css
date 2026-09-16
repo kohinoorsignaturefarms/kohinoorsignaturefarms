@@ -3287,11 +3287,13 @@ input, select, textarea {
   animation: ksf-spin 0.9s linear infinite;
 }
 
-/* Analytics / Orders shared tab wrapper */
+/* Analytics / Orders shared tab wrapper — fills full admin container width */
 .ksf-analytics-tab,
 .ksf-orders-tab {
-  padding: 1.25rem 1rem 2rem;
-  max-width: 900px;
+  width: 100%;
+  max-width: 100%;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 /* Tab header row */

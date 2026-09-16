@@ -14,7 +14,7 @@ export default function HeroSlider({ banners, onSelectCategory }) {
       categoryFilter: 'goat',
       badge: 'Signature Grass-Fed',
       buttonText: 'Explore Goat Cuts',
-      image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80'
+      image: ''
     }
   ];
 
@@ -77,17 +77,28 @@ export default function HeroSlider({ banners, onSelectCategory }) {
             const isActive = idx === currentIndex;
             return (
               <div key={slide.id || idx} className={`ksf-slide ${isActive ? 'active' : ''}`}>
-                <picture className="ksf-slide-picture">
-                  {slide.mobileImage && (
-                    <source media="(max-width: 640px)" srcSet={slide.mobileImage} />
-                  )}
-                  <img
-                    src={slide.image}
-                    alt={slide.title}
+                {slide.image ? (
+                  <picture className="ksf-slide-picture">
+                    {slide.mobileImage && (
+                      <source media="(max-width: 640px)" srcSet={slide.mobileImage} />
+                    )}
+                    <img
+                      src={slide.image}
+                      alt={slide.title}
+                      className="ksf-slide-bg"
+                      loading={idx === 0 ? 'eager' : 'lazy'}
+                    />
+                  </picture>
+                ) : (
+                  <div
                     className="ksf-slide-bg"
-                    loading={idx === 0 ? 'eager' : 'lazy'}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'radial-gradient(ellipse at 75% 35%, #185E39 0%, #0B3B24 55%, #051A10 100%)'
+                    }}
                   />
-                </picture>
+                )}
                 <div className="ksf-slide-overlay">
                   <div className="ksf-slide-content">
                     {slide.badge && (

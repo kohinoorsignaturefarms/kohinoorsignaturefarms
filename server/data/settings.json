@@ -10,31 +10,31 @@
     {
       "id": "banner-1",
       "badge": "Signature Grass-Fed",
-      "image": "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1600&q=80",
+      "image": "",
       "title": "Premium Farm-Fresh Mutton Cuts",
       "subtitle": "100% Grass-Fed pasture-raised goat — Halal certified, antibiotic-free, direct from farm to your doorstep.",
       "buttonText": "Explore All Cuts",
-      "mobileImage": "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=800&h=1000&q=80",
+      "mobileImage": "",
       "categoryFilter": "all"
     },
     {
       "id": "banner-2",
       "badge": "100% Antibiotic-Free",
-      "image": "https://images.unsplash.com/photo-1588347818133-c9f7f5f5c1cd?auto=format&fit=crop&w=1600&q=80",
+      "image": "",
       "title": "Authentic Halal Butchery — Freshly Cut on Order",
       "subtitle": "Every cut is prepared fresh upon your order by trained Halal butchers. Never frozen. Direct from open pasture.",
       "buttonText": "Shop Fresh Mutton",
-      "mobileImage": "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=800&h=1000&q=80",
+      "mobileImage": "",
       "categoryFilter": "goat"
     },
     {
       "id": "banner-3",
       "badge": "Premium Offal & Specialty Cuts",
-      "image": "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=1600&q=80",
+      "image": "",
       "title": "Farm-to-Table Organ Meats & Specialty Cuts",
       "subtitle": "From Kaleji and Kapura to Paya and Brain — the full goat, the authentic way. Sourced honest, delivered fresh.",
       "buttonText": "Explore Specialty Cuts",
-      "mobileImage": "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=800&h=1000&q=80",
+      "mobileImage": "",
       "categoryFilter": "goat"
     }
   ],

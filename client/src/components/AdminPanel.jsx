@@ -123,6 +123,7 @@ function AdminPanelInner({
   const [editingProduct, setEditingProduct] = useState(null);
   const [isNewProduct, setIsNewProduct] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [uploadingBannerField, setUploadingBannerField] = useState(null); // 'desktop-idx' or 'mobile-idx'
 
   // Banner Editor Modal State
   const [editingBanner, setEditingBanner] = useState(null);
@@ -374,6 +375,30 @@ function AdminPanelInner({
       showToast('Image upload failed', 'error');
     } finally {
       setUploadingImage(false);
+    }
+  };
+
+  // Image Upload handler for Hero Banners
+  const handleBannerImageUpload = async (bannerIdx, file, isMobile = false) => {
+    if (!file) return;
+    const fieldKey = `${isMobile ? 'mobile' : 'desktop'}-${bannerIdx}`;
+    setUploadingBannerField(fieldKey);
+    try {
+      const res = await api.uploadImage(file);
+      if (res.url) {
+        const copy = [...(settings.heroBanners || [])];
+        if (isMobile) {
+          copy[bannerIdx].mobileImage = res.url;
+        } else {
+          copy[bannerIdx].image = res.url;
+        }
+        setSettings({ ...settings, heroBanners: copy });
+        showToast(`${isMobile ? 'Mobile' : 'Desktop'} banner image uploaded!`);
+      }
+    } catch (err) {
+      showToast('Banner image upload failed', 'error');
+    } finally {
+      setUploadingBannerField(null);
     }
   };
 
@@ -1506,7 +1531,8 @@ function AdminPanelInner({
                       categoryFilter: 'goat',
                       badge: 'Special Cut',
                       buttonText: 'Order Fresh',
-                      image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1400&q=80'
+                      image: '',
+                      mobileImage: ''
                     }
                   ];
                   handleSaveBanners(newBanners);
@@ -1528,7 +1554,7 @@ function AdminPanelInner({
               </button>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1.25rem', width: '100%', boxSizing: 'border-box' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '1.25rem', width: '100%', boxSizing: 'border-box' }}>
               {(settings.heroBanners || []).map((banner, idx) => (
                 <div
                   key={banner.id || idx}
@@ -1540,11 +1566,36 @@ function AdminPanelInner({
                     boxShadow: 'var(--shadow-sm)'
                   }}
                 >
-                  <img
-                    src={banner.image}
-                    alt={banner.title}
-                    style={{ width: '100%', height: '160px', objectFit: 'cover' }}
-                  />
+                  {banner.image ? (
+                    <img
+                      src={banner.image}
+                      alt={banner.title}
+                      style={{ width: '100%', height: '160px', objectFit: 'cover' }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        width: '100%',
+                        height: '160px',
+                        background: 'radial-gradient(circle at 50% 50%, #165B37 0%, #0B3B24 100%)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'rgba(212, 175, 55, 0.85)',
+                        fontSize: '0.82rem',
+                        fontWeight: 700,
+                        gap: '0.35rem',
+                        padding: '1rem',
+                        textAlign: 'center',
+                        boxSizing: 'border-box'
+                      }}
+                    >
+                      <span style={{ fontSize: '1.4rem' }}>🌿</span>
+                      <span>Kohinoor Emerald Gradient</span>
+                      <span style={{ fontSize: '0.72rem', color: '#E2E8F0', fontWeight: 500 }}>No image uploaded — using luxury brand backdrop</span>
+                    </div>
+                  )}
                   <div style={{ padding: '1rem' }}>
                     <div className="ksf-form-group">
                       <label className="ksf-form-label">Headline</label>
@@ -1610,34 +1661,92 @@ function AdminPanelInner({
                       </div>
                     </div>
 
+                    {/* Desktop Image Upload + URL */}
                     <div className="ksf-form-group">
-                      <label className="ksf-form-label">Desktop Banner Image URL (Wide Landscape)</label>
-                      <input
-                        type="text"
-                        className="ksf-input"
-                        value={banner.image || ''}
-                        onChange={(e) => {
-                          const copy = [...settings.heroBanners];
-                          copy[idx].image = e.target.value;
-                          setSettings({ ...settings, heroBanners: copy });
-                        }}
-                        placeholder="https://images.unsplash.com/..."
-                      />
+                      <label className="ksf-form-label">Desktop Banner Image (Wide Landscape)</label>
+                      <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center' }}>
+                        <input
+                          type="text"
+                          className="ksf-input"
+                          value={banner.image || ''}
+                          onChange={(e) => {
+                            const copy = [...settings.heroBanners];
+                            copy[idx].image = e.target.value;
+                            setSettings({ ...settings, heroBanners: copy });
+                          }}
+                          placeholder="Paste image URL or tap upload..."
+                          style={{ flex: 1, fontSize: '0.8rem' }}
+                        />
+                        <label
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            padding: '0.52rem 0.85rem',
+                            borderRadius: 'var(--radius-md)',
+                            background: 'var(--green-primary)',
+                            color: '#FFFFFF',
+                            fontSize: '0.78rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            whiteSpace: 'nowrap',
+                            boxShadow: 'var(--shadow-sm)'
+                          }}
+                        >
+                          <Upload size={13} />
+                          <span>{uploadingBannerField === `desktop-${idx}` ? 'Uploading...' : 'Upload'}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            onChange={(e) => handleBannerImageUpload(idx, e.target.files?.[0], false)}
+                          />
+                        </label>
+                      </div>
                     </div>
 
+                    {/* Mobile Image Upload + URL */}
                     <div className="ksf-form-group">
-                      <label className="ksf-form-label">Mobile Banner Image URL (Portrait / Vertical)</label>
-                      <input
-                        type="text"
-                        className="ksf-input"
-                        value={banner.mobileImage || ''}
-                        onChange={(e) => {
-                          const copy = [...settings.heroBanners];
-                          copy[idx].mobileImage = e.target.value;
-                          setSettings({ ...settings, heroBanners: copy });
-                        }}
-                        placeholder="https://images.unsplash.com/... (optional)"
-                      />
+                      <label className="ksf-form-label">Mobile Banner Image (Portrait / Vertical - Optional)</label>
+                      <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center' }}>
+                        <input
+                          type="text"
+                          className="ksf-input"
+                          value={banner.mobileImage || ''}
+                          onChange={(e) => {
+                            const copy = [...settings.heroBanners];
+                            copy[idx].mobileImage = e.target.value;
+                            setSettings({ ...settings, heroBanners: copy });
+                          }}
+                          placeholder="Paste mobile URL or tap upload..."
+                          style={{ flex: 1, fontSize: '0.8rem' }}
+                        />
+                        <label
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            padding: '0.52rem 0.85rem',
+                            borderRadius: 'var(--radius-md)',
+                            background: 'var(--bg-subtle)',
+                            color: 'var(--green-primary)',
+                            border: '1px solid var(--border-light)',
+                            fontSize: '0.78rem',
+                            fontWeight: 700,
+                            cursor: 'pointer',
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          <Upload size={13} />
+                          <span>{uploadingBannerField === `mobile-${idx}` ? 'Uploading...' : 'Upload Mobile'}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            style={{ display: 'none' }}
+                            onChange={(e) => handleBannerImageUpload(idx, e.target.files?.[0], true)}
+                          />
+                        </label>
+                      </div>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
@@ -1942,58 +2051,61 @@ function AdminPanelInner({
                     </div>
                   </div>
 
-                  {/* Event Breakdown */}
-                  {analytics.eventBreakdown && Object.keys(analytics.eventBreakdown).length > 0 && (
-                    <div className="ksf-analytics-section">
-                      <h3 className="ksf-analytics-section-title">Click Type Breakdown</h3>
-                      <div className="ksf-event-breakdown">
-                        {Object.entries(analytics.eventBreakdown).map(([type, count]) => {
-                          const total = analytics.totalClicks || 1;
-                          const pct = Math.round((count / total) * 100);
-                          const labels = { buy_click: 'WhatsApp Direct', cart_add: 'Add to Cart', whatsapp_checkout: 'Cart Checkout' };
-                          const colors = { buy_click: 'var(--whatsapp-green)', cart_add: 'var(--green-accent)', whatsapp_checkout: 'var(--gold-primary)' };
-                          return (
-                            <div key={type} className="ksf-event-row">
-                              <div className="ksf-event-row-label">
-                                <span className="ksf-event-dot" style={{ background: colors[type] || 'var(--green-primary)' }} />
-                                {labels[type] || type}
+                  {/* Analytics Sections: Side-by-Side on Desktop */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))', gap: '1.25rem', alignItems: 'start' }}>
+                    {/* Event Breakdown */}
+                    {analytics.eventBreakdown && Object.keys(analytics.eventBreakdown).length > 0 && (
+                      <div className="ksf-analytics-section" style={{ margin: 0 }}>
+                        <h3 className="ksf-analytics-section-title">Click Type Breakdown</h3>
+                        <div className="ksf-event-breakdown">
+                          {Object.entries(analytics.eventBreakdown).map(([type, count]) => {
+                            const total = analytics.totalClicks || 1;
+                            const pct = Math.round((count / total) * 100);
+                            const labels = { buy_click: 'WhatsApp Direct', cart_add: 'Add to Cart', whatsapp_checkout: 'Cart Checkout' };
+                            const colors = { buy_click: 'var(--whatsapp-green)', cart_add: 'var(--green-accent)', whatsapp_checkout: 'var(--gold-primary)' };
+                            return (
+                              <div key={type} className="ksf-event-row">
+                                <div className="ksf-event-row-label">
+                                  <span className="ksf-event-dot" style={{ background: colors[type] || 'var(--green-primary)' }} />
+                                  {labels[type] || type}
+                                </div>
+                                <div className="ksf-event-bar-wrap">
+                                  <div className="ksf-event-bar" style={{ width: `${pct}%`, background: colors[type] || 'var(--green-primary)' }} />
+                                </div>
+                                <div className="ksf-event-count">{count} <span className="ksf-event-pct">({pct}%)</span></div>
                               </div>
-                              <div className="ksf-event-bar-wrap">
-                                <div className="ksf-event-bar" style={{ width: `${pct}%`, background: colors[type] || 'var(--green-primary)' }} />
-                              </div>
-                              <div className="ksf-event-count">{count} <span className="ksf-event-pct">({pct}%)</span></div>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Top Products */}
-                  {Array.isArray(analytics.topProducts) && analytics.topProducts.length > 0 && (
-                    <div className="ksf-analytics-section">
-                      <h3 className="ksf-analytics-section-title">🔥 Top Clicked Products</h3>
-                      <div className="ksf-top-products">
-                        {analytics.topProducts.map((p, idx) => {
-                          const maxClicks = analytics.topProducts[0]?.clicks || 1;
-                          const barPct = Math.round((p.clicks / maxClicks) * 100);
-                          return (
-                            <div key={p.product_id || idx} className="ksf-top-product-row">
-                              <span className="ksf-top-product-rank">#{idx + 1}</span>
-                              <div className="ksf-top-product-info">
-                                <span className="ksf-top-product-name">{p.product_name}</span>
-                                {p.category && <span className="ksf-top-product-cat">{p.category}</span>}
+                    {/* Top Products */}
+                    {Array.isArray(analytics.topProducts) && analytics.topProducts.length > 0 && (
+                      <div className="ksf-analytics-section" style={{ margin: 0 }}>
+                        <h3 className="ksf-analytics-section-title">🔥 Top Clicked Products</h3>
+                        <div className="ksf-top-products">
+                          {analytics.topProducts.map((p, idx) => {
+                            const maxClicks = analytics.topProducts[0]?.clicks || 1;
+                            const barPct = Math.round((p.clicks / maxClicks) * 100);
+                            return (
+                              <div key={p.product_id || idx} className="ksf-top-product-row">
+                                <span className="ksf-top-product-rank">#{idx + 1}</span>
+                                <div className="ksf-top-product-info">
+                                  <span className="ksf-top-product-name">{p.product_name}</span>
+                                  {p.category && <span className="ksf-top-product-cat">{p.category}</span>}
+                                </div>
+                                <div className="ksf-top-product-bar-wrap">
+                                  <div className="ksf-top-product-bar" style={{ width: `${barPct}%` }} />
+                                </div>
+                                <span className="ksf-top-product-clicks">{p.clicks}</span>
                               </div>
-                              <div className="ksf-top-product-bar-wrap">
-                                <div className="ksf-top-product-bar" style={{ width: `${barPct}%` }} />
-                              </div>
-                              <span className="ksf-top-product-clicks">{p.clicks}</span>
-                            </div>
-                          );
-                        })}
+                            );
+                          })}
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
+                  </div>
 
                   {(!analytics.totalClicks || analytics.totalClicks === 0) && (
                     <div className="ksf-analytics-empty">
@@ -2257,14 +2369,19 @@ function AdminPanelInner({
                   style={{
                     fontFamily: 'var(--font-cinzel)',
                     fontWeight: 800,
-                    fontSize: '1.2rem',
+                    fontSize: '1.25rem',
                     color: 'var(--green-primary)',
-                    marginBottom: '0.2rem'
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    marginBottom: '0.25rem',
+                    letterSpacing: '0.02em'
                   }}
                 >
+                  <MapPin size={22} />
                   Exclusive Delivery Gated Communities
                 </h3>
-                <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)', margin: 0 }}>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.4 }}>
                   Manage the gated societies where Kohinoor Signature Farms currently delivers. Selected community auto-populates on the storefront and WhatsApp checkout.
                 </p>
               </div>
@@ -2292,12 +2409,14 @@ function AdminPanelInner({
               </button>
             </div>
 
-            {/* Communities Grid */}
+            {/* Communities Grid — standardized card proportion */}
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-                gap: '1rem'
+                gridTemplateColumns: 'repeat(auto-fill, minmax(360px, 440px))',
+                gap: '1.25rem',
+                width: '100%',
+                boxSizing: 'border-box'
               }}
             >
               {deliveryLocations.map((loc, idx) => (
