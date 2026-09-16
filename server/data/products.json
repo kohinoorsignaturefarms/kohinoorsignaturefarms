@@ -1,724 +1,1000 @@
 [
   {
-    "id": "ksf-goat-01",
-    "name": "Signature Grass-Fed Goat Curry Cut",
-    "slug": "signature-grass-fed-goat-curry-cut",
+    "id": "ksf-1789582100472",
+    "name": "Mutton Spleen",
+    "slug": "mutton-spleen",
     "badges": [
-      "Best Seller",
-      "Grass Fed",
-      "100% Halal"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "Tender bone-in & boneless pieces from young pasture-raised goats",
-    "category": "goat",
-    "feedType": "100% Organic Pasture Grass, Alfalfa & Herbal Forage",
-    "variants": [
-      {
-        "id": "v-g1-500",
-        "mrp": 540,
-        "label": "500 g",
-        "weight": "500g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "480g - 500g",
-        "sellingPrice": 469
-      },
-      {
-        "id": "v-g1-1000",
-        "mrp": 1050,
-        "label": "1 kg (Best Value)",
-        "weight": "1000g",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "980g - 1000g",
-        "sellingPrice": 889
-      },
-      {
-        "id": "v-g1-2000",
-        "mrp": 2100,
-        "label": "2 kg (Family Pack)",
-        "weight": "2000g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "1960g - 2000g",
-        "sellingPrice": 1699
-      }
-    ],
-    "shelfLife": "Best consumed within 48 hours. Keep refrigerated at 0°C to 4°C.",
-    "description": "Our signature goat curry cut is crafted from young, pasture-raised goats that feed on natural herbal greens. Hand-trimmed by master butchers to give you the perfect balance of tender meat, succulent fat, and bone marrow for deep, flavorful gravies.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Perfect for traditional Hyderabadi Mutton Curry, Dalcha, Rogan Josh, and slow-braised curries.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "16 to 20 tender pieces per kg",
-    "storageInstructions": "Keep stored in cold refrigeration (0°C - 4°C). Wash gently under cold tap water right before cooking. Do not refreeze once thawed."
-  },
-  {
-    "id": "ksf-goat-02",
-    "name": "Royal Goat Biryani Cut (Rich Cuts)",
-    "slug": "royal-goat-biryani-cut",
-    "badges": [
-      "Chef's Pick",
-      "Dum Biryani Special",
-      "100% Halal"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1516684732162-798a0062be99?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "Large succulent pieces with shoulder, shank & ribs crafted for Dum Biryani",
-    "category": "goat",
-    "feedType": "100% Organic Pasture Grazing & Whole Grains",
-    "variants": [
-      {
-        "id": "v-g2-500",
-        "mrp": 580,
-        "label": "500 g",
-        "weight": "500g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "480g - 500g",
-        "sellingPrice": 499
-      },
-      {
-        "id": "v-g2-1000",
-        "mrp": 1120,
-        "label": "1 kg (Recommended)",
-        "weight": "1000g",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "980g - 1000g",
-        "sellingPrice": 949
-      },
-      {
-        "id": "v-g2-2000",
-        "mrp": 2240,
-        "label": "2 kg (Feast Pack)",
-        "weight": "2000g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "1960g - 2000g",
-        "sellingPrice": 1849
-      }
-    ],
-    "shelfLife": "Best consumed within 48 hours. Keep refrigerated at 0°C to 4°C.",
-    "description": "Specially cut in larger 40-50g portions featuring prime cuts from shoulder, chops, and marrow shanks. These larger pieces lock in the juices during slow dum cooking, delivering meltingly tender meat that absorbs aromatic saffron and spices.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Formulated specifically for Authentic Hyderabadi Dum Biryani, Mandi, and Pulao.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "10 to 14 large biryani cuts per kg",
-    "storageInstructions": "Keep chilled at 0°C - 4°C. Marinate with yogurt and spices 2-4 hours prior to cooking for maximum tenderness."
-  },
-  {
-    "id": "ksf-goat-03",
-    "name": "Pure Goat Boneless Meat",
-    "slug": "pure-goat-boneless-meat",
-    "badges": [
-      "100% Edible",
-      "High Protein",
-      "100% Halal"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "100% pure tender muscle meat, zero bone, trimmed to perfection",
-    "category": "goat",
-    "feedType": "Natural Grazed Grass & Mineral Water",
-    "variants": [
-      {
-        "id": "v-g3-500",
-        "mrp": 690,
-        "label": "500 g",
-        "weight": "500g",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "500g",
-        "sellingPrice": 599
-      },
-      {
-        "id": "v-g3-1000",
-        "mrp": 1350,
-        "label": "1 kg (Chef Pack)",
-        "weight": "1000g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "1000g",
-        "sellingPrice": 1149
-      }
-    ],
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "description": "Ultra-lean yet juicy boneless goat meat carved from the leg and shoulder. Cleaned thoroughly, membrane-trimmed, and ready for gourmet cooking without any bone wastage.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Sensational for Mutton Tikka, Boti Kebab, Mutton Sukka, and Kashmiri Rogan Josh.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "100% edible meat, 25-30 bite sized chunks per 500g",
-    "storageInstructions": "Refrigerate at 0-4°C. Ideal for mincing or dicing into bite-sized tikka cubes."
-  },
-  {
-    "id": "ksf-goat-04",
-    "name": "Fresh Goat Mince (Fine Keema)",
-    "slug": "fresh-goat-mince-keema",
-    "badges": [
-      "Fresh Ground",
-      "Juicy & Tender",
-      "100% Halal"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1588168333986-5078d3ae3976?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1603048588665-791ca8aea617?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "Finely ground fresh goat meat with optimum lean-to-fat balance",
-    "category": "goat",
-    "feedType": "Natural Grazing Grass & Organically Raised",
-    "variants": [
-      {
-        "id": "v-g4-500",
-        "mrp": 599,
-        "label": "500 g",
-        "weight": "500g",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "500g",
-        "sellingPrice": 519
-      },
-      {
-        "id": "v-g4-1000",
-        "mrp": 1180,
-        "label": "1 kg",
-        "weight": "1000g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "1000g",
-        "sellingPrice": 999
-      }
-    ],
-    "shelfLife": "Best consumed within 24-36 hours at 0°C to 4°C.",
-    "description": "Double-minced fresh goat meat with just the right 85:15 lean-to-natural fat ratio for juicy kebabs and rich keema curries. Freshly ground upon order, never frozen or pre-packaged.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Shami Kebabs, Keema Pav, Seekh Kebabs, and Keema Matar.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "Double ground fine keema mince",
-    "storageInstructions": "Keep stored in cold chiller. Use immediately after opening."
-  },
-  {
-    "id": "ksf-goat-05",
-    "name": "Goat Chops & Ribs (Chaap)",
-    "slug": "goat-chops-and-ribs-chaap",
-    "badges": [
-      "Gourmet Cut",
-      "Grass Fed",
-      "100% Halal"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1558030006-450675393462?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "Tender rib bones with prime meat, ideal for pan-searing & tandoor",
-    "category": "goat",
-    "feedType": "100% Pasture Raised & Foraged Greens",
-    "variants": [
-      {
-        "id": "v-g5-500",
-        "mrp": 590,
-        "label": "500 g",
-        "weight": "500g",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "480g - 500g",
-        "sellingPrice": 519
-      },
-      {
-        "id": "v-g5-1000",
-        "mrp": 1150,
-        "label": "1 kg",
-        "weight": "1000g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "980g - 1000g",
-        "sellingPrice": 989
-      }
-    ],
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "description": "Prime French-trimmed rib chops with rich marbling. Sourced from young goats to ensure supreme tenderness when grilled, pan-roasted, or spiced for dry fry.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Mutton Chaap Fry, Tandoori Chops, Grilled Ribs, and Shahi Korma.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "8 - 10 rib chops per 500g",
-    "storageInstructions": "Store at 0°C - 4°C. Marinate with ginger-garlic and freshly crushed peppercorns."
-  },
-  {
-    "id": "ksf-goat-06",
-    "name": "Cleaned Goat Paya (Trotters)",
-    "slug": "cleaned-goat-paya-trotters",
-    "badges": [
-      "Flame Scorched",
-      "Collagen Rich",
-      "100% Halal"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1606787366850-de6330128bfc?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": false,
-    "tagline": "Flame-scorched, de-haired and thoroughly scraped clean trotters",
-    "category": "goat",
-    "feedType": "Natural Grazing Grass & Organic Minerals",
-    "variants": [
-      {
-        "id": "v-g6-4pcs",
-        "mrp": 450,
-        "label": "4 Legs (Set of 4)",
-        "weight": "approx 600g",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "600g",
-        "sellingPrice": 379
-      },
-      {
-        "id": "v-g6-8pcs",
-        "mrp": 890,
-        "label": "8 Legs (Set of 8)",
-        "weight": "approx 1200g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "1200g",
-        "sellingPrice": 729
-      }
-    ],
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "description": "Traditional flame-roasted trotters, scraped immaculately clean and portioned into neat roundels. Rich in natural gelatin, collagen, and bone marrow for restorative broths and Hyderabadi Paya Shorba.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Authentic Hyderabadi Mutton Paya Shorba, Nihari, and bone marrow broth.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "Set of 4 trotters (cut into 8-12 pieces)",
-    "storageInstructions": "Refrigerate at 0-4°C. Simmer slowly on low flame with whole spices for 3-4 hours."
-  },
-  {
-    "id": "ksf-chk-01",
-    "name": "Country Chicken (Original Natukodi)",
-    "slug": "country-chicken-original-natukodi",
-    "badges": [
-      "100% Desi Natukodi",
-      "Free-Range",
-      "Zero Antibiotics"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1598103442097-8b74394b95c6?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "100% Free-Range country fowls raised on open fields with earthy rich aroma",
-    "category": "chicken",
-    "feedType": "100% Free-Range Foraging, Whole Grains & Seeds",
-    "variants": [
-      {
-        "id": "v-c1-500",
-        "mrp": 320,
-        "label": "500 g (Skinless)",
-        "weight": "500g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "480g - 500g",
-        "sellingPrice": 269
-      },
-      {
-        "id": "v-c1-1000",
-        "mrp": 599,
-        "label": "1 kg (Skinless - Popular)",
-        "weight": "1000g",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "950g - 1000g",
-        "sellingPrice": 499
-      },
-      {
-        "id": "v-c1-1000-skin",
-        "mrp": 620,
-        "label": "1 kg (With Skin / Roasted)",
-        "weight": "1000g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "980g - 1000g",
-        "sellingPrice": 529
-      }
-    ],
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "description": "Authentic desi country chicken raised in open sunlit pastures feeding on green grasses, seeds, and insects. Characterized by lean, firm, flavorful red meat that cooks into an intensely aromatic, spicy village-style curry.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Natukodi Pulusu, Andhra Country Chicken Curry, Country Chicken Fry with steamed rice.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "14 to 18 curry cut pieces per kg",
-    "storageInstructions": "Keep chilled at 0°C - 4°C. Pressure cook or slow simmer for tender fall-off-the-bone texture."
-  },
-  {
-    "id": "ksf-chk-02",
-    "name": "Farm Tender Chicken Curry Cut",
-    "slug": "farm-tender-chicken-curry-cut",
-    "badges": [
-      "Daily Fresh Cut",
       "100% Halal",
-      "Antibiotic-Free"
+      "Farm Fresh"
     ],
     "images": [
-      "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1574484284002-952d92456975?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
     ],
     "inStock": true,
-    "tagline": "Juicy bone-in & boneless pieces from tender young farm chicken",
-    "category": "chicken",
-    "feedType": "100% Vegetarian Grains, Soya & Maize",
+    "tagline": "Tilli — soft, iron-rich goat spleen with a delicately mild flavour and velvety texture.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
     "variants": [
       {
-        "id": "v-c2-500",
-        "mrp": 190,
+        "id": "var-1000-1789582100472-mzp7",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582100472-zgws",
+        "mrp": 0,
         "label": "500 g",
         "weight": "500g",
         "inStock": true,
         "isDefault": false,
         "netWeight": "480g - 500g",
-        "sellingPrice": 149
-      },
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "The spleen — known as Tilli across Hyderabad — is a beloved, mildly flavoured offal with a soft, almost melt-in-the-mouth texture that differs entirely from kidney or liver. Exceptionally rich in iron and easily digestible, it is one of the gentlest entries into the world of organ meats.\n\nFrom Kohinoor Signature Farms' organically raised, open-pasture goats — the spleen is clean, plump, and free of any harsh mineral flavour. Halal-processed fresh on order day, cold-chained at 0°C–4°C directly to your kitchen. Consume on the day of delivery for best results.\n\nSlice and fry simply in ghee with onions and green chillies for a quick Tilli Fry, or braise in a mild tomato-onion curry for a wholesome Tilli Masala. A gentle, approachable offal for the whole family.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Tilli Fry, Spleen Masala, Mixed Offal Curry, Tilli with Liver, Simple Ghee Fry",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582100238",
+    "name": "Mutton Intestine",
+    "slug": "mutton-intestine",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Cleaned goat intestine — the crispy, chewy street-food favourite beloved across Hyderabad.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
       {
-        "id": "v-c2-1000",
-        "mrp": 360,
-        "label": "1 kg (Best Value)",
+        "id": "var-1000-1789582100238-iagr",
+        "mrp": 0,
+        "label": "1 kg",
         "weight": "1000g",
         "inStock": true,
         "isDefault": true,
         "netWeight": "980g - 1000g",
-        "sellingPrice": 279
+        "sellingPrice": 0
       },
       {
-        "id": "v-c2-2000",
-        "mrp": 720,
-        "label": "2 kg (Family Pack)",
-        "weight": "2000g",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "1960g - 2000g",
-        "sellingPrice": 539
-      }
-    ],
-    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "description": "Sourced from young farm-raised chickens fed with vegetarian grain diets and probiotic water. Cleaned in RO water, skinned, and trimmed with zero slime or excess fat.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Butter Chicken, Chicken Masala, Korma, and Chicken Biryani.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "14 to 16 neat pieces per kg",
-    "storageInstructions": "Store at 0°C to 4°C. Wash gently with cold water before seasoning."
-  },
-  {
-    "id": "ksf-chk-03",
-    "name": "Fresh Boneless Chicken Breast Fillet",
-    "slug": "fresh-boneless-chicken-breast-fillet",
-    "badges": [
-      "Gym & Keto Choice",
-      "High Protein",
-      "100% Halal"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1604503468506-a8da13d82791?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "High-protein lean fillets, tenderized and trimmed of all visible fat",
-    "category": "chicken",
-    "feedType": "All-Natural Grain & Mineral Feed",
-    "variants": [
-      {
-        "id": "v-c3-500",
-        "mrp": 250,
+        "id": "var-500-1789582100238-wfou",
+        "mrp": 0,
         "label": "500 g",
         "weight": "500g",
         "inStock": true,
-        "isDefault": true,
-        "netWeight": "500g",
-        "sellingPrice": 199
-      },
-      {
-        "id": "v-c3-1000",
-        "mrp": 480,
-        "label": "1 kg (Saver Pack)",
-        "weight": "1000g",
-        "inStock": true,
         "isDefault": false,
-        "netWeight": "1000g",
-        "sellingPrice": 379
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
       }
     ],
     "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "description": "Pure prime whole chicken breast fillets with zero bones and minimal fat. Packed with 25g+ lean protein per 100g, perfect for fitness enthusiasts and gourmet grilling.",
+    "description": "Mutton Intestine — known locally as Gurda or Boti depending on the cut — is a street-food legend in Hyderabad and across South Asia. When cleaned properly and cooked over high heat, the intestine crisps at the edges while remaining chewy at its core, creating a textural contrast that is uniquely addictive.\n\nAt Kohinoor Signature Farms, our goats are raised on clean, organic feed — which ensures the intestine is substantially purer and milder than what is typically available. Thoroughly cleaned, turned, and Halal-processed on order day. Dispatched cold-chained at 0°C–4°C. Must be cooked on the day of delivery.\n\nStir-fry at screaming-high heat in a kadai with onions, green chillies, and fresh masala for the classic Intestine Fry — a Hyderabadi street staple. Also superb grilled over charcoal.",
     "fssaiNumber": "13624014000889",
-    "culinaryUses": "Grilled Chicken, Pasta, Tikka, Meal Prep, and Crispy Chicken Strips.",
+    "culinaryUses": "Intestine Fry, Boti Curry, Grilled Intestine, Mixed Offal Masala, Street-Style Boti",
     "antibioticFree": true,
     "halalCertified": true,
-    "piecesEstimate": "2 to 4 whole prime fillets per 500g",
-    "storageInstructions": "Refrigerate at 0°C - 4°C. Slice across grain or pound lightly for extra softness."
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
   },
   {
-    "id": "ksf-chk-04",
-    "name": "Juicy Chicken Drumsticks (Tangdi)",
-    "slug": "juicy-chicken-drumsticks-tangdi",
+    "id": "ksf-1789582099990",
+    "name": "Mutton Tripe",
+    "slug": "mutton-tripe",
     "badges": [
-      "Party Favorite",
-      "Juicy Meat",
-      "100% Halal"
+      "100% Halal",
+      "Farm Fresh"
     ],
     "images": [
-      "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
     ],
     "inStock": true,
-    "tagline": "Tender, skinless chicken legs perfect for tandoori and juicy fries",
-    "category": "chicken",
-    "feedType": "Natural Whole Grain Feed",
+    "tagline": "Cleaned goat stomach lining — the backbone of rustic, slow-cooked dishes across every cuisine.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
     "variants": [
       {
-        "id": "v-c4-500",
-        "mrp": 240,
-        "label": "500 g (5-6 Pcs)",
+        "id": "var-1000-1789582099989-jnmv",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582099989-awdm",
+        "mrp": 0,
+        "label": "500 g",
         "weight": "500g",
         "inStock": true,
-        "isDefault": true,
+        "isDefault": false,
         "netWeight": "480g - 500g",
-        "sellingPrice": 189
-      },
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Tripe — the stomach lining of the goat — has nourished communities across South Asia, the Middle East, and Europe for millennia. Rich in collagen, zinc, and selenium, it is one of the most nutritionally complete of all offal cuts. When slow-cooked, it transforms from tough to extraordinarily tender and gelatinous.\n\nAt Kohinoor Signature Farms, our goats are fed a clean, organic diet that keeps their digestive systems pure — making our tripe significantly cleaner and milder in flavour than market-sourced alternatives. Thoroughly cleaned, Halal-processed on order day, and cold-chained at 0°C–4°C.\n\nSlow-cook for 2–3 hours in a spiced broth for a rich Tripe Curry, or combine with Paya for the ultimate slow-cooked offal broth. A dish that demands patience and rewards it handsomely.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Tripe Curry, Oande Masala, Mixed Offal Broth, Slow-Cooked Tripe, Tripe Soup",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582099668",
+    "name": "Mutton Heart",
+    "slug": "mutton-heart",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Dense, deeply flavourful, and lean — the goat's heart is an offal gem waiting to be discovered.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
       {
-        "id": "v-c4-1000",
-        "mrp": 460,
-        "label": "1 kg (10-12 Pcs)",
+        "id": "var-piece-1789582099667-ebh3",
+        "mrp": 0,
+        "label": "1 Piece",
+        "weight": "1 Piece",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "The goat heart is pure, hard-working muscle — dense, lean, and packed with a bold, beefy depth of flavour. Unlike other offal, it carries very little fat and virtually no gamey notes when fresh, making it an excellent introduction to organ meats for the curious eater.\n\nFrom Kohinoor Signature Farms' open-pasture, organically raised goats — healthy animals whose hearts are as clean as their lifestyle. Halal-processed on order day, carefully cleaned and trimmed, then cold-chained at 0°C–4°C directly to you. Best consumed on the day of delivery.\n\nDice and stir-fry at high heat for a Dil Masala, thread onto skewers and grill over charcoal for an offal seekh, or slow-braise in a rich onion-tomato base. Its firm texture holds up beautifully across cooking methods.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Heart Masala, Grilled Heart Skewers, Dil Fry, Mixed Offal Curry, Stuffed Heart",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582099416",
+    "name": "Mutton Liver",
+    "slug": "mutton-liver",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Nutrient-dense, rich, and fast-cooking — premium pasture-raised goat liver at its finest.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582099415-e4i6",
+        "mrp": 0,
+        "label": "1 kg",
         "weight": "1000g",
         "inStock": true,
-        "isDefault": false,
+        "isDefault": true,
         "netWeight": "980g - 1000g",
-        "sellingPrice": 359
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582099415-2k3m",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
       }
     ],
     "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "description": "Selected plump chicken drumsticks with skin removed and cleanly trimmed at the bone joints. Meat stays exceptionally moist and juicy whether roasted, baked, or fried.",
+    "description": "Mutton Liver is one of the most nutrient-dense foods on earth — extraordinarily high in Vitamin B12, iron, Vitamin A, and folate — and when sourced from a naturally raised, pasture-fed goat, it tastes nothing like the strong, bitter liver from conventionally raised animals.\n\nAt Kohinoor Signature Farms, our goats live stress-free on open grassland and organic herbal feed without a single antibiotic or hormone. The liver from such an animal is clean, mild, and deeply flavourful — a world apart. Halal-butchered and cold-chained on order day. Must be consumed on the day of delivery.\n\nSlice thin and sear in a scorching pan with ghee, onions, green chillies, and black pepper for Kaleji Fry in under 8 minutes — one of the most satisfying quick meals in the Indian culinary repertoire.",
     "fssaiNumber": "13624014000889",
-    "culinaryUses": "Tangdi Kebab, Fried Chicken, Tandoori Chicken, and Drumstick Masala.",
+    "culinaryUses": "Kaleji Fry, Liver Masala, Liver Curry, Tawa Kaleji, Liver with Onions, Keema Kaleji",
     "antibioticFree": true,
     "halalCertified": true,
-    "piecesEstimate": "5 to 6 juicy drumsticks per 500g",
-    "storageInstructions": "Keep chilled at 0-4°C. Make light surface slits before marinating."
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
   },
   {
-    "id": "ksf-egg-01",
-    "name": "Pasture-Raised Country Brown Eggs (Desi Gaddi Guddu)",
-    "slug": "pasture-raised-country-brown-eggs",
+    "id": "ksf-1789582099171",
+    "name": "Mutton Kidney",
+    "slug": "mutton-kidney",
     "badges": [
-      "Golden Yolk",
-      "Omega-3 Rich",
-      "Free-Range"
+      "100% Halal",
+      "Farm Fresh"
     ],
     "images": [
-      "https://images.unsplash.com/photo-1590559832921-995275586619?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
     ],
     "inStock": true,
-    "tagline": "Organic eggs from free-roaming country hens with dark golden yolks",
-    "category": "eggs",
-    "feedType": "100% Natural Forage, Greens, Flaxseed & Grains",
+    "tagline": "Glistening, iron-rich kidneys with a bold, mineral depth — fast-cooking and intensely satisfying.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
     "variants": [
       {
-        "id": "v-e1-6",
-        "mrp": 120,
-        "label": "Pack of 6",
-        "weight": "6 Eggs",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "approx 320g",
-        "sellingPrice": 99
-      },
-      {
-        "id": "v-e1-12",
-        "mrp": 230,
-        "label": "Pack of 12 (Most Popular)",
-        "weight": "12 Eggs",
+        "id": "var-1000-1789582099170-p52m",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
         "inStock": true,
         "isDefault": true,
-        "netWeight": "approx 640g",
-        "sellingPrice": 189
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
       },
       {
-        "id": "v-e1-30",
-        "mrp": 550,
-        "label": "Crate of 30 (Monthly Saver)",
-        "weight": "30 Eggs",
+        "id": "var-500-1789582099170-i8u1",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
         "inStock": true,
         "isDefault": false,
-        "netWeight": "approx 1600g",
-        "sellingPrice": 449
-      }
-    ],
-    "shelfLife": "Best before 21 days from harvest date. Store in cool, dry place or refrigerate.",
-    "description": "Laid by native country hens foraging freely in sunshine and pasture. Naturally abundant in Omega-3, lutein, and bioavailable vitamins. Noted for their rich creamy texture and deep orange-gold yolks.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Half-boiled, sunny side up, poached eggs, egg bhurji, and baking.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "Graded medium-to-large desi eggs",
-    "storageInstructions": "Store with pointed end down in refrigerator at 4°C - 8°C for optimal freshness."
-  },
-  {
-    "id": "ksf-egg-02",
-    "name": "Kadaknath Heritage Black Fowl Eggs",
-    "slug": "kadaknath-heritage-black-fowl-eggs",
-    "badges": [
-      "Superfood",
-      "High Iron & Low Fat",
-      "Ayurvedic Heritage"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1506976785307-8732e854ad03?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "Rare Ayurvedic heritage eggs known for maximum iron, protein & low cholesterol",
-    "category": "eggs",
-    "feedType": "Herbal Greens, Spirulina & Organic Millet",
-    "variants": [
-      {
-        "id": "v-e2-6",
-        "mrp": 180,
-        "label": "Pack of 6",
-        "weight": "6 Eggs",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "approx 300g",
-        "sellingPrice": 149
-      },
-      {
-        "id": "v-e2-12",
-        "mrp": 350,
-        "label": "Pack of 12 (Special)",
-        "weight": "12 Eggs",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "approx 600g",
-        "sellingPrice": 279
-      }
-    ],
-    "shelfLife": "Best before 21 days from harvest date. Keep in cool ventilated place.",
-    "description": "Produced by authentic purebred Kadaknath black fowls. Highly revered in traditional wellness for superior protein content, amino acids, high iron, and low cholesterol content.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Boiled eggs, omelettes, nutritious breakfast tonic bowls.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "Rare heritage brown-tinted eggs",
-    "storageInstructions": "Refrigerate at 4°C - 8°C. Do not wash shells until ready to cook."
-  },
-  {
-    "id": "ksf-egg-03",
-    "name": "Classic Farm Fresh Table Eggs",
-    "slug": "classic-farm-fresh-table-eggs",
-    "badges": [
-      "Daily Breakfast Staple",
-      "Farm Fresh",
-      "Hygienic"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1616852924107-1647e3351d3b?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "Daily morning gathered white eggs, clean shells & high freshness",
-    "category": "eggs",
-    "feedType": "Clean Grains & Fortified Mineral Feed",
-    "variants": [
-      {
-        "id": "v-e3-6",
-        "mrp": 70,
-        "label": "Pack of 6",
-        "weight": "6 Eggs",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "approx 310g",
-        "sellingPrice": 59
-      },
-      {
-        "id": "v-e3-12",
-        "mrp": 135,
-        "label": "Pack of 12",
-        "weight": "12 Eggs",
-        "inStock": true,
-        "isDefault": false,
-        "netWeight": "approx 620g",
-        "sellingPrice": 109
-      },
-      {
-        "id": "v-e3-30",
-        "mrp": 310,
-        "label": "Tray of 30 (Value Saver)",
-        "weight": "30 Eggs",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "approx 1550g",
-        "sellingPrice": 249
-      }
-    ],
-    "shelfLife": "Best before 25 days from packing date.",
-    "description": "Hygienically collected from healthy farm hens fed with mineral-enriched corn and grain feeds. Graded, sanitized, and delivered within 24 hours of laying.",
-    "fssaiNumber": "13624014000889",
-    "culinaryUses": "Baking cakes, daily omelettes, French toast, scrambled eggs.",
-    "antibioticFree": true,
-    "halalCertified": true,
-    "piecesEstimate": "Graded table eggs",
-    "storageInstructions": "Store in clean refrigerator tray. Use for daily baking & cooking."
-  },
-  {
-    "id": "ksf-combo-01",
-    "name": "Sunday Feast Combo: Tender Goat (1kg) + Country Chicken (1kg)",
-    "slug": "sunday-feast-combo-goat-and-chicken",
-    "badges": [
-      "Mega Saver",
-      "Weekend Special",
-      "100% Halal"
-    ],
-    "images": [
-      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
-      "https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=900&q=80"
-    ],
-    "inStock": true,
-    "tagline": "The ultimate weekend meat combo with maximum freshness & savings",
-    "category": "combos",
-    "feedType": "100% Natural Organic Feed & Grass Grazing",
-    "variants": [
-      {
-        "id": "v-cb1-standard",
-        "mrp": 1650,
-        "label": "Combo Pack (2 kg Total)",
-        "weight": "2000g",
-        "inStock": true,
-        "isDefault": true,
-        "netWeight": "1950g - 2000g",
-        "sellingPrice": 1349
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
       }
     ],
     "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
-    "description": "Double the feast on your dining table! Includes 1 kg of our signature grass-fed Goat Curry Cut + 1 kg of authentic Free-Range Country Chicken (Natukodi). Specially packed in insulated chill boxes.",
+    "description": "Mutton Kidney is a staple of great Indian, Pakistani, and British offal cooking — high in iron, zinc, and B-vitamins, with a deep, mineral-forward flavour that pairs brilliantly with bold spices and fresh herbs. The key to great kidney is quality sourcing and freshness — both of which are uncompromised here.\n\nFrom Kohinoor Signature Farms' open-pasture, antibiotic-free goats, the kidneys are clean, plump, and free of any medicinal residue. Halal-processed and cold-chained on order day. Must be consumed within 24 hours of delivery for optimal freshness and flavour.\n\nHalve, core, and sauté in a screaming hot pan with ghee, onions, and green masala for Kidney Fry in under 10 minutes. Or slow-braise in a rich curry base for a full-bodied Kidney Masala.",
     "fssaiNumber": "13624014000889",
-    "culinaryUses": "Weekend Family Biryani, Sunday Feast curries, and gatherings.",
+    "culinaryUses": "Kidney Fry, Kidney Masala, Mixed Offal Curry, Grilled Kidneys, Indian-Style Devilled Kidneys",
     "antibioticFree": true,
     "halalCertified": true,
-    "piecesEstimate": "1 kg Goat Cut + 1 kg Country Chicken Cut",
-    "storageInstructions": "Keep stored chilled between 0°C and 4°C until cooking."
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582098923",
+    "name": "Mutton Testicle",
+    "slug": "mutton-testicle",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Kapura — the celebrated delicacy of Mughal courts, prized for its velvety texture and unique richness.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582098922-ym0r",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582098922-j01v",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Known across South Asia as Kapura, goat testicles are a celebrated delicacy with a lineage in Mughal court cuisine stretching back centuries. Possessing a uniquely smooth, almost creamy interior, Kapura is prized by those who understand great offal — rich, mild, and unlike anything else on the animal.\n\nFrom Kohinoor Signature Farms' hormone-free, antibiotic-free, open-pasture goats — the quality here is categorically superior to anything sourced from factory farms. Cleaned and Halal-processed fresh on order day, dispatched cold-chained at 0°C–4°C.\n\nSlice and sauté in ghee with minimal spicing to let the natural flavour shine, or incorporate into a rich Kapura Masala with tomatoes, green chillies, and fresh coriander. A once-in-a-lifetime texture that converts every first-time taster into a lifelong devotee.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Kapura Masala, Sautéed Kapura in Ghee, Kapura Fry, Mixed Offal Curry",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582098680",
+    "name": "Mutton Tongue",
+    "slug": "mutton-tongue",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Tender, velvety mutton tongue — a slow-cook delicacy with a uniquely smooth texture.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582098678-r5xq",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582098679-qps2",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Mutton Tongue is among the most underappreciated and reward-rich cuts in all of offal cooking. A single muscle with no connective tissue to separate — when cooked properly, it yields an almost buttery, silky texture unlike any other part of the animal.\n\nAt Kohinoor Signature Farms, our goats' tongues are taken from animals raised on organic grassland and herbal forage — clean, healthy animals whose offal reflects their quality of life. Halal-processed on order day, carefully cleaned and prepared, then cold-chained at 0°C–4°C to your doorstep.\n\nBlanch first to remove the outer skin, then braise in a spiced tomato-onion base for a rich Tongue Masala. Slice thinly and serve with fresh naan — the texture will surprise even the most seasoned meat lovers.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Tongue Masala, Zubaan Curry, Slow Braised Tongue, Cold Tongue Salad, Tongue Stew",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582098439",
+    "name": "Brain",
+    "slug": "brain",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Delicate, creamy goat brain — a luxury offal prized in Mughal kitchens for centuries.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-piece-1789582098439-zbzt",
+        "mrp": 0,
+        "label": "1 Piece",
+        "weight": "1 Piece",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Goat brain is one of the most luxurious and delicate ingredients in the Mughal culinary canon — silky, creamy, and extraordinarily rich. With a texture closer to a custard than conventional meat, it demands gentle cooking and rewards with an unmatched depth of flavour.\n\nAt Kohinoor Signature Farms, our goats are raised stress-free on organic pasture, which ensures the brain is clean, fresh, and free from any traces of medication or chemical intervention. Carefully extracted, cleaned, and Halal-processed on order day, then dispatched cold-chained at 0°C–4°C. Consume on the day of delivery for peak freshness.\n\nLightly sauté in ghee with green chillies and ginger for Maghaz Masala — a dish worth crossing the city for. Or fold into scrambled eggs for a decadent Maghaz Anda preparation.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Maghaz Masala, Maghaz Anda, Sautéed Brain with Ghee, Brain Fry, Mughlai Brain Curry",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582098205",
+    "name": "Head Meat",
+    "slug": "head-meat",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Deeply flavourful cheek and head meat — the secret of the world's most celebrated slow-cooked preparations.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1kg-1789582098204-yads",
+        "mrp": 0,
+        "label": "Per 1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Head Meat — harvested from the cheeks, jaw muscles, and skull of the goat — is among the most intensely flavourful meat on the animal. The facial muscles work constantly, developing a rich, tight-grained meat packed with intramuscular fat and connective tissue that renders down beautifully under low heat.\n\nFrom Kohinoor Signature Farms' open-pasture goats, head meat carries a clean, concentrated mutton flavour unlike any other cut. Carefully cleaned and prepared on order day under strict Halal and hygiene protocols, then cold-chained at 0°C–4°C.\n\nThe basis of the legendary Maghaz Masala, Siri Paya, and slow-cooked head curries enjoyed across Hyderabad, Lucknow, and beyond. Gelatinous, rich, and utterly unforgettable.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Cheek Meat Curry, Siri Paya, Slow-Cooked Head Masala, Braised Head Meat",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582097972",
+    "name": "Mutton Paya",
+    "slug": "mutton-paya",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Traditional trotters slow-cooked for the richest, most collagen-loaded broth in Indian cuisine.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-piece-1789582097971-s9dz",
+        "mrp": 0,
+        "label": "1 Piece",
+        "weight": "1 Piece",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Paya — goat trotters — is a dish of extraordinary heritage in South Asian and Hyderabadi cuisine. Consumed for centuries for their collagen, gelatin, and mineral content, these trotters slow-cook into a broth of remarkable depth: silky, fatty, aromatic, and profoundly nourishing.\n\nAt Kohinoor Signature Farms, our goats walk freely on open pasture from morning to evening — giving their trotters genuine density and mineral richness. Cleaned, de-haired, and Halal-processed on order day, then cold-chained at 0°C–4°C directly to you. No pre-soaking shortcuts, no chemical whitening.\n\nSlow-cook for 6–8 hours with whole spices, ginger, and onions for the famous Hyderabadi Paya Shorba — a winter breakfast of legends. Or pressure-cook for a quicker, equally nourishing weeknight broth.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Hyderabadi Paya Shorba, Paya Curry, Bone Broth, Nalli Soup, Trotters Masala",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582097723",
+    "name": "Mutton Mince Kheema for Dal Wada",
+    "slug": "mutton-mince-kheema-for-dal-wada",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Fine-minced mutton keema perfected for crispy, spiced Dal Wadas and deep-fried snacks.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582097712-r36m",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582097712-0pqk",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Dal Wada Keema is a fine art, and the mince matters more than anything else. Our Kheema for Dal Wada is finely ground from lean goat cuts — a texture specifically designed to blend seamlessly into soaked lentil batter, dispersing evenly so every bite of the wada carries a burst of mutton flavour without overwhelming the dal.\n\nGround fresh on order day from pasture-raised goats at Kohinoor Signature Farms. Clean, lean, and flavourful — naturally so, without any additives or preservatives. 100% Halal, antibiotic-free, hormone-free. Cold-chained at 0°C–4°C straight from butchery to your door.\n\nMix directly into your soaked chana dal or urad dal batter with green chillies, ginger, and coriander, then deep-fry to golden perfection. Also superb for Kheema Pav, stuffed parathas, and egg keema preparations.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Mutton Dal Wada, Kheema Pav, Stuffed Paratha, Egg Keema, Kheema Samosa",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582097476",
+    "name": "Mutton Mince Keema Kofta",
+    "slug": "mutton-mince-keema-kofta",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Coarse-ground minced mutton crafted for melt-in-the-mouth kofta, kebabs, and meatballs.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582097475-wmnu",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582097475-6572",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Our Keema Kofta mince is specifically coarse-ground from a blend of shoulder and leg meat — the ratio that delivers the perfect fat-to-lean balance for kofta that holds its shape on the skewer yet melts on the tongue. The texture is deliberate: coarse enough to bind naturally, fine enough to absorb whole spices deeply.\n\nMinced fresh on order day from open-pasture goats raised at Kohinoor Signature Farms on 100% organic herbal feed. No fillers, no extenders, no water injection — just pure mutton. Halal-butchered and cold-chained at 0°C–4°C from farm to kitchen.\n\nShape into kofta for rich curry, skewer as seekh kebab over charcoal, or stuff into naan for a hearty roll. The quality of the base mince is what separates an extraordinary kofta from an ordinary one.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Mutton Kofta Curry, Seekh Kebab, Shami Kebab, Stuffed Paratha, Mutton Meatballs",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582097227",
+    "name": "Mutton Loin Chops",
+    "slug": "mutton-loin-chops",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "The premium cut — tender loin chops from the most prized section of the goat.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582097225-z4mb",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582097225-ckch",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Loin Chops sit at the top of the mutton hierarchy. Cut from the short loin — the least-worked, most tender section of the goat — these T-bone style chops offer a combination of the tenderloin and the strip loin in a single cut, separated by a small T-shaped bone.\n\nFrom Kohinoor Signature Farms' open-pasture goats, the loin is perfectly marbled with clean, natural fat developed through months of organic grassland grazing. No antibiotics, no shortcuts. Halal-butchered to order, chilled at 0°C–4°C, and delivered the same morning.\n\nRequiring no more than 6–8 minutes on a searing hot grill or tawa, loin chops are the finest expression of high-quality mutton — season simply with salt, pepper, and a squeeze of lime to let the meat speak for itself.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Grilled Loin Chops, Pan-Seared Chops, Mutton Chops Masala, Special Occasion Roast",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582096997",
+    "name": "Mutton Shank",
+    "slug": "mutton-shank",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "The osso buco of Indian kitchens — shank with a marrow bone that melts into the richest braise.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582096996-xaaa",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582096996-oy7g",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "The Mutton Shank — cut from the lower foreleg — is a celebration cut in disguise. The central marrow bone is surrounded by layers of tough, collagen-dense muscle that, when braised slowly, transforms into fall-apart tender meat wrapped in a sauce of extraordinary richness.\n\nOur goats at Kohinoor Signature Farms live active, open-pasture lives — which means their shanks carry genuine muscle density and flavour depth. Organic herbal feed and zero chemical interventions ensure the marrow inside is clean, rich, and deeply nutritious. Halal-butchered on order day, cold-chained at 0°C–4°C to your doorstep.\n\nBraise in a sealed vessel for 3–4 hours in a spiced tomato-onion base and serve the whole shank — it is a showstopper that rewards patience.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Braised Mutton Shank, Mutton Osso Buco, Nalli Curry, Slow-Cooked Shank Masala",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582096764",
+    "name": "Mutton Neck",
+    "slug": "mutton-neck",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "The slow-cook darling — gelatinous, collagen-rich neck pieces that melt into rich, soul-warming curries.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582096763-suzv",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582096763-ksd9",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "The neck is one of the most underrated cuts on the goat — a tightly worked muscle rich in collagen, sinew, and fat that renders down into an extraordinarily silky, full-bodied gravy during slow cooking. For those who know, Mutton Neck Curry is the benchmark of a truly great cook.\n\nAt Kohinoor Signature Farms, the neck of a naturally raised, open-pasture goat carries unique depth thanks to the active lifestyle of the animal. Clean organic feed, zero antibiotics, zero hormones, and a stress-free life yield meat of incomparable quality. Freshly Halal-butchered to order, chilled immediately, and dispatched directly to you.\n\nBest treated as a long, slow braise — 2 to 3 hours minimum — where the connective tissue melts into the gravy, enriching it with a natural body and sheen that no stock cube can replicate.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Neck Curry, Slow Braised Neck, Nalli Shorba, Bone Broth, Mutton Handi",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582096530",
+    "name": "Mutton Chops",
+    "slug": "mutton-chops",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Juicy rib chops with a natural bone handle — grilled, fried, or curried to perfection.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582096529-vrqq",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582096529-q1mo",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Mutton Chops are among the most celebrated cuts at any table — visually dramatic, rich in flavour, and versatile across cooking styles. Our Chops are cut from the rack of the rib cage of our open-pasture goats, retaining a generous cap of natural fat on the bone that bastes the meat as it cooks.\n\nKohinoor Signature Farms' goats graze freely on organic grassland, developing ribs with clean, naturally marbled meat and an unmistakably sweet, grassy aroma. Halal-butchered fresh on order day and dispatched cold-chained at 0°C–4°C directly to your door.\n\nSear them in a hot cast iron pan, grill over charcoal, or slow-braise in a rich masala — each method reveals a different dimension of their exceptional flavour.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Masala Chops, Grilled Mutton Chops, Tawa Chops, Chops Curry, Tandoori Chops",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582096297",
+    "name": "Mutton Shoulder",
+    "slug": "mutton-shoulder",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Fall-apart tender, deeply flavourful — the slow-cook champion of the goat.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1kg-1789582096297-sv4i",
+        "mrp": 0,
+        "label": "Per 1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "The shoulder is where connective tissue meets well-worked muscle — a combination that transforms into meltingly tender, intensely flavoured meat after slow, low-heat cooking. Our Mutton Shoulder comes from free-range, open-pasture goats at Kohinoor Signature Farms that have naturally developed strong musculature through active grazing.\n\nFed on organic herbal forage and wild alfalfa — never given antibiotics or hormones — the shoulder carries a distinctive sweetness and depth of flavour that factory-farmed mutton simply cannot match. Halal-butchered on order day, cold-chained at 0°C–4°C.\n\nBraise it low and slow in a sealed pot for 3–4 hours and watch it fall off the bone into rich, unctuous, spice-soaked perfection. Outstanding for Mutton Nihari, Handi Gosht, and slow-cooker preparations.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Mutton Nihari, Handi Gosht, Pulled Mutton, Dum Gosht, Slow Braised Shoulder",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582096064",
+    "name": "Mutton Leg",
+    "slug": "mutton-leg",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "The crown cut — a whole leg of premium pasture-raised mutton for feasts and celebrations.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1kg-1789582096064-zi8l",
+        "mrp": 0,
+        "label": "Per 1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "The Mutton Leg is the most majestic cut on the animal — a whole, bone-in leg that feeds a family and commands the table. At Kohinoor Signature Farms, our goats graze freely across open sunlit pastures, developing strong, well-muscled legs with firm, flavourful meat and beautiful natural marbling.\n\nButchered to order under strict Halal protocols, the whole leg is cleaned, chilled to 0°C–4°C, and delivered the same morning. The sheer size and bone structure make it ideal for slow roasting, dum braising, or the famous Raan — where the bone slowly perfumes the entire joint over hours of cooking.\n\nOne leg. One unforgettable meal. A true centrepiece for Eid, weddings, and family celebrations.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Mutton Raan, Slow-Roast Leg, Dum Braised Leg, Eid Celebration Roast",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582095831",
+    "name": "Mutton Soup Bones",
+    "slug": "mutton-soup-bones",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Marrow-rich soup bones that brew the deepest, most nourishing bone broth you've ever tasted.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582095830-f8xq",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582095830-635u",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Great stock begins with great bones. Our Mutton Soup Bones are cut from the thick, marrow-packed femur and knuckle sections of pasture-raised goats — containing generous amounts of collagen, gelatin, and nutrients that dissolve into your broth as they slow-simmer.\n\nAt Kohinoor Signature Farms, our goats live active, stress-free lives on open pasture, which means denser, more mineral-rich bones compared to factory-farmed animals. No antibiotics, no steroids — just pure, natural growth. Butchered on order day under authentic Halal practices and cold-chained immediately.\n\nSlow-cook these bones for 4–8 hours to unlock a golden, gelatinous broth that is the foundation of nourishing soups, Nihari, Paya Shorba, and traditional bone broth for gut health.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Bone Broth, Mutton Nihari, Paya Shorba, Mutton Soup, Stock Base",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582095598",
+    "name": "Boneless Mutton",
+    "slug": "boneless-mutton",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Pure, clean mutton — no bone, no waste. Just premium farm-fresh meat, ready to cook.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582095597-8oi6",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582095597-jgba",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "For recipes that demand pure, uninterrupted mutton flavour without the bone, our Boneless Mutton is the definitive choice. Carefully deboned from the choicest cuts — shoulder, leg, and loin — this gives you consistent, meaty pieces that cook evenly and plate beautifully.\n\nRaised at Kohinoor Signature Farms on 100% organic pasture and herbal forage without a single antibiotic or hormone intervention, the meat is tender, naturally marbled, and bursting with clean flavour. Hand-deboned by skilled butchers on order day, chilled immediately to 0°C–4°C, and delivered to you farm-fresh — never frozen.\n\nIdeal for quick weeknight curries, stir-fries, rolls, shawarma-style preparations, or any dish where you want 100% edible yield.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Mutton Karahi, Keema Curry, Shawarma, Mutton Stir Fry, Mutton Rolls, Kofta",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582095366",
+    "name": "Mutton Biryani Cut",
+    "slug": "mutton-biryani-cut",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "Biryani-ready cuts, sized for even cooking and maximum dum flavour absorption.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582095365-gdfn",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582095365-bg6i",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Biryani is an art — and the meat cut determines the masterpiece. Our Mutton Biryani Cut is carefully portioned into medium-sized bone-in pieces specifically designed for dum cooking. The size ensures even heat penetration while the bone infuses the rice with a rich, aromatic depth that boneless meat can never achieve.\n\nSourced from stress-free, open-pasture goats raised at Kohinoor Signature Farms on organic herbal feed and clean spring water, this cut carries a naturally sweet, mild flavour that takes on spice beautifully. Butchered fresh on the day of your order under strict Halal protocols and cold-chained at 0°C–4°C from our farm to your kitchen.\n\nPerfect for Hyderabadi Dum Biryani, Lucknawi Biryani, Mutton Pilaf, and festive one-pot rice dishes.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Hyderabadi Dum Biryani, Lucknawi Biryani, Mutton Pilaf, Kachchi Biryani",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
+  },
+  {
+    "id": "ksf-1789582095135",
+    "name": "Mutton Curry Cut",
+    "slug": "mutton-curry-cut",
+    "badges": [
+      "100% Halal",
+      "Farm Fresh"
+    ],
+    "images": [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80"
+    ],
+    "inStock": true,
+    "tagline": "The soul of every great Indian mutton curry — bone-in, flavour-rich, perfectly portioned.",
+    "category": "goat",
+    "feedType": "100% Natural Organic Pasture Grass & Herbal Forage",
+    "variants": [
+      {
+        "id": "var-1000-1789582094507-s4ie",
+        "mrp": 0,
+        "label": "1 kg",
+        "weight": "1000g",
+        "inStock": true,
+        "isDefault": true,
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 0
+      },
+      {
+        "id": "var-500-1789582094507-pjs1",
+        "mrp": 0,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 0
+      }
+    ],
+    "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
+    "description": "Our Mutton Curry Cut is hand-portioned from pasture-raised goats that roam freely across open grasslands at Kohinoor Signature Farms. Each piece retains its natural bone, which slowly releases collagen and marrow as it simmers — creating that deep, restaurant-quality gravy you simply cannot replicate with boneless meat.\n\nThe goats are fed a 100% natural diet of organic pasture grass, wild alfalfa, and pesticide-free grain — never administered antibiotics or growth hormones. Slaughtered under authentic Halal practices by trained butchers on the day of your order, every cut is then hygienically chilled at 0°C–4°C and dispatched directly to your doorstep.\n\nWhether you're slow-cooking a Hyderabadi Mutton Curry, a robust Rogan Josh, or a Sunday family Salan, this cut is your trusted foundation.",
+    "fssaiNumber": "13624014000889",
+    "culinaryUses": "Mutton Curry, Hyderabadi Salan, Rogan Josh, Mutton Masala, Kerala Mutton Stew",
+    "antibioticFree": true,
+    "halalCertified": true,
+    "piecesEstimate": "",
+    "storageInstructions": "Keep chilled in cold refrigeration (0°C - 4°C). Wash with cold water before cooking."
   }
 ]
