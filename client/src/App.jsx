@@ -252,12 +252,14 @@ export default function App() {
       p.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       p.culinaryUses?.toLowerCase().includes(searchTerm.toLowerCase());
 
-    const isBestSeller = (p.badges || []).some(
-      (b) =>
-        b.toLowerCase().includes('best') ||
-        b.toLowerCase().includes('popular') ||
-        b.toLowerCase().includes('chef')
-    );
+    const isBestSeller =
+      p.isBestSeller === true ||
+      (p.badges || []).some(
+        (b) =>
+          b.toLowerCase().includes('best seller') ||
+          b.toLowerCase().includes('bestseller') ||
+          b.toLowerCase().includes('popular')
+      );
     const matchesBestSeller = !onlyBestSellers || isBestSeller;
 
     return matchesCategory && matchesSearch && matchesBestSeller;

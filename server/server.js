@@ -452,6 +452,7 @@ app.post('/api/products', async (req, res) => {
     images: Array.isArray(req.body.images) ? req.body.images : [],
     badges: req.body.badges || ['Farm Fresh', '100% Halal'],
     inStock: req.body.inStock !== false,
+    isBestSeller: Boolean(req.body.isBestSeller),
     variants: Array.isArray(req.body.variants) && req.body.variants.length > 0 
       ? req.body.variants 
       : [
@@ -516,31 +517,52 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
     return res.status(400).json({ error: 'No image file uploaded' });
   }
 
-  // Try Supabase Storage upload (requires service role key for bucket write access)
-  const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (supabase && serviceRoleKey) {
-    try {
-      const { createClient: createAdminClient } = await import('@supabase/supabase-js');
-      const adminSupabase = createAdminClient(supabaseUrl, serviceRoleKey);
+  // Try Supabase Storage upload (requires service role key or configured supabase storage)
+  const serviceRoleKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY ||
+    process.env.SUPABASE_SECRET ||
+    process.env.SUPABASE_SECRET_KEY ||
+    (process.env.SUPABASE_KEY && process.env.SUPABASE_KEY.startsWith('eyJ') ? process.env.SUPABASE_KEY : null);
 
+  const activeClient = serviceRoleKey ? createClient(supabaseUrl, serviceRoleKey) : supabase;
+
+  if (activeClient) {
+    try {
       const fileBuffer = fs.readFileSync(req.file.path);
       const ext = (req.file.originalname.split('.').pop() || 'jpg').toLowerCase();
       const filename = `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
       const contentType = req.file.mimetype || 'image/jpeg';
+      const bucketName = 'product-images';
 
-      const { data: uploadData, error: uploadError } = await adminSupabase.storage
-        .from('product-images')
-        .upload(filename, fileBuffer, { contentType, upsert: false });
+      let { data: uploadData, error: uploadError } = await activeClient.storage
+        .from(bucketName)
+        .upload(filename, fileBuffer, { contentType, upsert: true });
+
+      // If bucket doesn't exist and we have admin rights, try creating it
+      if (uploadError && (uploadError.message?.toLowerCase().includes('not found') || uploadError.statusCode === '404')) {
+        try {
+          await activeClient.storage.createBucket(bucketName, { public: true });
+          const retry = await activeClient.storage
+            .from(bucketName)
+            .upload(filename, fileBuffer, { contentType, upsert: true });
+          uploadData = retry.data;
+          uploadError = retry.error;
+        } catch (createErr) {
+          console.warn('Could not auto-create bucket:', createErr.message);
+        }
+      }
 
       if (!uploadError && uploadData) {
-        const { data: urlData } = adminSupabase.storage.from('product-images').getPublicUrl(filename);
+        const { data: urlData } = activeClient.storage.from(bucketName).getPublicUrl(filename);
         const publicUrl = urlData?.publicUrl;
-        // Clean up local temp file
         try { fs.unlinkSync(req.file.path); } catch(e) {}
         return res.json({ success: true, url: publicUrl, filename, storage: 'supabase' });
+      } else if (uploadError) {
+        console.warn('Supabase Storage upload note:', uploadError.message, '— falling back to local/base64');
       }
     } catch (err) {
-      console.warn('Supabase Storage upload note:', err.message, '— falling back to local');
+      console.warn('Supabase Storage upload note:', err.message, '— falling back to local/base64');
     }
   }
 

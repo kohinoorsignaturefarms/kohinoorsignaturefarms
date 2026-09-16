@@ -249,17 +249,18 @@ function AdminPanelInner({
       antibioticFree: true,
       culinaryUses: 'Great for traditional gravies, Biryani, and pan roasts.',
       piecesEstimate: '14 to 18 tender pieces per kg',
-      images: ['https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80'],
+      images: [],
       badges: ['Farm Fresh', '100% Halal'],
       inStock: true,
+      isBestSeller: false,
       variants: [
         {
           id: 'var-' + Date.now(),
           label: '1 kg',
           weight: '1000g',
           netWeight: '980g - 1000g',
-          mrp: 999,
-          sellingPrice: 849,
+          mrp: 0,
+          sellingPrice: 0,
           inStock: true,
           isDefault: true
         }
@@ -284,17 +285,18 @@ function AdminPanelInner({
       antibioticFree: prod.antibioticFree !== false,
       culinaryUses: prod.culinaryUses || '',
       piecesEstimate: prod.piecesEstimate || '',
-      images: Array.isArray(prod.images) && prod.images.length > 0 ? [...prod.images] : ['https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80'],
+      images: Array.isArray(prod.images) ? [...prod.images] : [],
       badges: Array.isArray(prod.badges) ? [...prod.badges] : ['Farm Fresh', '100% Halal'],
       inStock: prod.inStock !== false,
+      isBestSeller: Boolean(prod.isBestSeller || (prod.badges || []).some(b => b.toLowerCase().includes('best seller') || b.toLowerCase().includes('bestseller'))),
       variants: Array.isArray(prod.variants) && prod.variants.length > 0 ? JSON.parse(JSON.stringify(prod.variants)) : [
         {
           id: 'var-' + Date.now(),
           label: '1 kg',
           weight: '1000g',
           netWeight: '980g - 1000g',
-          mrp: 999,
-          sellingPrice: 849,
+          mrp: 0,
+          sellingPrice: 0,
           inStock: true,
           isDefault: true
         }
@@ -1081,6 +1083,21 @@ function AdminPanelInner({
                           >
                             {catObj?.name || p.category}
                           </span>
+                          {p.isBestSeller && (
+                            <span
+                              style={{
+                                background: '#FFF8E1',
+                                border: '1px solid #D4AF37',
+                                color: '#B8860B',
+                                padding: '0.15rem 0.45rem',
+                                borderRadius: 'var(--radius-sm)',
+                                fontWeight: 800,
+                                fontSize: '0.7rem'
+                              }}
+                            >
+                              🔥 Best Seller
+                            </span>
+                          )}
                           <button
                             onClick={() => handleToggleProductStock(p)}
                             style={{
@@ -2864,21 +2881,13 @@ function AdminPanelInner({
                 <div className="ksf-form-group">
                   <label className="ksf-form-label">Badges & Labels</label>
 
-                  {/* Best Seller quick toggle */}
+                  {/* Best Seller quick toggle — sets isBestSeller flag (not a visible badge) */}
                   {(() => {
-                    const badges = editingProduct.badges || [];
-                    const isBestSeller = badges.some(b => b.toLowerCase().includes('best seller') || b.toLowerCase().includes('bestseller'));
-                    const toggleBestSeller = () => {
-                      const filtered = badges.filter(b => !b.toLowerCase().includes('best seller') && !b.toLowerCase().includes('bestseller'));
-                      setEditingProduct({
-                        ...editingProduct,
-                        badges: isBestSeller ? filtered : ['Best Seller', ...filtered]
-                      });
-                    };
+                    const isBestSeller = editingProduct.isBestSeller === true;
                     return (
                       <button
                         type="button"
-                        onClick={toggleBestSeller}
+                        onClick={() => setEditingProduct({ ...editingProduct, isBestSeller: !isBestSeller })}
                         style={{
                           display: 'flex',
                           alignItems: 'center',
@@ -2896,7 +2905,7 @@ function AdminPanelInner({
                         }}
                       >
                         <span style={{ fontSize: '1rem' }}>🔥</span>
-                        {isBestSeller ? '★ Best Seller — ON' : 'Mark as Best Seller'}
+                        {isBestSeller ? '★ Best Seller — ON (shows in filter tab)' : 'Mark as Best Seller'}
                       </button>
                     );
                   })()}

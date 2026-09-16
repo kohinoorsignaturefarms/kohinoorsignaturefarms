@@ -16,7 +16,8 @@ export default function CategoryFilterBar({
   };
 
   const bestSellersCount = (products || []).filter((p) =>
-    (p.badges || []).some((b) => b.toLowerCase().includes('best') || b.toLowerCase().includes('popular'))
+    p.isBestSeller === true ||
+    (p.badges || []).some((b) => b.toLowerCase().includes('best seller') || b.toLowerCase().includes('bestseller') || b.toLowerCase().includes('popular'))
   ).length;
 
   return (

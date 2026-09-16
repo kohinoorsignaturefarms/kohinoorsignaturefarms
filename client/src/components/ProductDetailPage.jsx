@@ -189,22 +189,24 @@ export default function ProductDetailPage({
           <div className="ksf-detail-right-pane">
             {/* Badges */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', flexWrap: 'wrap', marginBottom: '0.4rem' }}>
-              {product.badges && product.badges.map((b, i) => (
-                <span
-                  key={i}
-                  style={{
-                    background: 'var(--gold-shimmer)',
-                    color: 'var(--gold-dark)',
-                    fontSize: '0.68rem',
-                    fontWeight: 700,
-                    padding: '0.15rem 0.45rem',
-                    borderRadius: 'var(--radius-sm)',
-                    border: '1px solid var(--gold-light)'
-                  }}
-                >
-                  {b}
-                </span>
-              ))}
+              {(product.badges || [])
+                .filter(b => !b.toLowerCase().includes('best seller') && !b.toLowerCase().includes('bestseller'))
+                .map((b, i) => (
+                  <span
+                    key={i}
+                    style={{
+                      background: 'var(--gold-shimmer)',
+                      color: 'var(--gold-dark)',
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      padding: '0.15rem 0.45rem',
+                      borderRadius: 'var(--radius-sm)',
+                      border: '1px solid var(--gold-light)'
+                    }}
+                  >
+                    {b}
+                  </span>
+                ))}
             </div>
 
             {/* Title & Tagline */}

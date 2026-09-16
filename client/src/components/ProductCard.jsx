@@ -88,19 +88,18 @@ export default function ProductCard({
           </div>
         )}
 
-        {/* Badges Stack */}
+        {/* Badges Stack — Best Seller is internal metadata, not shown here */}
         <div className="ksf-badge-stack">
-          {product.badges && product.badges.map((badge, idx) => {
-            const isGold = badge.toLowerCase().includes('best') || badge.toLowerCase().includes('popular') || badge.toLowerCase().includes('chef');
-            return (
+          {(product.badges || [])
+            .filter(badge => !badge.toLowerCase().includes('best seller') && !badge.toLowerCase().includes('bestseller'))
+            .map((badge, idx) => (
               <span
                 key={idx}
-                className={`ksf-badge-item ${isGold ? 'ksf-badge-bestseller' : 'ksf-badge-fresh'}`}
+                className="ksf-badge-item ksf-badge-fresh"
               >
                 {badge}
               </span>
-            );
-          })}
+            ))}
         </div>
       </div>
 
