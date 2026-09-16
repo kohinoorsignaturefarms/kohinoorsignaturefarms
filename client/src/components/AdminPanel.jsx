@@ -2862,7 +2862,84 @@ function AdminPanelInner({
                 </div>
 
                 <div className="ksf-form-group">
-                  <label className="ksf-form-label">Badges (Comma Separated)</label>
+                  <label className="ksf-form-label">Badges & Labels</label>
+
+                  {/* Best Seller quick toggle */}
+                  {(() => {
+                    const badges = editingProduct.badges || [];
+                    const isBestSeller = badges.some(b => b.toLowerCase().includes('best seller') || b.toLowerCase().includes('bestseller'));
+                    const toggleBestSeller = () => {
+                      const filtered = badges.filter(b => !b.toLowerCase().includes('best seller') && !b.toLowerCase().includes('bestseller'));
+                      setEditingProduct({
+                        ...editingProduct,
+                        badges: isBestSeller ? filtered : ['Best Seller', ...filtered]
+                      });
+                    };
+                    return (
+                      <button
+                        type="button"
+                        onClick={toggleBestSeller}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.45rem',
+                          padding: '0.45rem 1rem',
+                          borderRadius: 'var(--radius-full)',
+                          border: isBestSeller ? '2px solid #D4AF37' : '2px solid var(--border-light)',
+                          background: isBestSeller ? '#FFF8E1' : 'var(--bg-subtle)',
+                          color: isBestSeller ? '#B8860B' : 'var(--text-muted)',
+                          fontWeight: 700,
+                          fontSize: '0.8rem',
+                          cursor: 'pointer',
+                          marginBottom: '0.6rem',
+                          transition: 'all 0.15s'
+                        }}
+                      >
+                        <span style={{ fontSize: '1rem' }}>🔥</span>
+                        {isBestSeller ? '★ Best Seller — ON' : 'Mark as Best Seller'}
+                      </button>
+                    );
+                  })()}
+
+                  {/* Preset badge chips */}
+                  {(() => {
+                    const badges = editingProduct.badges || [];
+                    const PRESETS = ['100% Halal', 'Farm Fresh', "Chef's Pick", 'New Arrival', 'Limited Stock'];
+                    return (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem', marginBottom: '0.6rem' }}>
+                        {PRESETS.map(preset => {
+                          const active = badges.includes(preset);
+                          return (
+                            <button
+                              key={preset}
+                              type="button"
+                              onClick={() => {
+                                const next = active
+                                  ? badges.filter(b => b !== preset)
+                                  : [...badges, preset];
+                                setEditingProduct({ ...editingProduct, badges: next });
+                              }}
+                              style={{
+                                padding: '0.28rem 0.7rem',
+                                borderRadius: 'var(--radius-full)',
+                                border: active ? '1.5px solid var(--green-primary)' : '1.5px solid var(--border-light)',
+                                background: active ? 'var(--green-primary)' : 'transparent',
+                                color: active ? '#fff' : 'var(--text-muted)',
+                                fontSize: '0.75rem',
+                                fontWeight: 600,
+                                cursor: 'pointer',
+                                transition: 'all 0.12s'
+                              }}
+                            >
+                              {active ? '✓ ' : ''}{preset}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
+
+                  {/* Free text fallback */}
                   <input
                     type="text"
                     className="ksf-input"
@@ -2873,7 +2950,8 @@ function AdminPanelInner({
                         badges: e.target.value.split(',').map((b) => b.trim()).filter(Boolean)
                       })
                     }
-                    placeholder="Best Seller, Grass Fed, 100% Halal"
+                    placeholder="Or type custom badges: Grass Fed, Seasonal..."
+                    style={{ fontSize: '0.82rem' }}
                   />
                 </div>
               </div>
