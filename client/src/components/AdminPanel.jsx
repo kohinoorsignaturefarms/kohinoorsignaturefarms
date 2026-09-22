@@ -82,6 +82,7 @@ function AdminPanelInner({
   });
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
 
   // Sync props when parent loads them
@@ -340,6 +341,7 @@ function AdminPanelInner({
       return;
     }
 
+    setIsSaving(true);
     try {
       if (isNewProduct) {
         const res = await api.createProduct(editingProduct);
@@ -354,6 +356,8 @@ function AdminPanelInner({
       if (onDataRefresh) onDataRefresh();
     } catch (err) {
       showToast('Error saving product', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -361,18 +365,33 @@ function AdminPanelInner({
   const handleProductImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    // Reset input so same file can be re-selected after a failed upload
+    e.target.value = '';
     setUploadingImage(true);
     try {
       const res = await api.uploadImage(file);
       if (res.url) {
         setEditingProduct((prev) => ({
           ...prev,
-          images: [res.url, ...(prev.images || [])]
+          images: [res.url, ...(prev.images || []).filter(u => u !== res.url)]
         }));
-        showToast('Image uploaded successfully!');
+        if (res.storage === 'local') {
+          showToast('⚠️ Image saved locally only — not visible on live site. Create Supabase bucket.', 'error');
+        } else {
+          showToast(`✅ Image uploaded to CDN (${res.storage || 'supabase'})!`);
+        }
+      } else {
+        showToast('Upload returned no URL — check Supabase bucket setup', 'error');
       }
     } catch (err) {
-      showToast('Image upload failed', 'error');
+      // Try to extract server error message
+      let msg = 'Image upload failed';
+      try {
+        const errData = JSON.parse(err.message || '{}');
+        if (errData.fix) msg = errData.fix;
+        else if (errData.error) msg = errData.error;
+      } catch(_) {}
+      showToast(msg, 'error');
     } finally {
       setUploadingImage(false);
     }
@@ -448,12 +467,15 @@ function AdminPanelInner({
   // ----------------------------------------------------
   const handleSaveSettings = async (e) => {
     e.preventDefault();
+    setIsSaving(true);
     try {
       await api.updateSettings(settings);
       showToast('Store & WhatsApp settings updated successfully!');
       if (onDataRefresh) onDataRefresh();
     } catch (err) {
       showToast('Failed to update settings', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -461,6 +483,7 @@ function AdminPanelInner({
   // HERO BANNER ACTIONS
   // ----------------------------------------------------
   const handleSaveBanners = async (updatedBanners) => {
+    setIsSaving(true);
     try {
       const newSettings = { ...settings, heroBanners: updatedBanners };
       await api.updateSettings(newSettings);
@@ -469,6 +492,8 @@ function AdminPanelInner({
       if (onDataRefresh) onDataRefresh();
     } catch (err) {
       showToast('Failed to update banners', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -478,6 +503,7 @@ function AdminPanelInner({
   const handleSaveCategory = async (e) => {
     e.preventDefault();
     if (!editingCategory.name.trim()) return;
+    setIsSaving(true);
     try {
       await api.saveCategory(editingCategory);
       const updatedCats = await api.getCategories();
@@ -487,11 +513,14 @@ function AdminPanelInner({
       if (onDataRefresh) onDataRefresh();
     } catch (err) {
       showToast('Failed to save category', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const handleDeleteCategory = async (catId, catName) => {
     if (!window.confirm(`Delete category "${catName}"?`)) return;
+    setIsSaving(true);
     try {
       await api.deleteCategory(catId);
       setCategories((prev) => prev.filter((c) => c.id !== catId));
@@ -499,6 +528,8 @@ function AdminPanelInner({
       if (onDataRefresh) onDataRefresh();
     } catch (err) {
       showToast('Failed to delete category', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -533,6 +564,7 @@ function AdminPanelInner({
     e.preventDefault();
     if (!editingLocation || !editingLocation.name.trim()) return;
 
+    setIsSaving(true);
     try {
       const payload = {
         ...editingLocation,
@@ -554,11 +586,14 @@ function AdminPanelInner({
       if (onDataRefresh) onDataRefresh();
     } catch (err) {
       showToast('Failed to save delivery location', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const handleDeleteLocation = async (locId, locName) => {
     if (!window.confirm(`Are you sure you want to remove "${locName}" from delivery locations?`)) return;
+    setIsSaving(true);
     try {
       await api.deleteLocation(locId);
       const freshList = await api.getLocations();
@@ -568,10 +603,13 @@ function AdminPanelInner({
       if (onDataRefresh) onDataRefresh();
     } catch (err) {
       showToast('Failed to delete delivery location', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const handleToggleLocationActive = async (locId) => {
+    setIsSaving(true);
     try {
       await api.toggleLocation(locId);
       const freshList = await api.getLocations();
@@ -581,6 +619,8 @@ function AdminPanelInner({
       if (onDataRefresh) onDataRefresh();
     } catch (err) {
       showToast('Failed to update status', 'error');
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -722,6 +762,64 @@ function AdminPanelInner({
           <span>{toastMessage.text}</span>
         </div>
       )}
+
+      {/* Full-screen initial data loading overlay */}
+      {loading && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 9998,
+          background: 'rgba(5, 26, 16, 0.72)',
+          backdropFilter: 'blur(4px)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '1rem'
+        }}>
+          <RefreshCw size={44} color="#D4AF37" className="animate-spin" />
+          <div style={{ color: '#fff', fontFamily: 'var(--font-cinzel)', fontWeight: 700, fontSize: '1rem', letterSpacing: '0.04em' }}>
+            Loading Farm Data...
+          </div>
+          <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.8rem' }}>
+            Syncing products, settings & analytics
+          </div>
+        </div>
+      )}
+
+      {/* Saving overlay — shown during any save/delete API call */}
+      {isSaving && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 9997,
+          background: 'rgba(5, 26, 16, 0.45)',
+          backdropFilter: 'blur(2px)',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: '0.75rem'
+        }}>
+          <div style={{
+            background: 'var(--green-primary)',
+            borderRadius: 'var(--radius-xl)',
+            padding: '1.5rem 2.5rem',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.75rem',
+            boxShadow: 'var(--shadow-lg)',
+            border: '1px solid rgba(212,175,55,0.35)'
+          }}>
+            <RefreshCw size={32} color="#D4AF37" className="animate-spin" />
+            <div style={{ color: '#fff', fontWeight: 700, fontSize: '0.92rem', letterSpacing: '0.02em' }}>
+              Saving changes...
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* Admin Top Navigation */}
       <div className="ksf-admin-nav">
@@ -1485,8 +1583,9 @@ function AdminPanelInner({
 
               <button
                 type="submit"
+                disabled={isSaving}
                 style={{
-                  background: 'var(--green-primary)',
+                  background: isSaving ? 'var(--green-mid)' : 'var(--green-primary)',
                   color: '#FFFFFF',
                   fontWeight: 700,
                   fontSize: '0.95rem',
@@ -1495,11 +1594,13 @@ function AdminPanelInner({
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.5rem',
-                  boxShadow: 'var(--shadow-sm)'
+                  boxShadow: 'var(--shadow-sm)',
+                  opacity: isSaving ? 0.8 : 1,
+                  cursor: isSaving ? 'not-allowed' : 'pointer'
                 }}
               >
-                <Save size={18} />
-                <span>Save All Settings</span>
+                {isSaving ? <RefreshCw size={18} className="animate-spin" /> : <Save size={18} />}
+                <span>{isSaving ? 'Saving...' : 'Save All Settings'}</span>
               </button>
             </form>
           </div>
@@ -3183,8 +3284,9 @@ function AdminPanelInner({
 
                 <button
                   type="submit"
+                  disabled={isSaving}
                   style={{
-                    background: 'var(--green-primary)',
+                    background: isSaving ? 'var(--green-mid)' : 'var(--green-primary)',
                     color: '#FFFFFF',
                     padding: '0.55rem 1.35rem',
                     borderRadius: 'var(--radius-md)',
@@ -3193,11 +3295,13 @@ function AdminPanelInner({
                     display: 'flex',
                     alignItems: 'center',
                     gap: '0.4rem',
-                    boxShadow: 'var(--shadow-sm)'
+                    boxShadow: 'var(--shadow-sm)',
+                    opacity: isSaving ? 0.8 : 1,
+                    cursor: isSaving ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  <Save size={15} />
-                  <span>Save Product</span>
+                  {isSaving ? <RefreshCw size={15} className="animate-spin" /> : <Save size={15} />}
+                  <span>{isSaving ? 'Saving...' : 'Save Product'}</span>
                 </button>
               </div>
             </form>
@@ -3281,16 +3385,22 @@ function AdminPanelInner({
                 </button>
                 <button
                   type="submit"
+                  disabled={isSaving}
                   style={{
-                    background: 'var(--green-primary)',
+                    background: isSaving ? 'var(--green-mid)' : 'var(--green-primary)',
                     color: '#FFFFFF',
                     padding: '0.5rem 1.25rem',
                     borderRadius: 'var(--radius-md)',
                     fontWeight: 700,
-                    fontSize: '0.85rem'
+                    fontSize: '0.85rem',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    cursor: isSaving ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  Save Category
+                  {isSaving ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
+                  <span>{isSaving ? 'Saving...' : 'Save Category'}</span>
                 </button>
               </div>
             </form>
@@ -3410,18 +3520,23 @@ function AdminPanelInner({
                 </button>
                 <button
                   type="submit"
+                  disabled={isSaving}
                   style={{
-                    background: 'var(--green-primary)',
+                    background: isSaving ? 'var(--green-mid)' : 'var(--green-primary)',
                     color: '#FFFFFF',
                     padding: '0.5rem 1.25rem',
                     borderRadius: 'var(--radius-md)',
                     fontWeight: 700,
                     fontSize: '0.85rem',
                     border: 'none',
-                    cursor: 'pointer'
+                    cursor: isSaving ? 'not-allowed' : 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.4rem'
                   }}
                 >
-                  Save Community
+                  {isSaving ? <RefreshCw size={14} className="animate-spin" /> : <Save size={14} />}
+                  <span>{isSaving ? 'Saving...' : 'Save Community'}</span>
                 </button>
               </div>
             </form>

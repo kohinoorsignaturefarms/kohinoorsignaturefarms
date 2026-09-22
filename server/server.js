@@ -511,13 +511,15 @@ app.delete('/api/products/:id', async (req, res) => {
   res.json({ success: true, message: 'Product deleted successfully' });
 });
 
-// 4. IMAGE UPLOAD API — Supabase Storage with local fallback
+// 4. IMAGE UPLOAD API — Supabase Storage (public bucket required)
 app.post('/api/upload', upload.single('image'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No image file uploaded' });
   }
 
-  // Try Supabase Storage upload (requires service role key or configured supabase storage)
+  const bucketName = 'product-images';
+
+  // Build list of Supabase clients to try: service role first, then anon key
   const serviceRoleKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SERVICE_KEY ||
@@ -525,69 +527,92 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
     process.env.SUPABASE_SECRET_KEY ||
     (process.env.SUPABASE_KEY && process.env.SUPABASE_KEY.startsWith('eyJ') ? process.env.SUPABASE_KEY : null);
 
-  const activeClient = serviceRoleKey ? createClient(supabaseUrl, serviceRoleKey) : supabase;
+  const clientsToTry = [];
+  if (serviceRoleKey) clientsToTry.push({ key: serviceRoleKey, label: 'service_role' });
+  if (supabase) clientsToTry.push({ key: null, client: supabase, label: 'anon' });
 
-  if (activeClient) {
+  // Read file buffer once
+  let fileBuffer;
+  try {
+    fileBuffer = req.file.buffer || fs.readFileSync(req.file.path);
+  } catch (readErr) {
+    return res.status(500).json({ error: 'Failed to read uploaded file: ' + readErr.message });
+  }
+
+  const ext = (req.file.originalname.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+  const safeExt = ['jpg','jpeg','png','webp','gif','avif'].includes(ext) ? ext : 'jpg';
+  const filename = `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${safeExt}`;
+  const contentType = req.file.mimetype || 'image/jpeg';
+
+  let lastError = null;
+
+  for (const attempt of clientsToTry) {
     try {
-      const fileBuffer = fs.readFileSync(req.file.path);
-      const ext = (req.file.originalname.split('.').pop() || 'jpg').toLowerCase();
-      const filename = `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
-      const contentType = req.file.mimetype || 'image/jpeg';
-      const bucketName = 'product-images';
+      const client = attempt.client || createClient(supabaseUrl, attempt.key);
 
-      let { data: uploadData, error: uploadError } = await activeClient.storage
+      // Try upload
+      let { data: uploadData, error: uploadError } = await client.storage
         .from(bucketName)
         .upload(filename, fileBuffer, { contentType, upsert: true });
 
-      // If bucket doesn't exist and we have admin rights, try creating it
-      if (uploadError && (uploadError.message?.toLowerCase().includes('not found') || uploadError.statusCode === '404')) {
+      // If bucket not found AND we have service role, auto-create it
+      if (uploadError && (
+        uploadError.message?.toLowerCase().includes('not found') ||
+        uploadError.statusCode === '404' ||
+        uploadError.message?.toLowerCase().includes('bucket')
+      ) && attempt.label === 'service_role') {
+        console.log('Bucket not found — auto-creating product-images bucket...');
         try {
-          await activeClient.storage.createBucket(bucketName, { public: true });
-          const retry = await activeClient.storage
+          await client.storage.createBucket(bucketName, { public: true });
+          const retry = await client.storage
             .from(bucketName)
             .upload(filename, fileBuffer, { contentType, upsert: true });
           uploadData = retry.data;
           uploadError = retry.error;
         } catch (createErr) {
-          console.warn('Could not auto-create bucket:', createErr.message);
+          console.warn('Auto-create bucket failed:', createErr.message);
         }
       }
 
       if (!uploadError && uploadData) {
-        const { data: urlData } = activeClient.storage.from(bucketName).getPublicUrl(filename);
+        // Upload succeeded — get the permanent CDN URL
+        const { data: urlData } = client.storage.from(bucketName).getPublicUrl(filename);
         const publicUrl = urlData?.publicUrl;
-        try { fs.unlinkSync(req.file.path); } catch(e) {}
-        return res.json({ success: true, url: publicUrl, filename, storage: 'supabase' });
-      } else if (uploadError) {
-        console.warn('Supabase Storage upload note:', uploadError.message, '— falling back to local/base64');
+        // Clean up temp file
+        try { if (req.file.path) fs.unlinkSync(req.file.path); } catch(e) {}
+        console.log(`✅ Image uploaded to Supabase Storage (${attempt.label}):`, publicUrl);
+        return res.json({ success: true, url: publicUrl, filename, storage: 'supabase', key_used: attempt.label });
       }
+
+      lastError = uploadError?.message || 'Unknown upload error';
+      console.warn(`Upload attempt with ${attempt.label} key failed:`, lastError);
     } catch (err) {
-      console.warn('Supabase Storage upload note:', err.message, '— falling back to local/base64');
+      lastError = err.message;
+      console.warn(`Upload attempt with ${attempt.label} threw:`, err.message);
     }
   }
 
-  // Fallback: local /uploads (works in dev, but NOT on Vercel production)
+  // All Supabase attempts failed — try local disk as last resort (only works in dev)
   const isVercelEnv = Boolean(process.env.VERCEL || process.env.NOW_REGION);
-  const fileUrl = `/uploads/${req.file.filename}`;
-
-  if (isVercelEnv) {
-    // On Vercel with no service role key — can't store files. Return the data URL instead.
-    try {
-      const fileBuffer = fs.readFileSync(req.file.path);
-      const b64 = fileBuffer.toString('base64');
-      const dataUrl = `data:${req.file.mimetype};base64,${b64}`;
-      try { fs.unlinkSync(req.file.path); } catch(e) {}
-      return res.json({ success: true, url: dataUrl, filename: req.file.filename, storage: 'base64',
-        warning: 'No SUPABASE_SERVICE_ROLE_KEY set — image stored as base64 data URL. Add the key in Vercel env vars for persistent CDN storage.' });
-    } catch(err) {
-      return res.status(500).json({ error: 'Upload failed on serverless: no persistent storage available. Set SUPABASE_SERVICE_ROLE_KEY env var.' });
-    }
+  if (!isVercelEnv && req.file.path && req.file.filename) {
+    const fileUrl = `/uploads/${req.file.filename}`;
+    console.log('⚠️ Falling back to local /uploads storage:', fileUrl);
+    return res.json({ success: true, url: fileUrl, filename: req.file.filename, storage: 'local',
+      warning: 'Image saved locally — will NOT be visible on Vercel. Create a public Supabase bucket named "product-images" to fix this.' });
   }
 
-  res.json({ success: true, url: fileUrl, filename: req.file.filename, storage: 'local' });
+  // Nothing worked — return clear actionable error
+  try { if (req.file.path) fs.unlinkSync(req.file.path); } catch(e) {}
+  return res.status(500).json({
+    error: 'Image upload failed. Please create a public Supabase Storage bucket named "product-images".',
+    detail: lastError,
+    fix: 'Go to Supabase Dashboard → Storage → New Bucket → Name: product-images → Enable Public → Save'
+  });
 });
 
+
 // 5. ADMIN STATS & OVERVIEW API
+
 app.get('/api/stats', async (req, res) => {
   const products = (await getStoreData('products')) || [];
   const categories = (await getStoreData('categories')) || [];
