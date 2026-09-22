@@ -9,6 +9,29 @@ import multer from 'multer';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load .env for local development (no-op on Vercel where env vars are set in dashboard)
+try {
+  const dotenvPath = path.join(__dirname, '.env');
+  if (fs.existsSync(dotenvPath)) {
+    const envContent = fs.readFileSync(dotenvPath, 'utf-8');
+    envContent.split('\n').forEach(line => {
+      const trimmed = line.trim();
+      if (trimmed && !trimmed.startsWith('#')) {
+        const eqIdx = trimmed.indexOf('=');
+        if (eqIdx > 0) {
+          const key = trimmed.slice(0, eqIdx).trim();
+          const val = trimmed.slice(eqIdx + 1).trim();
+          if (!process.env[key]) process.env[key] = val;
+        }
+      }
+    });
+    console.log('✅ Loaded .env for local development');
+  }
+} catch (e) {
+  // Silently ignore — .env is optional
+}
+
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
