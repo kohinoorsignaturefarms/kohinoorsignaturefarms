@@ -2987,15 +2987,95 @@ function AdminPanelInner({
                         fontSize: '0.775rem',
                         fontWeight: 700,
                         color: 'var(--green-primary)',
-                        cursor: 'pointer'
+                        cursor: uploadingImage ? 'not-allowed' : 'pointer',
+                        opacity: uploadingImage ? 0.7 : 1
                       }}
                     >
                       <Upload size={14} />
                       <span>{uploadingImage ? 'Uploading...' : 'Or Upload Local Image'}</span>
-                      <input type="file" accept="image/*" style={{ display: 'none' }} onChange={handleProductImageUpload} />
+                      <input type="file" accept="image/*" style={{ display: 'none' }} disabled={uploadingImage} onChange={handleProductImageUpload} />
                     </label>
                   </div>
+
+                  {/* Live preview of primary image */}
+                  {editingProduct.images?.[0] && (
+                    <div style={{
+                      marginTop: '0.6rem',
+                      position: 'relative',
+                      display: 'inline-block',
+                      borderRadius: 'var(--radius-md)',
+                      overflow: 'hidden',
+                      border: '2px solid var(--green-primary)',
+                      boxShadow: '0 2px 8px rgba(11,59,36,0.15)'
+                    }}>
+                      <img
+                        src={editingProduct.images[0]}
+                        alt="Product preview"
+                        style={{
+                          display: 'block',
+                          width: '160px',
+                          height: '100px',
+                          objectFit: 'cover'
+                        }}
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.nextSibling.style.display = 'flex';
+                        }}
+                      />
+                      <div style={{
+                        display: 'none',
+                        width: '160px',
+                        height: '100px',
+                        background: 'var(--bg-subtle)',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '0.72rem',
+                        color: 'var(--text-muted)',
+                        textAlign: 'center',
+                        padding: '0.5rem'
+                      }}>
+                        ⚠️ Image not reachable
+                      </div>
+                      <button
+                        type="button"
+                        title="Remove image"
+                        onClick={() => setEditingProduct({ ...editingProduct, images: [] })}
+                        style={{
+                          position: 'absolute',
+                          top: '4px',
+                          right: '4px',
+                          background: 'rgba(220,38,38,0.9)',
+                          color: '#fff',
+                          border: 'none',
+                          borderRadius: '50%',
+                          width: '20px',
+                          height: '20px',
+                          cursor: 'pointer',
+                          fontSize: '0.7rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          fontWeight: 900,
+                          lineHeight: 1
+                        }}
+                      >×</button>
+                      <div style={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        background: 'rgba(11,59,36,0.75)',
+                        color: '#fff',
+                        fontSize: '0.6rem',
+                        fontWeight: 700,
+                        textAlign: 'center',
+                        padding: '2px 4px',
+                        letterSpacing: '0.04em'
+                      }}>PRIMARY IMAGE</div>
+                    </div>
+                  )}
                 </div>
+
 
                 <div className="ksf-form-group">
                   <label className="ksf-form-label">Badges & Labels</label>
