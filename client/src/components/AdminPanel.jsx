@@ -98,6 +98,21 @@ function AdminPanelInner({
     return count > 0 ? Math.round(total / count) : 16;
   }, [products]);
 
+  // Safety timeout auto-reset: NEVER allow loading or isSaving to get stuck
+  useEffect(() => {
+    if (isSaving) {
+      const timer = setTimeout(() => setIsSaving(false), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [isSaving]);
+
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => setLoading(false), 8000);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
   // Sync props when parent loads them
   useEffect(() => {
     if (Array.isArray(initialProducts) && initialProducts.length > 0) {
@@ -782,38 +797,8 @@ function AdminPanelInner({
       )}
 
 
-      {/* Saving overlay — shown during any save/delete API call */}
-      {isSaving && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 9997,
-          background: 'rgba(5, 26, 16, 0.45)',
-          backdropFilter: 'blur(2px)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '0.75rem'
-        }}>
-          <div style={{
-            background: 'var(--green-primary)',
-            borderRadius: 'var(--radius-xl)',
-            padding: '1.5rem 2.5rem',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '0.75rem',
-            boxShadow: 'var(--shadow-lg)',
-            border: '1px solid rgba(212,175,55,0.35)'
-          }}>
-            <RefreshCw size={32} color="#D4AF37" className="animate-spin" />
-            <div style={{ color: '#fff', fontWeight: 700, fontSize: '0.92rem', letterSpacing: '0.02em' }}>
-              Saving changes...
-            </div>
-          </div>
-        </div>
-      )}
+
+
 
 
       {/* Admin Top Navigation */}

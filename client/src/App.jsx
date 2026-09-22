@@ -476,8 +476,8 @@ export default function App() {
             )}
           </div>
 
-          {/* Loading State */}
-          {loading && (
+          {/* Loading State — only when no products are loaded yet */}
+          {loading && displayedProducts.length === 0 && (
             <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--green-primary)' }}>
               <RefreshCw className="animate-spin" size={32} style={{ margin: '0 auto 0.75rem' }} />
               <div style={{ fontWeight: 700 }}>Fetching fresh farm inventory...</div>
@@ -485,7 +485,7 @@ export default function App() {
           )}
 
           {/* Error State */}
-          {error && (
+          {error && displayedProducts.length === 0 && (
             <div
               style={{
                 background: '#FEF2F2',
@@ -515,8 +515,8 @@ export default function App() {
             </div>
           )}
 
-          {/* Products Grid */}
-          {!loading && !error && (
+          {/* Products Grid — always show when products exist */}
+          {(!loading || displayedProducts.length > 0) && (
             <div className="ksf-products-grid">
               {displayedProducts.map((product) => (
                 <ProductCard
