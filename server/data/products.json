@@ -7,7 +7,9 @@
       "100% Halal",
       "Farm Fresh"
     ],
-    "images": [],
+    "images": [
+      "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/products/mutton-spleen-0-1790083361037.png"
+    ],
     "inStock": true,
     "tagline": "Tilli — soft, iron-rich goat spleen with a delicately mild flavour and velvety texture.",
     "category": "goat",
@@ -15,29 +17,30 @@
     "variants": [
       {
         "id": "var-1000-1789582100472-mzp7",
-        "mrp": 0,
+        "mrp": 1000,
         "label": "1 kg",
         "weight": "1000g",
         "inStock": true,
         "isDefault": true,
         "netWeight": "980g - 1000g",
-        "sellingPrice": 0
+        "sellingPrice": 949
       },
       {
         "id": "var-500-1789582100472-zgws",
-        "mrp": 0,
+        "mrp": 600,
         "label": "500 g",
         "weight": "500g",
         "inStock": true,
         "isDefault": false,
         "netWeight": "480g - 500g",
-        "sellingPrice": 0
+        "sellingPrice": 519
       }
     ],
     "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
     "description": "The spleen — known as Tilli across Hyderabad — is a beloved, mildly flavoured offal with a soft, almost melt-in-the-mouth texture that differs entirely from kidney or liver. Exceptionally rich in iron and easily digestible, it is one of the gentlest entries into the world of organ meats.\n\nFrom Kohinoor Signature Farms' organically raised, open-pasture goats — the spleen is clean, plump, and free of any harsh mineral flavour. Halal-processed fresh on order day, cold-chained at 0°C–4°C directly to your kitchen. Consume on the day of delivery for best results.\n\nSlice and fry simply in ghee with onions and green chillies for a quick Tilli Fry, or braise in a mild tomato-onion curry for a wholesome Tilli Masala. A gentle, approachable offal for the whole family.",
     "fssaiNumber": "13624014000889",
     "culinaryUses": "Tilli Fry, Spleen Masala, Mixed Offal Curry, Tilli with Liver, Simple Ghee Fry",
+    "isBestSeller": false,
     "antibioticFree": true,
     "halalCertified": true,
     "piecesEstimate": "",
@@ -51,7 +54,9 @@
       "100% Halal",
       "Farm Fresh"
     ],
-    "images": [],
+    "images": [
+      "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/products/mutton-intestine-0-1790083362787.png"
+    ],
     "inStock": true,
     "tagline": "Cleaned goat intestine — the crispy, chewy street-food favourite beloved across Hyderabad.",
     "category": "goat",
@@ -59,29 +64,30 @@
     "variants": [
       {
         "id": "var-1000-1789582100238-iagr",
-        "mrp": 0,
+        "mrp": 800,
         "label": "1 kg",
         "weight": "1000g",
         "inStock": true,
         "isDefault": true,
         "netWeight": "980g - 1000g",
-        "sellingPrice": 0
+        "sellingPrice": 699
       },
       {
         "id": "var-500-1789582100238-wfou",
-        "mrp": 0,
+        "mrp": 500,
         "label": "500 g",
         "weight": "500g",
         "inStock": true,
         "isDefault": false,
-        "netWeight": "480g - 500g",
-        "sellingPrice": 0
+        "netWeight": "480 - 500g",
+        "sellingPrice": 399
       }
     ],
     "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
     "description": "Mutton Intestine — known locally as Gurda or Boti depending on the cut — is a street-food legend in Hyderabad and across South Asia. When cleaned properly and cooked over high heat, the intestine crisps at the edges while remaining chewy at its core, creating a textural contrast that is uniquely addictive.\n\nAt Kohinoor Signature Farms, our goats are raised on clean, organic feed — which ensures the intestine is substantially purer and milder than what is typically available. Thoroughly cleaned, turned, and Halal-processed on order day. Dispatched cold-chained at 0°C–4°C. Must be cooked on the day of delivery.\n\nStir-fry at screaming-high heat in a kadai with onions, green chillies, and fresh masala for the classic Intestine Fry — a Hyderabadi street staple. Also superb grilled over charcoal.",
     "fssaiNumber": "13624014000889",
     "culinaryUses": "Intestine Fry, Boti Curry, Grilled Intestine, Mixed Offal Masala, Street-Style Boti",
+    "isBestSeller": false,
     "antibioticFree": true,
     "halalCertified": true,
     "piecesEstimate": "",
@@ -103,29 +109,30 @@
     "variants": [
       {
         "id": "var-1000-1789582099989-jnmv",
-        "mrp": 0,
+        "mrp": 800,
         "label": "1 kg",
         "weight": "1000g",
         "inStock": true,
         "isDefault": true,
         "netWeight": "980g - 1000g",
-        "sellingPrice": 0
+        "sellingPrice": 699
       },
       {
         "id": "var-500-1789582099989-awdm",
-        "mrp": 0,
+        "mrp": 500,
         "label": "500 g",
         "weight": "500g",
         "inStock": true,
         "isDefault": false,
         "netWeight": "480g - 500g",
-        "sellingPrice": 0
+        "sellingPrice": 399
       }
     ],
     "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
     "description": "Tripe — the stomach lining of the goat — has nourished communities across South Asia, the Middle East, and Europe for millennia. Rich in collagen, zinc, and selenium, it is one of the most nutritionally complete of all offal cuts. When slow-cooked, it transforms from tough to extraordinarily tender and gelatinous.\n\nAt Kohinoor Signature Farms, our goats are fed a clean, organic diet that keeps their digestive systems pure — making our tripe significantly cleaner and milder in flavour than market-sourced alternatives. Thoroughly cleaned, Halal-processed on order day, and cold-chained at 0°C–4°C.\n\nSlow-cook for 2–3 hours in a spiced broth for a rich Tripe Curry, or combine with Paya for the ultimate slow-cooked offal broth. A dish that demands patience and rewards it handsomely.",
     "fssaiNumber": "13624014000889",
     "culinaryUses": "Tripe Curry, Oande Masala, Mixed Offal Broth, Slow-Cooked Tripe, Tripe Soup",
+    "isBestSeller": false,
     "antibioticFree": true,
     "halalCertified": true,
     "piecesEstimate": "",
@@ -139,7 +146,9 @@
       "100% Halal",
       "Farm Fresh"
     ],
-    "images": [],
+    "images": [
+      "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/products/mutton-heart-0-1790083363762.png"
+    ],
     "inStock": true,
     "tagline": "Dense, deeply flavourful, and lean — the goat's heart is an offal gem waiting to be discovered.",
     "category": "goat",
@@ -147,19 +156,30 @@
     "variants": [
       {
         "id": "var-piece-1789582099667-ebh3",
-        "mrp": 0,
+        "mrp": 1000,
         "label": "1 Piece",
         "weight": "1 Piece",
         "inStock": true,
         "isDefault": true,
-        "netWeight": "",
-        "sellingPrice": 0
+        "netWeight": "980g - 1000g",
+        "sellingPrice": 899
+      },
+      {
+        "id": "var-1790080594374",
+        "mrp": 500,
+        "label": "500 g",
+        "weight": "500g",
+        "inStock": true,
+        "isDefault": false,
+        "netWeight": "480g - 500g",
+        "sellingPrice": 449
       }
     ],
     "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
     "description": "The goat heart is pure, hard-working muscle — dense, lean, and packed with a bold, beefy depth of flavour. Unlike other offal, it carries very little fat and virtually no gamey notes when fresh, making it an excellent introduction to organ meats for the curious eater.\n\nFrom Kohinoor Signature Farms' open-pasture, organically raised goats — healthy animals whose hearts are as clean as their lifestyle. Halal-processed on order day, carefully cleaned and trimmed, then cold-chained at 0°C–4°C directly to you. Best consumed on the day of delivery.\n\nDice and stir-fry at high heat for a Dil Masala, thread onto skewers and grill over charcoal for an offal seekh, or slow-braise in a rich onion-tomato base. Its firm texture holds up beautifully across cooking methods.",
     "fssaiNumber": "13624014000889",
     "culinaryUses": "Heart Masala, Grilled Heart Skewers, Dil Fry, Mixed Offal Curry, Stuffed Heart",
+    "isBestSeller": false,
     "antibioticFree": true,
     "halalCertified": true,
     "piecesEstimate": "",
@@ -173,7 +193,9 @@
       "100% Halal",
       "Farm Fresh"
     ],
-    "images": [],
+    "images": [
+      "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/products/mutton-liver-0-1790083364772.jpeg"
+    ],
     "inStock": true,
     "tagline": "Nutrient-dense, rich, and fast-cooking — premium pasture-raised goat liver at its finest.",
     "category": "goat",
@@ -181,29 +203,30 @@
     "variants": [
       {
         "id": "var-1000-1789582099415-e4i6",
-        "mrp": 0,
+        "mrp": 1000,
         "label": "1 kg",
         "weight": "1000g",
         "inStock": true,
         "isDefault": true,
         "netWeight": "980g - 1000g",
-        "sellingPrice": 0
+        "sellingPrice": 949
       },
       {
         "id": "var-500-1789582099415-2k3m",
-        "mrp": 0,
+        "mrp": 600,
         "label": "500 g",
         "weight": "500g",
         "inStock": true,
         "isDefault": false,
         "netWeight": "480g - 500g",
-        "sellingPrice": 0
+        "sellingPrice": 519
       }
     ],
     "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
     "description": "Mutton Liver is one of the most nutrient-dense foods on earth — extraordinarily high in Vitamin B12, iron, Vitamin A, and folate — and when sourced from a naturally raised, pasture-fed goat, it tastes nothing like the strong, bitter liver from conventionally raised animals.\n\nAt Kohinoor Signature Farms, our goats live stress-free on open grassland and organic herbal feed without a single antibiotic or hormone. The liver from such an animal is clean, mild, and deeply flavourful — a world apart. Halal-butchered and cold-chained on order day. Must be consumed on the day of delivery.\n\nSlice thin and sear in a scorching pan with ghee, onions, green chillies, and black pepper for Kaleji Fry in under 8 minutes — one of the most satisfying quick meals in the Indian culinary repertoire.",
     "fssaiNumber": "13624014000889",
     "culinaryUses": "Kaleji Fry, Liver Masala, Liver Curry, Tawa Kaleji, Liver with Onions, Keema Kaleji",
+    "isBestSeller": false,
     "antibioticFree": true,
     "halalCertified": true,
     "piecesEstimate": "",
@@ -217,7 +240,9 @@
       "100% Halal",
       "Farm Fresh"
     ],
-    "images": [],
+    "images": [
+      "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/products/mutton-kidney-0-1790083365148.png"
+    ],
     "inStock": true,
     "tagline": "Glistening, iron-rich kidneys with a bold, mineral depth — fast-cooking and intensely satisfying.",
     "category": "goat",
@@ -225,29 +250,30 @@
     "variants": [
       {
         "id": "var-1000-1789582099170-p52m",
-        "mrp": 0,
+        "mrp": 1000,
         "label": "1 kg",
         "weight": "1000g",
         "inStock": true,
         "isDefault": true,
         "netWeight": "980g - 1000g",
-        "sellingPrice": 0
+        "sellingPrice": 899
       },
       {
         "id": "var-500-1789582099170-i8u1",
-        "mrp": 0,
+        "mrp": 500,
         "label": "500 g",
         "weight": "500g",
         "inStock": true,
         "isDefault": false,
         "netWeight": "480g - 500g",
-        "sellingPrice": 0
+        "sellingPrice": 489
       }
     ],
     "shelfLife": "Best consumed within 48 hours at 0°C to 4°C.",
     "description": "Mutton Kidney is a staple of great Indian, Pakistani, and British offal cooking — high in iron, zinc, and B-vitamins, with a deep, mineral-forward flavour that pairs brilliantly with bold spices and fresh herbs. The key to great kidney is quality sourcing and freshness — both of which are uncompromised here.\n\nFrom Kohinoor Signature Farms' open-pasture, antibiotic-free goats, the kidneys are clean, plump, and free of any medicinal residue. Halal-processed and cold-chained on order day. Must be consumed within 24 hours of delivery for optimal freshness and flavour.\n\nHalve, core, and sauté in a screaming hot pan with ghee, onions, and green masala for Kidney Fry in under 10 minutes. Or slow-braise in a rich curry base for a full-bodied Kidney Masala.",
     "fssaiNumber": "13624014000889",
     "culinaryUses": "Kidney Fry, Kidney Masala, Mixed Offal Curry, Grilled Kidneys, Indian-Style Devilled Kidneys",
+    "isBestSeller": false,
     "antibioticFree": true,
     "halalCertified": true,
     "piecesEstimate": "",

@@ -17,7 +17,16 @@ import { Sparkles, MessageCircle, AlertCircle, RefreshCw, Settings, ShieldCheck,
 const getCachedBootstrap = () => {
   try {
     const raw = localStorage.getItem('ksf_cached_bootstrap');
-    if (raw) return JSON.parse(raw);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      // Auto-clear stale heavy base64 cache so browser pulls fresh CDN URLs
+      const hasBase64 = parsed?.products?.some(p => p.images?.some(img => img && img.startsWith('data:')));
+      if (hasBase64) {
+        localStorage.removeItem('ksf_cached_bootstrap');
+        return null;
+      }
+      return parsed;
+    }
   } catch (e) {}
   return null;
 };
