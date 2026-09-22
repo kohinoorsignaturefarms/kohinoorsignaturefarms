@@ -412,7 +412,7 @@ function AdminPanelInner({
     }
     setUploadingImage(true);
     try {
-      const res = await api.uploadImage(file);
+      const res = await api.uploadImage(file, 'products');
       if (res.url) {
         setEditingProduct((prev) => ({
           ...prev,
@@ -436,7 +436,7 @@ function AdminPanelInner({
     const fieldKey = `${isMobile ? 'mobile' : 'desktop'}-${bannerIdx}`;
     setUploadingBannerField(fieldKey);
     try {
-      const res = await api.uploadImage(file);
+      const res = await api.uploadImage(file, 'banners');
       if (res.url) {
         const copy = [...(settings.heroBanners || [])];
         if (isMobile) {
@@ -451,6 +451,25 @@ function AdminPanelInner({
       showToast('Banner image upload failed', 'error');
     } finally {
       setUploadingBannerField(null);
+    }
+  };
+
+  // Image Upload handler for Category
+  const handleCategoryImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    try {
+      const res = await api.uploadImage(file, 'categories');
+      if (res.url) {
+        setEditingCategory((prev) => ({ ...prev, image: res.url }));
+        showToast('Category image uploaded!');
+      }
+    } catch (err) {
+      showToast('Category image upload failed', 'error');
+    } finally {
+      setUploadingImage(false);
+      e.target.value = '';
     }
   };
 
@@ -1780,10 +1799,57 @@ function AdminPanelInner({
                             type="file"
                             accept="image/*"
                             style={{ display: 'none' }}
+                            disabled={uploadingBannerField === `desktop-${idx}`}
                             onChange={(e) => handleBannerImageUpload(idx, e.target.files?.[0], false)}
                           />
                         </label>
                       </div>
+
+                      {/* Desktop Live Preview */}
+                      {banner.image && (
+                        <div style={{
+                          marginTop: '0.5rem',
+                          position: 'relative',
+                          display: 'inline-block',
+                          maxWidth: '240px',
+                          borderRadius: 'var(--radius-md)',
+                          overflow: 'hidden',
+                          border: '2px solid var(--green-primary)',
+                          boxShadow: 'var(--shadow-sm)'
+                        }}>
+                          <img
+                            src={banner.image}
+                            alt={`Desktop Banner ${idx + 1}`}
+                            style={{ width: '100%', height: '80px', objectFit: 'cover', display: 'block' }}
+                            onError={(e) => { e.target.style.opacity = '0.3'; }}
+                          />
+                          <div style={{
+                            position: 'absolute', bottom: 0, left: 0, right: 0,
+                            background: 'rgba(11,59,36,0.88)', color: '#fff',
+                            fontSize: '0.58rem', fontWeight: 700, textAlign: 'center',
+                            padding: '2px 4px', letterSpacing: '0.04em'
+                          }}>
+                            🖥 DESKTOP BANNER
+                          </div>
+                          <button
+                            type="button"
+                            title="Remove desktop image"
+                            onClick={() => {
+                              const copy = [...settings.heroBanners];
+                              copy[idx].image = '';
+                              setSettings({ ...settings, heroBanners: copy });
+                            }}
+                            style={{
+                              position: 'absolute', top: '4px', right: '4px',
+                              background: 'rgba(220,38,38,0.9)', color: '#fff',
+                              border: 'none', borderRadius: '50%',
+                              width: '18px', height: '18px', cursor: 'pointer',
+                              fontSize: '0.65rem', display: 'flex', alignItems: 'center',
+                              justifyContent: 'center', fontWeight: 900
+                            }}
+                          >×</button>
+                        </div>
+                      )}
                     </div>
 
                     {/* Mobile Image Upload + URL */}
@@ -1824,10 +1890,57 @@ function AdminPanelInner({
                             type="file"
                             accept="image/*"
                             style={{ display: 'none' }}
+                            disabled={uploadingBannerField === `mobile-${idx}`}
                             onChange={(e) => handleBannerImageUpload(idx, e.target.files?.[0], true)}
                           />
                         </label>
                       </div>
+
+                      {/* Mobile Live Preview */}
+                      {banner.mobileImage && (
+                        <div style={{
+                          marginTop: '0.5rem',
+                          position: 'relative',
+                          display: 'inline-block',
+                          maxWidth: '120px',
+                          borderRadius: 'var(--radius-md)',
+                          overflow: 'hidden',
+                          border: '2px solid var(--accent-gold, #D4AF37)',
+                          boxShadow: 'var(--shadow-sm)'
+                        }}>
+                          <img
+                            src={banner.mobileImage}
+                            alt={`Mobile Banner ${idx + 1}`}
+                            style={{ width: '100%', height: '80px', objectFit: 'cover', display: 'block' }}
+                            onError={(e) => { e.target.style.opacity = '0.3'; }}
+                          />
+                          <div style={{
+                            position: 'absolute', bottom: 0, left: 0, right: 0,
+                            background: 'rgba(30,41,59,0.88)', color: '#fff',
+                            fontSize: '0.58rem', fontWeight: 700, textAlign: 'center',
+                            padding: '2px 4px', letterSpacing: '0.04em'
+                          }}>
+                            📱 MOBILE BANNER
+                          </div>
+                          <button
+                            type="button"
+                            title="Remove mobile image"
+                            onClick={() => {
+                              const copy = [...settings.heroBanners];
+                              copy[idx].mobileImage = '';
+                              setSettings({ ...settings, heroBanners: copy });
+                            }}
+                            style={{
+                              position: 'absolute', top: '4px', right: '4px',
+                              background: 'rgba(220,38,38,0.9)', color: '#fff',
+                              border: 'none', borderRadius: '50%',
+                              width: '18px', height: '18px', cursor: 'pointer',
+                              fontSize: '0.65rem', display: 'flex', alignItems: 'center',
+                              justifyContent: 'center', fontWeight: 900
+                            }}
+                          >×</button>
+                        </div>
+                      )}
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '1rem' }}>
@@ -3394,13 +3507,78 @@ function AdminPanelInner({
               </div>
 
               <div className="ksf-form-group">
-                <label className="ksf-form-label">Image URL</label>
-                <input
-                  type="text"
-                  className="ksf-input"
-                  value={editingCategory.image}
-                  onChange={(e) => setEditingCategory({ ...editingCategory, image: e.target.value })}
-                />
+                <label className="ksf-form-label">Category Image</label>
+                <div style={{ display: 'flex', gap: '0.45rem', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    className="ksf-input"
+                    value={editingCategory.image || ''}
+                    onChange={(e) => setEditingCategory({ ...editingCategory, image: e.target.value })}
+                    placeholder="Paste image URL or tap upload..."
+                    style={{ flex: 1, fontSize: '0.8rem' }}
+                  />
+                  <label
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      padding: '0.52rem 0.85rem',
+                      borderRadius: 'var(--radius-md)',
+                      background: 'var(--green-primary)',
+                      color: '#FFFFFF',
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      cursor: 'pointer',
+                      whiteSpace: 'nowrap',
+                      boxShadow: 'var(--shadow-sm)'
+                    }}
+                  >
+                    <Upload size={13} />
+                    <span>{uploadingImage ? 'Uploading...' : 'Upload'}</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      disabled={uploadingImage}
+                      onChange={handleCategoryImageUpload}
+                    />
+                  </label>
+                </div>
+
+                {/* Category Live Preview */}
+                {editingCategory.image && (
+                  <div style={{
+                    marginTop: '0.5rem',
+                    position: 'relative',
+                    display: 'inline-block',
+                    width: '100px',
+                    height: '75px',
+                    borderRadius: 'var(--radius-md)',
+                    overflow: 'hidden',
+                    border: '2px solid var(--green-primary)',
+                    boxShadow: 'var(--shadow-sm)'
+                  }}>
+                    <img
+                      src={editingCategory.image}
+                      alt="Category Preview"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                      onError={(e) => { e.target.style.opacity = '0.3'; }}
+                    />
+                    <button
+                      type="button"
+                      title="Remove category image"
+                      onClick={() => setEditingCategory({ ...editingCategory, image: '' })}
+                      style={{
+                        position: 'absolute', top: '3px', right: '3px',
+                        background: 'rgba(220,38,38,0.9)', color: '#fff',
+                        border: 'none', borderRadius: '50%',
+                        width: '18px', height: '18px', cursor: 'pointer',
+                        fontSize: '0.65rem', display: 'flex', alignItems: 'center',
+                        justifyContent: 'center', fontWeight: 900
+                      }}
+                    >×</button>
+                  </div>
+                )}
               </div>
 
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.5rem', marginTop: '1.25rem' }}>

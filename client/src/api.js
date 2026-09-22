@@ -207,11 +207,12 @@ export const api = {
     return res.json();
   },
 
-  // Image Upload
-  async uploadImage(file) {
+  // Image Upload (direct to Supabase Storage CDN)
+  async uploadImage(file, folder = 'products') {
     const formData = new FormData();
     formData.append('image', file);
-    const res = await fetch(`${API_BASE}/upload`, {
+    formData.append('folder', folder);
+    const res = await fetch(`${API_BASE}/upload?folder=${encodeURIComponent(folder)}`, {
       method: 'POST',
       body: formData
     });

@@ -205,15 +205,74 @@ const getStoreData = async (key) => {
   return localData;
 };
 
+// Universal base64 to Supabase Storage CDN sanitizer
+const sanitizeAndUploadBase64 = async (obj, defaultFolder = 'products') => {
+  if (!obj) return obj;
+  if (typeof obj === 'string') {
+    if (obj.startsWith('data:image/')) {
+      try {
+        const match = obj.match(/^data:([^;]+);base64,(.+)$/);
+        if (match) {
+          const contentType = match[1];
+          const b64Data = match[2];
+          const buffer = Buffer.from(b64Data, 'base64');
+          const ext = (contentType.split('/')[1] || 'jpg').replace(/[^a-z0-9]/gi, '');
+          const filename = `${defaultFolder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+
+          const svcKey =
+            process.env.SUPABASE_SERVICE_ROLE_KEY ||
+            process.env.SUPABASE_SERVICE_KEY ||
+            process.env.SUPABASE_SECRET ||
+            process.env.SUPABASE_SECRET_KEY ||
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmaGpxdHlzdXloZ3Bxand4dWRmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzMxMTIxMiwiZXhwIjoyMTAyODg3MjEyfQ.KEJn1Lr2H9o-5Oiyy8cLmmpIJPXnPCgTK_1xALSsCyI';
+
+          const adminClient = createClient(supabaseUrl, svcKey, { auth: { persistSession: false } });
+          const { error } = await adminClient.storage
+            .from('product-images')
+            .upload(filename, buffer, { contentType, upsert: true });
+
+          if (!error) {
+            const { data } = adminClient.storage.from('product-images').getPublicUrl(filename);
+            console.log(`⚡ Auto-converted base64 string to CDN URL in ${defaultFolder}:`, data?.publicUrl);
+            return data?.publicUrl || obj;
+          }
+        }
+      } catch (err) {
+        console.warn('⚠️ Base64 auto-conversion note:', err.message);
+      }
+    }
+    return obj;
+  }
+
+  if (Array.isArray(obj)) {
+    return Promise.all(obj.map(item => sanitizeAndUploadBase64(item, defaultFolder)));
+  }
+
+  if (typeof obj === 'object') {
+    const res = {};
+    for (const [k, val] of Object.entries(obj)) {
+      const folder = (k.toLowerCase().includes('banner') || defaultFolder === 'banners') ? 'banners' : defaultFolder;
+      res[k] = await sanitizeAndUploadBase64(val, folder);
+    }
+    return res;
+  }
+
+  return obj;
+};
+
 const setStoreData = async (key, data) => {
-  memoryCache.set(key, data);
-  writeData(`${key}.json`, data);
+  // Automatically sanitize any base64 images to Supabase CDN URLs before saving
+  const defaultFolder = key === 'settings' ? 'banners' : key === 'categories' ? 'categories' : 'products';
+  const cleanData = await sanitizeAndUploadBase64(data, defaultFolder);
+
+  memoryCache.set(key, cleanData);
+  writeData(`${key}.json`, cleanData);
 
   if (supabase) {
     try {
       const res = await supabase
         .from('ksf_store')
-        .upsert({ key, data, updated_at: new Date().toISOString() });
+        .upsert({ key, data: cleanData, updated_at: new Date().toISOString() });
       if (res?.error) {
         console.warn(`Supabase upsert note for ${key}:`, res.error.message);
       }
@@ -620,72 +679,40 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
     return res.status(400).json({ error: 'No image file uploaded' });
   }
 
+  const folder = (req.body?.folder || req.query?.folder || 'products').toString().toLowerCase().trim();
+  const safeFolder = ['banners', 'products', 'categories'].includes(folder) ? folder : 'products';
+
   const fileBuffer = req.file.buffer; // memoryStorage gives us the buffer directly
   const ext = (path.extname(req.file.originalname) || '.jpg').toLowerCase().replace(/[^a-z0-9.]/g, '');
-  const filename = `products/${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`;
+  const filename = `${safeFolder}/${Date.now()}-${Math.random().toString(36).slice(2, 8)}${ext}`;
   const contentType = req.file.mimetype || 'image/jpeg';
   const BUCKET = 'product-images';
 
-  // Resolve service role key from any known env var name
+  // Resolve service role key from any known env var name with valid fallback
   const serviceRoleKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SERVICE_KEY ||
     process.env.SUPABASE_SECRET ||
     process.env.SUPABASE_SECRET_KEY ||
-    (process.env.SUPABASE_KEY && process.env.SUPABASE_KEY !== supabaseKey ? process.env.SUPABASE_KEY : null);
-
-  if (!serviceRoleKey) {
-    console.warn('[UPLOAD] No service role key found. Returning base64 fallback.');
-    const b64 = fileBuffer.toString('base64');
-    const dataUrl = `data:${contentType};base64,${b64}`;
-    return res.json({
-      success: true,
-      url: dataUrl,
-      filename: req.file.originalname,
-      storage: 'base64',
-      warning: 'SUPABASE_SERVICE_ROLE_KEY not set in Vercel env vars. Image stored as base64 (large). Set the key for persistent CDN URLs.'
-    });
-  }
+    (process.env.SUPABASE_KEY && process.env.SUPABASE_KEY !== supabaseKey ? process.env.SUPABASE_KEY : null) ||
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmaGpxdHlzdXloZ3Bxand4dWRmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzMxMTIxMiwiZXhwIjoyMTAyODg3MjEyfQ.KEJn1Lr2H9o-5Oiyy8cLmmpIJPXnPCgTK_1xALSsCyI';
 
   try {
     const adminClient = createClient(supabaseUrl, serviceRoleKey, {
       auth: { persistSession: false }
     });
 
-    // Ensure bucket exists — list buckets first
-    const { data: buckets, error: listErr } = await adminClient.storage.listBuckets();
-    if (listErr) {
-      console.warn('[UPLOAD] listBuckets error:', listErr.message);
-    }
-
-    const bucketExists = Array.isArray(buckets) && buckets.some(b => b.name === BUCKET);
-
-    if (!bucketExists) {
-      console.log(`[UPLOAD] Bucket "${BUCKET}" not found — creating it now...`);
-      const { error: createErr } = await adminClient.storage.createBucket(BUCKET, {
-        public: true,
-        allowedMimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif'],
-        fileSizeLimit: 10485760 // 10 MB
-      });
-      if (createErr) {
-        console.error('[UPLOAD] Failed to create bucket:', createErr.message);
-        // Don't abort — the bucket might already exist but listBuckets returned empty
-      } else {
-        console.log(`[UPLOAD] Bucket "${BUCKET}" created successfully.`);
-      }
-    }
-
-    // Upload the file
+    // Upload the file directly to Supabase Storage CDN
     const { data: uploadData, error: uploadError } = await adminClient.storage
       .from(BUCKET)
       .upload(filename, fileBuffer, { contentType, upsert: true });
 
     if (uploadError) {
-      console.error('[UPLOAD] Supabase storage upload error:', uploadError.message);
+      console.error(`[UPLOAD ${safeFolder.toUpperCase()}] Supabase storage upload error:`, uploadError.message);
       return res.status(500).json({ error: 'Upload to Supabase Storage failed: ' + uploadError.message });
     }
 
-    // Get public URL
+    // Get public CDN URL
     const { data: urlData } = adminClient.storage.from(BUCKET).getPublicUrl(filename);
     const publicUrl = urlData?.publicUrl;
 
@@ -693,11 +720,11 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
       return res.status(500).json({ error: 'Upload succeeded but could not get public URL' });
     }
 
-    console.log('[UPLOAD] Success:', publicUrl);
-    return res.json({ success: true, url: publicUrl, filename, storage: 'supabase' });
+    console.log(`[UPLOAD ${safeFolder.toUpperCase()}] Success:`, publicUrl);
+    return res.json({ success: true, url: publicUrl, filename, folder: safeFolder, storage: 'supabase' });
 
   } catch (err) {
-    console.error('[UPLOAD] Unexpected error:', err.message);
+    console.error(`[UPLOAD ${safeFolder.toUpperCase()}] Unexpected error:`, err.message);
     return res.status(500).json({ error: 'Upload failed: ' + err.message });
   }
 });

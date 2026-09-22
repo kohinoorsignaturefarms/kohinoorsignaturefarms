@@ -77,13 +77,13 @@ export default function HeroSlider({ banners, onSelectCategory }) {
             const isActive = idx === currentIndex;
             return (
               <div key={slide.id || idx} className={`ksf-slide ${isActive ? 'active' : ''}`}>
-                {slide.image ? (
+                {(slide.image || slide.mobileImage) ? (
                   <picture className="ksf-slide-picture">
                     {slide.mobileImage && (
                       <source media="(max-width: 640px)" srcSet={slide.mobileImage} />
                     )}
                     <img
-                      src={slide.image}
+                      src={slide.image || slide.mobileImage}
                       alt={slide.title}
                       className="ksf-slide-bg"
                       loading={idx === 0 ? 'eager' : 'lazy'}
