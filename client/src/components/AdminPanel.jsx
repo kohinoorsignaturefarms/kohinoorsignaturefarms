@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   Package,
   Plus,
@@ -80,10 +80,23 @@ function AdminPanelInner({
     }
     return [];
   });
-  const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [toastMessage, setToastMessage] = useState(null);
+
+  // Compute average customer discount in real-time without extra API calls
+  const avgDiscount = useMemo(() => {
+    let total = 0, count = 0;
+    (products || []).forEach(p => {
+      (p.variants || []).forEach(v => {
+        if (v.mrp && v.sellingPrice && Number(v.mrp) > Number(v.sellingPrice)) {
+          total += ((Number(v.mrp) - Number(v.sellingPrice)) / Number(v.mrp)) * 100;
+          count++;
+        }
+      });
+    });
+    return count > 0 ? Math.round(total / count) : 16;
+  }, [products]);
 
   // Sync props when parent loads them
   useEffect(() => {
@@ -158,25 +171,37 @@ function AdminPanelInner({
   const loadAllData = async () => {
     setLoading(true);
     try {
-      const [prodRes, catRes, setRes, statRes, locRes] = await Promise.all([
-        api.getProducts().catch(() => []),
-        api.getCategories().catch(() => []),
-        api.getSettings().catch(() => ({})),
-        api.getStats().catch(() => null),
-        api.getLocations().catch(() => [])
-      ]);
-      if (Array.isArray(prodRes)) setProducts(prodRes);
-      if (Array.isArray(catRes)) setCategories(catRes);
-      if (setRes && typeof setRes === 'object') setSettings(setRes);
-      if (statRes) setStats(statRes);
-      if (Array.isArray(locRes) && locRes.length > 0) {
-        setLocations(locRes);
-      } else if (Array.isArray(setRes?.deliveryLocations)) {
-        setLocations(setRes.deliveryLocations);
+      // 1. Fast unified bootstrap fetch with cache bypass
+      const data = await api.getBootstrap({ bypassCache: true }).catch(() => null);
+      if (data && Array.isArray(data.products)) {
+        setProducts(data.products);
+        if (Array.isArray(data.categories)) setCategories(data.categories);
+        if (data.settings && typeof data.settings === 'object') setSettings(data.settings);
+        if (Array.isArray(data.locations) && data.locations.length > 0) {
+          setLocations(data.locations);
+        } else if (Array.isArray(data.settings?.deliveryLocations)) {
+          setLocations(data.settings.deliveryLocations);
+        }
+      } else {
+        // Fallback: parallel fetch
+        const [prodRes, catRes, setRes, locRes] = await Promise.all([
+          api.getProducts().catch(() => []),
+          api.getCategories().catch(() => []),
+          api.getSettings().catch(() => ({})),
+          api.getLocations().catch(() => [])
+        ]);
+        if (Array.isArray(prodRes)) setProducts(prodRes);
+        if (Array.isArray(catRes)) setCategories(catRes);
+        if (setRes && typeof setRes === 'object') setSettings(setRes);
+        if (Array.isArray(locRes) && locRes.length > 0) {
+          setLocations(locRes);
+        } else if (Array.isArray(setRes?.deliveryLocations)) {
+          setLocations(setRes.deliveryLocations);
+        }
       }
     } catch (err) {
       console.error('Error loading admin data:', err);
-      showToast('Error loading database', 'error');
+      showToast('Error syncing database', 'error');
     } finally {
       setLoading(false);
     }
@@ -756,29 +781,6 @@ function AdminPanelInner({
         </div>
       )}
 
-      {/* Full-screen initial data loading overlay */}
-      {loading && (
-        <div style={{
-          position: 'fixed',
-          inset: 0,
-          zIndex: 9998,
-          background: 'rgba(5, 26, 16, 0.72)',
-          backdropFilter: 'blur(4px)',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: '1rem'
-        }}>
-          <RefreshCw size={44} color="#D4AF37" className="animate-spin" />
-          <div style={{ color: '#fff', fontFamily: 'var(--font-cinzel)', fontWeight: 700, fontSize: '1rem', letterSpacing: '0.04em' }}>
-            Loading Farm Data...
-          </div>
-          <div style={{ color: 'rgba(255,255,255,0.65)', fontSize: '0.8rem' }}>
-            Syncing products, settings & analytics
-          </div>
-        </div>
-      )}
 
       {/* Saving overlay — shown during any save/delete API call */}
       {isSaving && (
@@ -2053,7 +2055,7 @@ function AdminPanelInner({
                   </div>
                   <div>
                     <div style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--gold-dark)', lineHeight: 1.1 }}>
-                      {stats?.avgDiscount || '16'}%
+                      {avgDiscount}%
                     </div>
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: 600, marginTop: '0.2rem' }}>
                       Avg Customer Savings

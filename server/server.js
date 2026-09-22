@@ -123,43 +123,84 @@ if (supabaseUrl && supabaseKey) {
 // In-memory cache for ultra-fast response times (<1ms)
 const memoryCache = new Map();
 
+// High-speed bulk cache priming with timeout protection (<200ms)
+let isPriming = false;
+const primeCache = async () => {
+  if (memoryCache.size >= 4) return;
+  if (isPriming) return;
+  isPriming = true;
+
+  if (supabase) {
+    try {
+      const queryPromise = supabase
+        .from('ksf_store')
+        .select('key, data')
+        .in('key', ['products', 'categories', 'settings', 'delivery_locations']);
+      
+      const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Supabase query timeout')), 2500)
+      );
+
+      const res = await Promise.race([queryPromise, timeoutPromise]);
+
+      if (res && !res.error && Array.isArray(res.data)) {
+        res.data.forEach(row => {
+          if (row.key && row.data) {
+            memoryCache.set(row.key, row.data);
+          }
+        });
+      }
+    } catch (err) {
+      console.warn('⚠️ Supabase cache prime notice:', err.message);
+    }
+  }
+
+  // Fallback to local files for any missing keys
+  ['products', 'categories', 'settings', 'delivery_locations'].forEach(k => {
+    if (!memoryCache.has(k)) {
+      const local = readData(`${k}.json`) || (k === 'delivery_locations' ? readData('locations.json') : null);
+      if (local) memoryCache.set(k, local);
+    }
+  });
+
+  isPriming = false;
+};
+
 // Helper functions for reading & writing JSON with Supabase Cloud Sync
 const getStoreData = async (key) => {
   if (memoryCache.has(key)) {
     return memoryCache.get(key);
   }
 
-  // 1. Query Supabase
+  // 1. Prime cache in bulk
+  await primeCache();
+  if (memoryCache.has(key)) {
+    return memoryCache.get(key);
+  }
+
+  // 2. Direct single query with 2s timeout
   if (supabase) {
     try {
-      const { data, error } = await supabase
+      const queryPromise = supabase
         .from('ksf_store')
         .select('data')
         .eq('key', key)
         .single();
-
-      if (!error && data && data.data) {
-        memoryCache.set(key, data.data);
-        return data.data;
+      const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 2000));
+      const res = await Promise.race([queryPromise, timeoutPromise]);
+      if (res && !res.error && res.data?.data) {
+        memoryCache.set(key, res.data.data);
+        return res.data.data;
       }
     } catch (err) {
       // Graceful fallback to local JSON
     }
   }
 
-  // 2. Fallback to local JSON file
-  const localData = readData(`${key}.json`);
+  // 3. Fallback to local JSON file
+  const localData = readData(`${key}.json`) || (key === 'delivery_locations' ? readData('locations.json') : null);
   if (localData !== null) {
     memoryCache.set(key, localData);
-    if (supabase) {
-      supabase
-        .from('ksf_store')
-        .upsert({ key, data: localData, updated_at: new Date().toISOString() })
-        .then(
-          () => {},
-          (err) => {}
-        );
-    }
   }
   return localData;
 };
@@ -187,8 +228,44 @@ const setStoreData = async (key, data) => {
 // API ROUTES
 // ------------------------------------
 
+// 0. BOOTSTRAP API — High-speed unified initialization endpoint with Edge Caching
+app.get('/api/bootstrap', async (req, res) => {
+  if (!req.query.t) {
+    res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  } else {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+  }
+
+  await primeCache();
+
+  const [products, categories, settings, locations] = await Promise.all([
+    getStoreData('products'),
+    getStoreData('categories'),
+    getStoreData('settings'),
+    getStoreData('delivery_locations')
+  ]);
+
+  const safeSettings = { ...(settings || {}) };
+  if (Array.isArray(locations) && locations.length > 0) {
+    safeSettings.deliveryLocations = locations;
+  }
+  const hasCustomPin = Boolean(safeSettings.adminPin);
+  delete safeSettings.adminPin;
+  safeSettings.hasCustomPin = hasCustomPin;
+
+  res.json({
+    products: products || [],
+    categories: categories || [],
+    settings: safeSettings,
+    locations: locations || []
+  });
+});
+
 // 1. SETTINGS API
 app.get('/api/settings', async (req, res) => {
+  if (!req.query.t) {
+    res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  }
   const settings = (await getStoreData('settings')) || {};
   const locations = await getStoreData('delivery_locations');
   if (Array.isArray(locations) && locations.length > 0) {
@@ -227,6 +304,9 @@ app.post('/api/auth/verify-pin', async (req, res) => {
 
 // 2. CATEGORIES API
 app.get('/api/categories', async (req, res) => {
+  if (!req.query.t) {
+    res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  }
   const categories = (await getStoreData('categories')) || [];
   res.json(categories);
 });
@@ -291,11 +371,17 @@ const saveDeliveryLocationsData = async (locations) => {
 };
 
 app.get('/api/locations', async (req, res) => {
+  if (!req.query.t) {
+    res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  }
   const locations = await getDeliveryLocationsData();
   res.json(locations);
 });
 
 app.get('/api/delivery-locations', async (req, res) => {
+  if (!req.query.t) {
+    res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  }
   const locations = await getDeliveryLocationsData();
   res.json(locations);
 });
@@ -399,6 +485,9 @@ app.patch('/api/locations/:id/toggle', async (req, res) => {
 
 // 3. PRODUCTS API
 app.get('/api/products', async (req, res) => {
+  if (!req.query.t) {
+    res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
+  }
   let products = (await getStoreData('products')) || [];
   const { category, search, inStock, badge } = req.query;
 

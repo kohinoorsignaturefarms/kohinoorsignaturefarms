@@ -13,11 +13,21 @@ import LocationModal from './components/LocationModal';
 import { api, formatCurrency, DEFAULT_DELIVERY_LOCATIONS } from './api';
 import { Sparkles, MessageCircle, AlertCircle, RefreshCw, Settings, ShieldCheck, ShoppingBag, ArrowRight } from 'lucide-react';
 
+// Read cached catalog from localStorage for instant, zero-delay initial render (<1ms)
+const getCachedBootstrap = () => {
+  try {
+    const raw = localStorage.getItem('ksf_cached_bootstrap');
+    if (raw) return JSON.parse(raw);
+  } catch (e) {}
+  return null;
+};
+const cachedBootstrap = getCachedBootstrap();
+
 export default function App() {
-  const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [settings, setSettings] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(() => cachedBootstrap?.products || []);
+  const [categories, setCategories] = useState(() => cachedBootstrap?.categories || []);
+  const [settings, setSettings] = useState(() => cachedBootstrap?.settings || null);
+  const [loading, setLoading] = useState(() => !(cachedBootstrap?.products?.length > 0));
   const [error, setError] = useState(null);
 
   // Delivery Location State (Persisted in localStorage)
@@ -165,27 +175,65 @@ export default function App() {
   const [isAdminOpen, setIsAdminOpen] = useState(checkIsAdminRoute);
   const [currentPage, setCurrentPage] = useState(() => checkIsAboutRoute() ? 'about' : 'store');
 
-  // Fetch initial data from REST API backend ONCE
-  const fetchData = useCallback(async () => {
-    setLoading(true);
+  // Fetch initial data from unified bootstrap endpoint (or background refresh)
+  const fetchData = useCallback(async (bypassCache = false) => {
+    // Only show full loading spinner if we have zero products currently on screen
+    setProducts((curr) => {
+      if (!curr || curr.length === 0) setLoading(true);
+      return curr;
+    });
     setError(null);
+
     try {
+      // 1. High-speed unified bootstrap endpoint (1 request instead of 4)
+      const data = await api.getBootstrap({ bypassCache }).catch(() => null);
+      if (data && Array.isArray(data.products) && data.products.length > 0) {
+        setProducts(data.products);
+        if (Array.isArray(data.categories)) setCategories(data.categories);
+        if (data.settings && typeof data.settings === 'object') {
+          const merged = { ...data.settings };
+          if (Array.isArray(data.locations) && data.locations.length > 0) {
+            merged.deliveryLocations = data.locations;
+          }
+          setSettings(merged);
+        }
+        try {
+          localStorage.setItem('ksf_cached_bootstrap', JSON.stringify(data));
+        } catch (e) {}
+        setLoading(false);
+        return;
+      }
+
+      // 2. Fallback: individual endpoints if bootstrap not reachable
       const [prodRes, catRes, setRes, locRes] = await Promise.all([
         api.getProducts().catch(() => []),
         api.getCategories().catch(() => []),
         api.getSettings().catch(() => ({})),
         api.getLocations().catch(() => [])
       ]);
-      setProducts(prodRes || []);
-      setCategories(catRes || []);
+      if (Array.isArray(prodRes) && prodRes.length > 0) setProducts(prodRes);
+      if (Array.isArray(catRes) && catRes.length > 0) setCategories(catRes);
       const mergedSettings = setRes || {};
       if (Array.isArray(locRes) && locRes.length > 0) {
         mergedSettings.deliveryLocations = locRes;
       }
       setSettings(mergedSettings);
+      try {
+        localStorage.setItem('ksf_cached_bootstrap', JSON.stringify({
+          products: prodRes,
+          categories: catRes,
+          settings: mergedSettings,
+          locations: locRes
+        }));
+      } catch (e) {}
     } catch (err) {
       console.error('Error fetching farm data:', err);
-      setError('Unable to connect to farm server. Please check your connection.');
+      setProducts((curr) => {
+        if (!curr || curr.length === 0) {
+          setError('Unable to connect to farm server. Please check your connection.');
+        }
+        return curr;
+      });
     } finally {
       setLoading(false);
     }
@@ -334,7 +382,7 @@ export default function App() {
         initialProducts={products}
         initialCategories={categories}
         initialSettings={settings}
-        onDataRefresh={fetchData}
+        onDataRefresh={() => fetchData(true)}
       />
     );
   }

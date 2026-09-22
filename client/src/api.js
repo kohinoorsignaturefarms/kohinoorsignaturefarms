@@ -16,6 +16,14 @@ export const getOrCreateVisitorId = () => {
 };
 
 export const api = {
+  // Bootstrap: unified single fetch for catalog, categories, settings, locations
+  async getBootstrap(options = {}) {
+    const url = options.bypassCache ? `${API_BASE}/bootstrap?t=${Date.now()}` : `${API_BASE}/bootstrap`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error('Failed to fetch bootstrap data');
+    return res.json();
+  },
+
   // Products
   async getProducts(params = {}) {
     const query = new URLSearchParams();
