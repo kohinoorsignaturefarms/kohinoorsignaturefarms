@@ -51,9 +51,9 @@ export default function ProductCard({
     selectedLocation
   );
 
-  const mainImage = product.images && product.images.length > 0
-    ? product.images[0]
-    : 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80';
+  const mainImage = product.images && product.images.filter(Boolean).length > 0
+    ? product.images.filter(Boolean)[0]
+    : null;
 
   const handleAdd = (e) => {
     e.stopPropagation();
@@ -74,12 +74,40 @@ export default function ProductCard({
     <div className={`ksf-product-card animate-fade-in ${isProductOutOfStock ? 'ksf-card-out-of-stock' : ''}`}>
       {/* Media Image & Badges */}
       <div className="ksf-prod-media" onClick={() => onOpenDetail(product)} style={{ cursor: 'pointer' }}>
-        <img
-          src={mainImage}
-          alt={product.name}
-          className="ksf-prod-img"
-          loading="lazy"
-        />
+        {mainImage ? (
+          <>
+            <img
+              src={mainImage}
+              alt={product.name}
+              className="ksf-prod-img"
+              loading="lazy"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                if (e.target.nextSibling) e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+            <div className="ksf-prod-img" style={{
+              display: 'none', flexDirection: 'column',
+              alignItems: 'center', justifyContent: 'center',
+              background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+              gap: '0.3rem'
+            }}>
+              <span style={{ fontSize: '2rem' }}>🐐</span>
+              <span style={{ fontSize: '0.62rem', color: 'var(--green-primary)', fontWeight: 600, opacity: 0.6 }}>Photo soon</span>
+            </div>
+          </>
+        ) : (
+          <div className="ksf-prod-img" style={{
+            display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+            gap: '0.3rem'
+          }}>
+            <span style={{ fontSize: '2rem' }}>🐐</span>
+            <span style={{ fontSize: '0.62rem', color: 'var(--green-primary)', fontWeight: 600, opacity: 0.6 }}>Photo soon</span>
+          </div>
+        )}
+
 
         {/* Status Overlay if Sold Out */}
         {(isProductOutOfStock || activeVariant?.inStock === false) && (

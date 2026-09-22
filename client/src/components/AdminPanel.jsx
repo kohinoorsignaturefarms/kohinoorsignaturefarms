@@ -361,26 +361,34 @@ function AdminPanelInner({
     }
   };
 
-  // Image Upload handler for Product
+  // Image Upload handler for Product (appends to array, max 5 images)
   const handleProductImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
+    const currentImages = editingProduct?.images || [];
+    if (currentImages.length >= 5) {
+      showToast('Maximum 5 images allowed per product', 'error');
+      return;
+    }
     setUploadingImage(true);
     try {
       const res = await api.uploadImage(file);
       if (res.url) {
         setEditingProduct((prev) => ({
           ...prev,
-          images: [res.url, ...(prev.images || [])]
+          images: [...(prev.images || []).slice(0, 4), res.url]
         }));
-        showToast('Image uploaded successfully!');
+        showToast('Image uploaded!');
       }
     } catch (err) {
       showToast('Image upload failed', 'error');
     } finally {
       setUploadingImage(false);
+      // Reset input so same file can be re-uploaded
+      e.target.value = '';
     }
   };
+
 
   // Image Upload handler for Hero Banners
   const handleBannerImageUpload = async (bannerIdx, file, isMobile = false) => {
@@ -3053,118 +3061,167 @@ function AdminPanelInner({
                 </div>
               </div>
 
-              {/* Images & Badges */}
-              <div className="ksf-admin-grid-2col">
-                <div className="ksf-form-group">
-                  <label className="ksf-form-label">Primary Image URL</label>
-                  <input
-                    type="text"
-                    className="ksf-input"
-                    value={editingProduct.images?.[0] || ''}
-                    onChange={(e) => setEditingProduct({ ...editingProduct, images: [e.target.value] })}
-                    placeholder="https://..."
-                  />
-                  <div style={{ marginTop: '0.4rem' }}>
-                    <label
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '0.4rem',
-                        fontSize: '0.775rem',
-                        fontWeight: 700,
-                        color: 'var(--green-primary)',
-                        cursor: uploadingImage ? 'not-allowed' : 'pointer',
-                        opacity: uploadingImage ? 0.7 : 1
-                      }}
-                    >
-                      <Upload size={14} />
-                      <span>{uploadingImage ? 'Uploading...' : 'Or Upload Local Image'}</span>
-                      <input type="file" accept="image/*" style={{ display: 'none' }} disabled={uploadingImage} onChange={handleProductImageUpload} />
-                    </label>
-                  </div>
-
-                  {/* Live preview of primary image */}
-                  {editingProduct.images?.[0] && (
-                    <div style={{
-                      marginTop: '0.6rem',
-                      position: 'relative',
-                      display: 'inline-block',
+              {/* Product Image Gallery — up to 5 images */}
+              <div className="ksf-form-group" style={{ marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <label className="ksf-form-label" style={{ margin: 0 }}>
+                    Product Images
+                    <span style={{ fontWeight: 400, color: 'var(--text-muted)', marginLeft: '0.4rem', fontSize: '0.72rem' }}>
+                      ({(editingProduct.images || []).length}/5) — First image is shown on cards
+                    </span>
+                  </label>
+                  {/* Add Image button */}
+                  {(editingProduct.images || []).length < 5 && (
+                    <label style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      fontSize: '0.775rem',
+                      fontWeight: 700,
+                      color: uploadingImage ? 'var(--text-muted)' : 'var(--green-primary)',
+                      cursor: uploadingImage ? 'not-allowed' : 'pointer',
+                      opacity: uploadingImage ? 0.65 : 1,
+                      background: 'var(--green-light-bg)',
+                      border: '1.5px dashed var(--green-primary)',
                       borderRadius: 'var(--radius-md)',
-                      overflow: 'hidden',
-                      border: '2px solid var(--green-primary)',
-                      boxShadow: '0 2px 8px rgba(11,59,36,0.15)'
+                      padding: '0.35rem 0.75rem',
+                      transition: 'all 0.15s'
                     }}>
-                      <img
-                        src={editingProduct.images[0]}
-                        alt="Product preview"
-                        style={{
-                          display: 'block',
-                          width: '160px',
-                          height: '100px',
-                          objectFit: 'cover'
-                        }}
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          e.target.nextSibling.style.display = 'flex';
-                        }}
+                      <Upload size={13} />
+                      <span>{uploadingImage ? 'Uploading...' : '+ Add Image'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        disabled={uploadingImage}
+                        onChange={handleProductImageUpload}
                       />
-                      <div style={{
-                        display: 'none',
-                        width: '160px',
-                        height: '100px',
-                        background: 'var(--bg-subtle)',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.72rem',
-                        color: 'var(--text-muted)',
-                        textAlign: 'center',
-                        padding: '0.5rem'
-                      }}>
-                        ⚠️ Image not reachable
-                      </div>
-                      <button
-                        type="button"
-                        title="Remove image"
-                        onClick={() => setEditingProduct({ ...editingProduct, images: [] })}
-                        style={{
-                          position: 'absolute',
-                          top: '4px',
-                          right: '4px',
-                          background: 'rgba(220,38,38,0.9)',
-                          color: '#fff',
-                          border: 'none',
-                          borderRadius: '50%',
-                          width: '20px',
-                          height: '20px',
-                          cursor: 'pointer',
-                          fontSize: '0.7rem',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontWeight: 900,
-                          lineHeight: 1
-                        }}
-                      >×</button>
-                      <div style={{
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        background: 'rgba(11,59,36,0.75)',
-                        color: '#fff',
-                        fontSize: '0.6rem',
-                        fontWeight: 700,
-                        textAlign: 'center',
-                        padding: '2px 4px',
-                        letterSpacing: '0.04em'
-                      }}>PRIMARY IMAGE</div>
-                    </div>
+                    </label>
+                  )}
+                  {(editingProduct.images || []).length >= 5 && (
+                    <span style={{ fontSize: '0.72rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
+                      Max 5 reached
+                    </span>
                   )}
                 </div>
 
+                {/* Image Grid */}
+                <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
+                  {(editingProduct.images || []).map((imgUrl, idx) => (
+                    <div key={idx} style={{
+                      position: 'relative',
+                      width: '110px',
+                      borderRadius: 'var(--radius-md)',
+                      overflow: 'hidden',
+                      border: idx === 0 ? '2.5px solid var(--green-primary)' : '1.5px solid var(--border-light)',
+                      boxShadow: idx === 0 ? '0 2px 8px rgba(11,59,36,0.18)' : '0 1px 4px rgba(0,0,0,0.07)',
+                      flexShrink: 0
+                    }}>
+                      <img
+                        src={imgUrl}
+                        alt={`Product image ${idx + 1}`}
+                        style={{ display: 'block', width: '110px', height: '80px', objectFit: 'cover' }}
+                        onError={(e) => { e.target.style.opacity = 0.3; }}
+                      />
 
-                <div className="ksf-form-group">
-                  <label className="ksf-form-label">Badges & Labels</label>
+                      {/* Label: Primary / #2 / #3 etc */}
+                      <div style={{
+                        position: 'absolute', bottom: 0, left: 0, right: 0,
+                        background: idx === 0 ? 'rgba(11,59,36,0.82)' : 'rgba(0,0,0,0.55)',
+                        color: '#fff', fontSize: '0.58rem', fontWeight: 700,
+                        textAlign: 'center', padding: '2px 4px', letterSpacing: '0.04em'
+                      }}>
+                        {idx === 0 ? '★ PRIMARY' : `#${idx + 1}`}
+                      </div>
+
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        title="Remove"
+                        onClick={() => {
+                          const updated = (editingProduct.images || []).filter((_, i) => i !== idx);
+                          setEditingProduct({ ...editingProduct, images: updated });
+                        }}
+                        style={{
+                          position: 'absolute', top: '3px', right: '3px',
+                          background: 'rgba(220,38,38,0.9)', color: '#fff',
+                          border: 'none', borderRadius: '50%',
+                          width: '18px', height: '18px', cursor: 'pointer',
+                          fontSize: '0.65rem', display: 'flex', alignItems: 'center',
+                          justifyContent: 'center', fontWeight: 900, lineHeight: 1
+                        }}
+                      >×</button>
+
+                      {/* Move Left (make primary) */}
+                      {idx > 0 && (
+                        <button
+                          type="button"
+                          title="Move left"
+                          onClick={() => {
+                            const imgs = [...(editingProduct.images || [])];
+                            [imgs[idx - 1], imgs[idx]] = [imgs[idx], imgs[idx - 1]];
+                            setEditingProduct({ ...editingProduct, images: imgs });
+                          }}
+                          style={{
+                            position: 'absolute', top: '3px', left: '3px',
+                            background: 'rgba(11,59,36,0.85)', color: '#fff',
+                            border: 'none', borderRadius: '50%',
+                            width: '18px', height: '18px', cursor: 'pointer',
+                            fontSize: '0.65rem', display: 'flex', alignItems: 'center',
+                            justifyContent: 'center', lineHeight: 1
+                          }}
+                        >‹</button>
+                      )}
+                    </div>
+                  ))}
+
+                  {/* Empty slots as visual placeholders */}
+                  {Array.from({ length: Math.max(0, 5 - (editingProduct.images || []).length) }).map((_, i) => (
+                    <div key={`empty-${i}`} style={{
+                      width: '110px', height: '80px',
+                      borderRadius: 'var(--radius-md)',
+                      border: '1.5px dashed var(--border-light)',
+                      background: 'var(--bg-subtle)',
+                      display: 'flex', flexDirection: 'column',
+                      alignItems: 'center', justifyContent: 'center',
+                      color: 'var(--text-muted)', fontSize: '0.65rem',
+                      gap: '0.2rem', flexShrink: 0
+                    }}>
+                      <span style={{ fontSize: '1.1rem', opacity: 0.4 }}>🖼</span>
+                      <span>Slot {(editingProduct.images || []).length + i + 1}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {/* URL paste fallback for slot 1 */}
+                <div style={{ marginTop: '0.5rem' }}>
+                  <input
+                    type="text"
+                    className="ksf-input"
+                    value=""
+                    placeholder="Or paste an image URL and press Enter to add..."
+                    style={{ fontSize: '0.78rem' }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const url = e.target.value.trim();
+                        if (!url) return;
+                        const curr = editingProduct.images || [];
+                        if (curr.length >= 5) { showToast('Max 5 images', 'error'); return; }
+                        setEditingProduct({ ...editingProduct, images: [...curr, url] });
+                        e.target.value = '';
+                      }
+                    }}
+                  />
+                  <small style={{ color: 'var(--text-muted)', fontSize: '0.7rem' }}>
+                    Press Enter to add a URL • Click ‹ on any image to make it Primary
+                  </small>
+                </div>
+              </div>
+
+              {/* Badges & Labels */}
+              <div className="ksf-form-group">
+                <label className="ksf-form-label">Badges &amp; Labels</label>
 
                   {/* Best Seller quick toggle — sets isBestSeller flag (not a visible badge) */}
                   {(() => {
@@ -3248,9 +3305,8 @@ function AdminPanelInner({
                     style={{ fontSize: '0.82rem' }}
                   />
                 </div>
-              </div>
 
-              {/* Action Buttons */}
+                {/* Action Buttons */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '0.75rem', borderTop: '1px solid var(--border-light)', paddingTop: '1rem', marginTop: '0.5rem' }}>
                 <button
                   type="button"

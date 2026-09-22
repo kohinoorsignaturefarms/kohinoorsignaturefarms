@@ -67,9 +67,10 @@ export default function ProductDetailPage({
     selectedLocation
   );
 
-  const images = product.images && product.images.length > 0
-    ? product.images
-    : ['https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=1200&q=80'];
+  const images = product.images && product.images.filter(Boolean).length > 0
+    ? product.images.filter(Boolean)
+    : [];
+
 
   const fssaiNo = product.fssaiNumber || storeSettings?.masterFssai || '13624014000889';
 
@@ -124,14 +125,51 @@ export default function ProductDetailPage({
           <div className="ksf-detail-left-pane">
             <div className="ksf-detail-gallery">
               <div style={{ position: 'relative', width: '100%', overflow: 'hidden', borderRadius: 'var(--radius-lg)' }}>
-                <img
-                  src={images[activeImageIdx] || images[0]}
-                  alt={product.name}
-                  className="ksf-detail-main-img"
-                  style={{
-                    filter: isOutOfStock ? 'grayscale(15%)' : 'none'
-                  }}
-                />
+                {images.length > 0 ? (
+                  <>
+                    <img
+                      src={images[activeImageIdx] || images[0]}
+                      alt={product.name}
+                      className="ksf-detail-main-img"
+                      style={{
+                        filter: isOutOfStock ? 'grayscale(15%)' : 'none'
+                      }}
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        if (e.target.nextSibling) e.target.nextSibling.style.display = 'flex';
+                      }}
+                    />
+                    <div className="ksf-detail-main-img" style={{
+                      display: 'none',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+                      gap: '0.5rem',
+                      filter: isOutOfStock ? 'grayscale(40%)' : 'none'
+                    }}>
+                      <span style={{ fontSize: '2.5rem' }}>🐐</span>
+                      <span style={{ fontSize: '0.75rem', color: 'var(--green-primary)', fontWeight: 600, opacity: 0.7 }}>
+                        Image could not be loaded
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="ksf-detail-main-img" style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+                    gap: '0.5rem',
+                    filter: isOutOfStock ? 'grayscale(40%)' : 'none'
+                  }}>
+                    <span style={{ fontSize: '2.5rem' }}>🐐</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--green-primary)', fontWeight: 600, opacity: 0.7 }}>
+                      Image coming soon
+                    </span>
+                  </div>
+                )}
 
                 {isOutOfStock && (
                   <div className="ksf-detail-out-of-stock-overlay">
@@ -139,6 +177,7 @@ export default function ProductDetailPage({
                   </div>
                 )}
               </div>
+
 
               {images.length > 1 && (
                 <div style={{ display: 'flex', gap: '0.45rem', overflowX: 'auto', paddingBottom: '0.2rem' }}>
@@ -148,6 +187,7 @@ export default function ProductDetailPage({
                       src={img}
                       alt={`${product.name} thumbnail ${idx + 1}`}
                       onClick={() => setActiveImageIdx(idx)}
+                      onError={(e) => { e.target.style.opacity = '0.3'; }}
                       style={{
                         width: '56px',
                         height: '56px',
