@@ -207,15 +207,9 @@ export const api = {
       method: 'POST',
       body: formData
     });
-    if (!res.ok) {
-      // Throw with server body so caller can display the actionable fix
-      let body = {};
-      try { body = await res.json(); } catch(_) {}
-      throw new Error(JSON.stringify(body));
-    }
+    if (!res.ok) throw new Error('Image upload failed');
     return res.json();
   },
-
 
   // ─── Analytics & Order Tracking ───────────────────────────────────────────
 

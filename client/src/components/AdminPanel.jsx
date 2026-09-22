@@ -365,33 +365,18 @@ function AdminPanelInner({
   const handleProductImageUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    // Reset input so same file can be re-selected after a failed upload
-    e.target.value = '';
     setUploadingImage(true);
     try {
       const res = await api.uploadImage(file);
       if (res.url) {
         setEditingProduct((prev) => ({
           ...prev,
-          images: [res.url, ...(prev.images || []).filter(u => u !== res.url)]
+          images: [res.url, ...(prev.images || [])]
         }));
-        if (res.storage === 'local') {
-          showToast('⚠️ Image saved locally only — not visible on live site. Create Supabase bucket.', 'error');
-        } else {
-          showToast(`✅ Image uploaded to CDN (${res.storage || 'supabase'})!`);
-        }
-      } else {
-        showToast('Upload returned no URL — check Supabase bucket setup', 'error');
+        showToast('Image uploaded successfully!');
       }
     } catch (err) {
-      // Try to extract server error message
-      let msg = 'Image upload failed';
-      try {
-        const errData = JSON.parse(err.message || '{}');
-        if (errData.fix) msg = errData.fix;
-        else if (errData.error) msg = errData.error;
-      } catch(_) {}
-      showToast(msg, 'error');
+      showToast('Image upload failed', 'error');
     } finally {
       setUploadingImage(false);
     }
