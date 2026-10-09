@@ -223,8 +223,11 @@ const sanitizeAndUploadBase64 = async (obj, defaultFolder = 'products') => {
             process.env.SUPABASE_SERVICE_ROLE_KEY ||
             process.env.SUPABASE_SERVICE_KEY ||
             process.env.SUPABASE_SECRET ||
-            process.env.SUPABASE_SECRET_KEY ||
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmaGpxdHlzdXloZ3Bxand4dWRmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzMxMTIxMiwiZXhwIjoyMTAyODg3MjEyfQ.KEJn1Lr2H9o-5Oiyy8cLmmpIJPXnPCgTK_1xALSsCyI';
+            process.env.SUPABASE_SECRET_KEY;
+          if (!svcKey) {
+            console.warn('⚠️ [sanitize] SUPABASE_SERVICE_ROLE_KEY not set — skipping base64 auto-conversion');
+            return obj;
+          }
 
           const adminClient = createClient(supabaseUrl, svcKey, { auth: { persistSession: false } });
           const { error } = await adminClient.storage
@@ -688,14 +691,18 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
   const contentType = req.file.mimetype || 'image/jpeg';
   const BUCKET = 'product-images';
 
-  // Resolve service role key from any known env var name with valid fallback
+  // Resolve service role key from environment variables only — never hardcode secrets
   const serviceRoleKey =
     process.env.SUPABASE_SERVICE_ROLE_KEY ||
     process.env.SUPABASE_SERVICE_KEY ||
     process.env.SUPABASE_SECRET ||
     process.env.SUPABASE_SECRET_KEY ||
-    (process.env.SUPABASE_KEY && process.env.SUPABASE_KEY !== supabaseKey ? process.env.SUPABASE_KEY : null) ||
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlmaGpxdHlzdXloZ3Bxand4dWRmIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NzMxMTIxMiwiZXhwIjoyMTAyODg3MjEyfQ.KEJn1Lr2H9o-5Oiyy8cLmmpIJPXnPCgTK_1xALSsCyI';
+    (process.env.SUPABASE_KEY && process.env.SUPABASE_KEY !== supabaseKey ? process.env.SUPABASE_KEY : null);
+
+  if (!serviceRoleKey) {
+    console.error('[UPLOAD] SUPABASE_SERVICE_ROLE_KEY is not set in environment variables.');
+    return res.status(500).json({ error: 'Server misconfiguration: storage service key not set. Contact admin.' });
+  }
 
   try {
     const adminClient = createClient(supabaseUrl, serviceRoleKey, {
