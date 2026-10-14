@@ -1,5 +1,5 @@
 import React from 'react';
-import { Search, MessageCircle, X, ShoppingBag, MapPin, ChevronDown } from 'lucide-react';
+import { Search, X, ShoppingBag, MapPin, ChevronDown } from 'lucide-react';
 import { InstagramIcon, XIcon, FacebookIcon, YouTubeIcon } from './SocialIcons';
 import { DEFAULT_SOCIAL_LINKS } from '../api';
 
@@ -15,13 +15,6 @@ export default function Header({
   selectedLocation,
   onOpenLocationModal
 }) {
-  const whatsappNumber = (storeSettings?.whatsappNumber || '919876543210').replace(/[^0-9]/g, '');
-  const locationMsg = selectedLocation?.name 
-    ? `Hello Kohinoor Signature Farms! I would like to inquire about today's available fresh cuts for delivery to ${selectedLocation.name}.`
-    : 'Hello Kohinoor Signature Farms! I would like to inquire about today\'s available fresh farm cuts.';
-
-  const farmWhatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(locationMsg)}`;
-
   const socialLinks = {
     ...DEFAULT_SOCIAL_LINKS,
     ...(storeSettings?.socialLinks || {})
@@ -106,19 +99,6 @@ export default function Header({
               </div>
               <span className="ksf-header-cart-label">Basket</span>
             </button>
-
-            {/* Direct WhatsApp Action */}
-            <a
-              href={farmWhatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-whatsapp-header"
-              title="Order on WhatsApp"
-              aria-label="Order on WhatsApp"
-            >
-              <MessageCircle size={17} />
-              <span className="ksf-header-wa-label">WhatsApp Order</span>
-            </a>
           </div>
         </div>
 
