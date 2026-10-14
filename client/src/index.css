@@ -210,31 +210,10 @@ input, select, textarea {
   word-break: break-word;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .ksf-announcement {
-    font-size: 0.64rem;
-    padding: 0.26rem 0.5rem;
-    line-height: 1.25;
-    gap: 0.3rem;
-  }
-
-  .ksf-announcement svg {
-    width: 10px;
-    height: 10px;
-  }
-}
-
-@media (max-width: 480px) {
-  .ksf-announcement {
-    font-size: 0.58rem;
-    padding: 0.22rem 0.4rem;
-    line-height: 1.2;
-    letter-spacing: 0.01em;
-  }
-
-  .ksf-announcement svg {
-    width: 9px;
-    height: 9px;
+    font-size: 0.7rem;
+    padding: 0.35rem 0.5rem;
   }
 }
 
