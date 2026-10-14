@@ -179,10 +179,21 @@ export default function Header({
       {/* Bottom Header Bar: Luxury Social Channels */}
       <div className="ksf-header-bottom-bar">
         <div className="ksf-container ksf-header-bottom-container">
-          <div className="ksf-header-bottom-left">
-            <span className="ksf-bottom-dot">●</span>
-            <span className="ksf-bottom-tagline">Pure Pasture-Raised • 100% Halal Direct Dispatch</span>
-          </div>
+          {/* Desktop-only: Location button in bottom bar */}
+          <button
+            type="button"
+            onClick={onOpenLocationModal}
+            className="ksf-bottom-location-btn"
+            title="Change delivery gated community"
+            aria-label="Change delivery location"
+          >
+            <MapPin size={13} />
+            <span className="ksf-bottom-loc-sub">Delivering to</span>
+            <strong className="ksf-bottom-loc-name">
+              {selectedLocation?.name || 'Select Society'}
+            </strong>
+            <ChevronDown size={12} />
+          </button>
 
           <div className="ksf-header-socials">
             <span className="ksf-social-title">Follow Us:</span>
