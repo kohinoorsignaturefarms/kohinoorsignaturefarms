@@ -34,25 +34,6 @@ export default function Header({
             </div>
           </div>
 
-          {/* Desktop Delivery Location Selector */}
-          <button
-            type="button"
-            onClick={onOpenLocationModal}
-            className="btn-location-header btn-location-desktop"
-            title="Change delivery gated community"
-            aria-label="Change delivery location"
-          >
-            <div className="ksf-loc-pin-wrap">
-              <MapPin size={15} />
-            </div>
-            <div className="ksf-loc-info">
-              <span className="ksf-loc-sub">Delivering to</span>
-              <span className="ksf-loc-name">
-                {selectedLocation?.name || 'Select Society'}
-                <ChevronDown size={13} className="ksf-loc-arrow" />
-              </span>
-            </div>
-          </button>
 
           {/* Desktop Search Bar (Hidden on Mobile) */}
           <div className="ksf-search-desktop">
