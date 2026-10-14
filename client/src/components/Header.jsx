@@ -62,14 +62,14 @@ export default function Header({
             title="Change delivery location"
             aria-label="Change delivery location"
           >
-            <MapPin size={18} />
+            <MapPin size={18} className="ksf-header-loc-pill-icon" />
             <div className="ksf-header-loc-pill-text">
               <span className="ksf-header-loc-pill-sub">Delivering to</span>
               <strong className="ksf-header-loc-pill-name">
                 {selectedLocation?.name || 'Select Society'}
               </strong>
             </div>
-            <ChevronDown size={12} />
+            <ChevronDown size={13} className="ksf-header-loc-pill-arrow" />
           </button>
 
           {/* Header Action Buttons */}

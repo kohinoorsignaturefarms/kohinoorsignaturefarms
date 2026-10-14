@@ -1,15 +1,16 @@
 import React from 'react';
-import {
-  Leaf,
-  Award,
-  Building2,
-  Users,
-  ShieldCheck,
-  Sparkles,
-  ShoppingBag,
-  MessageCircle,
-  CheckCircle2
-} from 'lucide-react';
+
+/* Helper: renders a Material Symbols Outlined icon */
+function MI({ name, size = 24, style = {} }) {
+  return (
+    <span
+      className="material-symbols-outlined"
+      style={{ fontSize: size, lineHeight: 1, display: 'inline-flex', alignItems: 'center', ...style }}
+    >
+      {name}
+    </span>
+  );
+}
 
 export default function AboutUsPage({ storeSettings, onGoToStore }) {
   const whatsappNumber = (storeSettings?.whatsappNumber || '919876543210').replace(/[^0-9]/g, '');
@@ -18,7 +19,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
 
   const pillars = [
     {
-      icon: <Leaf size={28} />,
+      icon: <MI name="eco" size={28} />,
       title: 'NATURAL FEED',
       subtitle: 'BETTER HEALTH',
       badge: '100% Organic Diet',
@@ -26,7 +27,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
         'Our livestock feeds exclusively on organic green pasture, wild alfalfa, and pesticide-free grains. Zero artificial hormones, growth stimulants, or antibiotics.'
     },
     {
-      icon: <Award size={28} />,
+      icon: <MI name="military_tech" size={28} />,
       title: 'PREMIUM BREEDING',
       subtitle: 'QUALITY LIVESTOCK',
       badge: 'Native Bloodlines',
@@ -34,7 +35,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
         'Selected pure native breeds raised in open-air, stress-free environments. This delivers authentic marbling, exceptional tenderness, and true culinary flavor.'
     },
     {
-      icon: <Building2 size={28} />,
+      icon: <MI name="agriculture" size={28} />,
       title: 'MODERN FARMING',
       subtitle: 'SUSTAINABLE FUTURE',
       badge: 'Eco-Conscious',
@@ -42,7 +43,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
         'Eco-conscious farming integrating solar power, clean RO water systems, organic manure recycling, and sustainable agro-pastoral practices.'
     },
     {
-      icon: <Users size={28} />,
+      icon: <MI name="group" size={28} />,
       title: 'TRUSTED CARE',
       subtitle: 'BETTER YIELD',
       badge: 'Vet Supervised',
@@ -53,32 +54,32 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
 
   const standards = [
     {
-      icon: '',
+      icon: <MI name="grass" size={32} />,
       title: '100% Natural Herbal Feed',
       desc: 'Organic pasture grass, wild alfalfa & pesticide-free grain mix'
     },
     {
-      icon: '',
+      icon: <MI name="wb_sunny" size={32} />,
       title: 'Stress-Free Open Pasture',
       desc: 'Free-range roaming under open sunlight for maximum vitality'
     },
     {
-      icon: '',
+      icon: <MI name="verified" size={32} />,
       title: 'Certified Halal Butchery',
       desc: 'Strict authentic manual Halal practices by trained butchers'
     },
     {
-      icon: '',
+      icon: <MI name="ac_unit" size={32} />,
       title: '0°C-4°C Cold Chain Delivery',
       desc: 'Hygienically chilled from butcher block to customer doorstep'
     },
     {
-      icon: '',
+      icon: <MI name="do_not_disturb_on" size={32} />,
       title: 'Zero Antibiotics & Growth Hormones',
       desc: '100% clean meat without synthetic chemical additives'
     },
     {
-      icon: '🩺',
+      icon: <MI name="health_and_safety" size={32} />,
       title: 'Veterinary Supervised',
       desc: 'Daily certified clinical livestock health screening'
     }
@@ -90,8 +91,8 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
       <section className="ksf-about-hero">
         <div className="ksf-container" style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto' }}>
           <div className="ksf-about-badge">
-            <Sparkles size={13} style={{ color: 'var(--gold-primary)' }} />
-            <span>THE KOHINOOR STANDARD • AGRO & LIVESTOCK FARMS</span>
+            <MI name="auto_awesome" size={13} style={{ color: 'var(--gold-primary)' }} />
+            <span>THE KOHINOOR STANDARD • AGRO &amp; LIVESTOCK FARMS</span>
           </div>
 
           <h1 className="ksf-about-title">
@@ -111,7 +112,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
               onClick={onGoToStore}
               className="btn-about-primary"
             >
-              <ShoppingBag size={17} />
+              <MI name="shopping_bag" size={17} />
               <span>Explore Today's Fresh Cuts</span>
             </button>
             <a
@@ -120,7 +121,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
               rel="noopener noreferrer"
               className="btn-about-secondary"
             >
-              <MessageCircle size={17} />
+              <MI name="chat" size={17} />
               <span>Connect on WhatsApp</span>
             </a>
           </div>
@@ -134,11 +135,11 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
             {/* Square Card 1: 100% Authentic Halal Guarantee */}
             <div className="ksf-guarantee-square-card">
               <div className="ksf-guarantee-square-icon">
-                <ShieldCheck size={32} />
+                <MI name="shield" size={32} />
               </div>
               <span className="ksf-guarantee-square-badge">AUTHENTIC HALAL GUARANTEE</span>
               <h3 className="ksf-guarantee-square-title">
-                100% Halal & Pure Farm Direct
+                100% Halal &amp; Pure Farm Direct
               </h3>
               <p className="ksf-guarantee-square-text">
                 Every order is prepared with strict adherence to authentic Halal principles, certified veterinary inspection, and cold-chain sanitization. From our farm directly to your dining table.
@@ -157,7 +158,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
               <div className="ksf-guarantee-square-avatar-wrap">
                 <img src="/logo.jpeg" alt="Kohinoor Signature Farms" className="ksf-guarantee-square-avatar" />
               </div>
-              <span className="ksf-guarantee-square-badge">FOUNDED & MANAGED BY</span>
+              <span className="ksf-guarantee-square-badge">FOUNDED &amp; MANAGED BY</span>
               <h3 className="ksf-guarantee-square-title">
                 {founder}
               </h3>
@@ -165,7 +166,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
                 Kohinoor Signature Farms
               </div>
               <p className="ksf-guarantee-square-quote">
-                “Clean, uncompromised nutrition starts from honest farming. Every cut is prepared fresh upon order from healthy livestock raised with compassion.”
+                "Clean, uncompromised nutrition starts from honest farming. Every cut is prepared fresh upon order from healthy livestock raised with compassion."
               </p>
               <div className="ksf-guarantee-square-pills">
                 <span>Ethical Care</span>
@@ -183,8 +184,8 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
       <section className="ksf-about-section ksf-about-section-alt">
         <div className="ksf-container">
           <div className="ksf-section-title-wrap">
-            <span className="ksf-section-badge">INTEGRITY & HERITAGE</span>
-            <h2 className="ksf-section-h2">Core Agricultural & Ethical Pillars</h2>
+            <span className="ksf-section-badge">INTEGRITY &amp; HERITAGE</span>
+            <h2 className="ksf-section-h2">Core Agricultural &amp; Ethical Pillars</h2>
             <p className="ksf-section-p">
               From pasture soil to table, our four founding pillars ensure authentic taste, peak nutrition, and uncompromised food safety.
             </p>
@@ -212,8 +213,8 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
       <section className="ksf-about-section">
         <div className="ksf-container">
           <div className="ksf-section-title-wrap">
-            <span className="ksf-section-badge">FOOD SAFETY & HYGIENE</span>
-            <h2 className="ksf-section-h2">Our Quality & Hygiene Standards</h2>
+            <span className="ksf-section-badge">FOOD SAFETY &amp; HYGIENE</span>
+            <h2 className="ksf-section-h2">Our Quality &amp; Hygiene Standards</h2>
             <p className="ksf-section-p">
               Zero compromises on purity. We enforce rigorous cold-chain protocols and traditional methods at every step.
             </p>
@@ -226,7 +227,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
                 <h4 className="ksf-std-square-title">{std.title}</h4>
                 <p className="ksf-std-square-desc">{std.desc}</p>
                 <div className="ksf-std-square-badge">
-                  <CheckCircle2 size={13} />
+                  <MI name="check_circle" size={13} />
                   <span>Verified Standard</span>
                 </div>
               </div>
@@ -249,7 +250,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
             onClick={onGoToStore}
             className="btn-about-cta-primary"
           >
-            <ShoppingBag size={18} />
+            <MI name="shopping_bag" size={18} />
             <span>Order Fresh Cuts Now</span>
           </button>
         </div>
