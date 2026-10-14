@@ -461,8 +461,8 @@ export default function App() {
               >
                 {activeCategory === 'all'
                   ? onlyBestSellers
-                    ? '🔥 Best Selling Cuts'
-                    : '🌱 All Fresh Farm Cuts'
+                    ? 'Best Selling Cuts'
+                    : 'All Fresh Farm Cuts'
                   : `${categories.find((c) => c.id === activeCategory)?.name || 'Cuts'}`}
               </h2>
               <p style={{ fontSize: '0.825rem', color: 'var(--text-muted)' }}>
@@ -551,7 +551,7 @@ export default function App() {
                     border: '1px dashed var(--border-light)'
                   }}
                 >
-                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}>🌿</span>
+                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '0.5rem' }}></span>
                   <h3 style={{ fontFamily: 'var(--font-serif)', color: 'var(--green-primary)', fontSize: '1.25rem', marginBottom: '0.3rem' }}>
                     No cuts match your current selection
                   </h3>

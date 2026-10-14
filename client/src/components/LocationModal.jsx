@@ -118,7 +118,7 @@ export default function LocationModal({
                     </div>
                     {loc.deliverySlot && (
                       <div className="ksf-loc-slot-badge">
-                        <span>⏰ {loc.deliverySlot}</span>
+                        <span>{loc.deliverySlot}</span>
                       </div>
                     )}
                   </div>

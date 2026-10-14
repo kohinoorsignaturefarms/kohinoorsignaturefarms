@@ -92,7 +92,7 @@ export default function ProductCard({
               background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
               gap: '0.3rem'
             }}>
-              <span style={{ fontSize: '2rem' }}>🐐</span>
+              
               <span style={{ fontSize: '0.62rem', color: 'var(--green-primary)', fontWeight: 600, opacity: 0.6 }}>Photo soon</span>
             </div>
           </>
@@ -103,7 +103,7 @@ export default function ProductCard({
             background: 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
             gap: '0.3rem'
           }}>
-            <span style={{ fontSize: '2rem' }}>🐐</span>
+            
             <span style={{ fontSize: '0.62rem', color: 'var(--green-primary)', fontWeight: 600, opacity: 0.6 }}>Photo soon</span>
           </div>
         )}
@@ -207,7 +207,7 @@ export default function ProductCard({
             )}
             {isCurrentOutOfStock && (
               <span style={{ fontSize: '0.725rem', fontWeight: 800, color: 'var(--error-red)', marginLeft: 'auto' }}>
-                ● Out of Stock
+                Out of Stock
               </span>
             )}
           </div>
@@ -232,7 +232,7 @@ export default function ProductCard({
                   cursor: 'not-allowed'
                 }}
               >
-                ● Out of Stock Today
+                Out of Stock Today
               </button>
 
               <button

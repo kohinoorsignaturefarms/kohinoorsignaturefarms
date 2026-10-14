@@ -380,7 +380,7 @@ app.post('/api/categories', async (req, res) => {
     slug: req.body.slug || req.body.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
     name: req.body.name,
     tagline: req.body.tagline || '',
-    icon: req.body.icon || '🥩',
+    icon: req.body.icon || '',
     badge: req.body.badge || '',
     accentColor: req.body.accentColor || '#0B3B24',
     image: req.body.image || '',

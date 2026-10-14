@@ -1123,7 +1123,7 @@ function AdminPanelInner({
                                 color: p.inStock !== false ? 'var(--discount-text)' : 'var(--error-red)'
                               }}
                             >
-                              {p.inStock !== false ? '● In Stock' : '○ Sold Out'}
+                              {p.inStock !== false ? 'In Stock' : 'Sold Out'}
                             </button>
                           </td>
 
@@ -1217,7 +1217,7 @@ function AdminPanelInner({
                                 fontSize: '0.7rem'
                               }}
                             >
-                              🔥 Best Seller
+                              Best Seller
                             </span>
                           )}
                           <button
@@ -1231,7 +1231,7 @@ function AdminPanelInner({
                               color: p.inStock !== false ? 'var(--discount-text)' : 'var(--error-red)'
                             }}
                           >
-                            {p.inStock !== false ? '● In Stock' : '○ Sold Out'}
+                            {p.inStock !== false ? 'In Stock' : 'Sold Out'}
                           </button>
                         </div>
                       </div>
@@ -1432,7 +1432,7 @@ function AdminPanelInner({
                   className="ksf-input"
                   value={settings.announcement || ''}
                   onChange={(e) => setSettings({ ...settings, announcement: e.target.value })}
-                  placeholder="🌿 100% Pure Organic & Grass-Fed • Halal Certified • Fresh Morning Cuts Direct from Farm"
+                  placeholder="100% Pure Organic & Grass-Fed • Halal Certified • Fresh Morning Cuts Direct from Farm"
                 />
               </div>
 
@@ -1494,7 +1494,7 @@ function AdminPanelInner({
                 <div className="ksf-admin-grid-2col">
                   <div className="ksf-form-group">
                     <label className="ksf-form-label">
-                      <span>📸 Instagram Profile URL</span>
+                      <span>Instagram Profile URL</span>
                     </label>
                     <input
                       type="url"
@@ -1538,7 +1538,7 @@ function AdminPanelInner({
                 <div className="ksf-admin-grid-2col">
                   <div className="ksf-form-group">
                     <label className="ksf-form-label">
-                      <span>👤 Facebook Page URL</span>
+                      <span>Facebook Page URL</span>
                     </label>
                     <input
                       type="url"
@@ -1559,7 +1559,7 @@ function AdminPanelInner({
 
                   <div className="ksf-form-group">
                     <label className="ksf-form-label">
-                      <span>▶️ YouTube Channel URL</span>
+                      <span>YouTube Channel URL</span>
                     </label>
                     <input
                       type="url"
@@ -1691,7 +1691,7 @@ function AdminPanelInner({
                         boxSizing: 'border-box'
                       }}
                     >
-                      <span style={{ fontSize: '1.4rem' }}>🌿</span>
+                      
                       <span>Kohinoor Emerald Gradient</span>
                       <span style={{ fontSize: '0.72rem', color: '#E2E8F0', fontWeight: 500 }}>No image uploaded — using luxury brand backdrop</span>
                     </div>
@@ -1829,7 +1829,7 @@ function AdminPanelInner({
                             fontSize: '0.58rem', fontWeight: 700, textAlign: 'center',
                             padding: '2px 4px', letterSpacing: '0.04em'
                           }}>
-                            🖥 DESKTOP BANNER
+                            DESKTOP BANNER
                           </div>
                           <button
                             type="button"
@@ -1920,7 +1920,7 @@ function AdminPanelInner({
                             fontSize: '0.58rem', fontWeight: 700, textAlign: 'center',
                             padding: '2px 4px', letterSpacing: '0.04em'
                           }}>
-                            📱 MOBILE BANNER
+                            MOBILE BANNER
                           </div>
                           <button
                             type="button"
@@ -1999,7 +1999,7 @@ function AdminPanelInner({
                     slug: '',
                     name: '',
                     tagline: '',
-                    icon: '🥩',
+                    icon: '',
                     badge: 'Farm Fresh',
                     image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
                     description: ''
@@ -2035,7 +2035,7 @@ function AdminPanelInner({
                   }}
                 >
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                    <span style={{ fontSize: '1.75rem' }}>{c.icon || '🥩'}</span>
+                    <span style={{ fontSize: '1.75rem' }}>{c.icon}</span>
                     <span
                       style={{
                         background: 'var(--gold-shimmer)',
@@ -2277,7 +2277,7 @@ function AdminPanelInner({
                     {/* Top Products */}
                     {Array.isArray(analytics.topProducts) && analytics.topProducts.length > 0 && (
                       <div className="ksf-analytics-section" style={{ margin: 0 }}>
-                        <h3 className="ksf-analytics-section-title">🔥 Top Clicked Products</h3>
+                        <h3 className="ksf-analytics-section-title">Top Clicked Products</h3>
                         <div className="ksf-top-products">
                           {analytics.topProducts.map((p, idx) => {
                             const maxClicks = analytics.topProducts[0]?.clicks || 1;
@@ -2350,10 +2350,10 @@ function AdminPanelInner({
             <div className="ksf-period-pill-bar">
               {[
                 { key: 'all', label: `All Orders (${orders.length})` },
-                { key: 'pending', label: '🟡 Pending' },
-                { key: 'confirmed', label: '✅ Confirmed' },
-                { key: 'delivered', label: '🚚 Delivered' },
-                { key: 'cancelled', label: '❌ Cancelled' }
+                { key: 'pending', label: 'Pending' },
+                { key: 'confirmed', label: 'Confirmed' },
+                { key: 'delivered', label: 'Delivered' },
+                { key: 'cancelled', label: 'Cancelled' }
               ].map(f => (
                 <button
                   key={f.key}
@@ -2667,12 +2667,12 @@ function AdminPanelInner({
                         }}
                         title="Toggle active status"
                       >
-                        {loc.active !== false ? '● Active' : '○ Inactive'}
+                        {loc.active !== false ? 'Active' : 'Inactive'}
                       </button>
                     </div>
 
                     <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: '0.4rem', lineHeight: '1.4' }}>
-                      📍 {loc.area}{loc.city ? `, ${loc.city}` : ''}{loc.pincode ? ` - ${loc.pincode}` : ''}
+                      {loc.area}{loc.city ? `, ${loc.city}` : ''}{loc.pincode ? ` - ${loc.pincode}` : ''}
                     </div>
 
                     {loc.deliverySlot && (
@@ -2689,7 +2689,7 @@ function AdminPanelInner({
                           color: 'var(--green-darkest)'
                         }}
                       >
-                        <span>⏰ {loc.deliverySlot}</span>
+                        <span>{loc.deliverySlot}</span>
                       </div>
                     )}
                   </div>
@@ -2891,7 +2891,7 @@ function AdminPanelInner({
                         border: `1px solid ${editingProduct.inStock !== false ? '#86EFAC' : '#FCA5A5'}`
                       }}
                     >
-                      {editingProduct.inStock !== false ? '● In Stock (Live)' : '● Out of Stock (Sold Out)'}
+                      {editingProduct.inStock !== false ? 'In Stock (Live)' : 'Out of Stock (Sold Out)'}
                     </span>
                   </div>
                   <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0, lineHeight: 1.3 }}>
@@ -3133,7 +3133,7 @@ function AdminPanelInner({
                               }}
                               title="Toggle portion stock availability"
                             >
-                              {v.inStock !== false ? '● In Stock' : '● Sold Out'}
+                              {v.inStock !== false ? 'In Stock' : 'Sold Out'}
                             </button>
                           </div>
 
@@ -3231,7 +3231,7 @@ function AdminPanelInner({
                         color: '#fff', fontSize: '0.58rem', fontWeight: 700,
                         textAlign: 'center', padding: '2px 4px', letterSpacing: '0.04em'
                       }}>
-                        {idx === 0 ? '★ PRIMARY' : `#${idx + 1}`}
+                        {idx === 0 ? 'PRIMARY' : `#${idx + 1}`}
                       </div>
 
                       {/* Remove button */}
@@ -3287,7 +3287,7 @@ function AdminPanelInner({
                       color: 'var(--text-muted)', fontSize: '0.65rem',
                       gap: '0.2rem', flexShrink: 0
                     }}>
-                      <span style={{ fontSize: '1.1rem', opacity: 0.4 }}>🖼</span>
+                      
                       <span>Slot {(editingProduct.images || []).length + i + 1}</span>
                     </div>
                   ))}
@@ -3346,8 +3346,8 @@ function AdminPanelInner({
                           transition: 'all 0.15s'
                         }}
                       >
-                        <span style={{ fontSize: '1rem' }}>🔥</span>
-                        {isBestSeller ? '★ Best Seller — ON (shows in filter tab)' : 'Mark as Best Seller'}
+                        
+                        {isBestSeller ? 'Best Seller — ON (shows in filter tab)' : 'Mark as Best Seller'}
                       </button>
                     );
                   })()}
@@ -3382,7 +3382,7 @@ function AdminPanelInner({
                                 transition: 'all 0.12s'
                               }}
                             >
-                              {active ? '✓ ' : ''}{preset}
+                              {preset}
                             </button>
                           );
                         })}
@@ -3480,7 +3480,7 @@ function AdminPanelInner({
                     className="ksf-input"
                     value={editingCategory.icon}
                     onChange={(e) => setEditingCategory({ ...editingCategory, icon: e.target.value })}
-                    placeholder="🐐"
+                    placeholder=""
                   />
                 </div>
 

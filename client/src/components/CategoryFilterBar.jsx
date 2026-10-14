@@ -32,7 +32,7 @@ export default function CategoryFilterBar({
               onSelectCategory('all');
             }}
           >
-            <span>🥩 All Fresh Cuts</span>
+            <span>All Fresh Cuts</span>
             <span className="ksf-pill-count">{getCount('all')}</span>
           </button>
 
@@ -48,7 +48,7 @@ export default function CategoryFilterBar({
                   onSelectCategory(cat.id);
                 }}
               >
-                <span>{cat.icon || '🥩'} {cat.name}</span>
+                <span>{cat.name}</span>
                 <span className="ksf-pill-count">{getCount(cat.id)}</span>
               </button>
             );

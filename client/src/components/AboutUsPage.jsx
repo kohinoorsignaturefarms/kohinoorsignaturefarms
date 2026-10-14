@@ -53,27 +53,27 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
 
   const standards = [
     {
-      icon: '🌱',
+      icon: '',
       title: '100% Natural Herbal Feed',
       desc: 'Organic pasture grass, wild alfalfa & pesticide-free grain mix'
     },
     {
-      icon: '🐐',
+      icon: '',
       title: 'Stress-Free Open Pasture',
       desc: 'Free-range roaming under open sunlight for maximum vitality'
     },
     {
-      icon: '🛡️',
+      icon: '',
       title: 'Certified Halal Butchery',
       desc: 'Strict authentic manual Halal practices by trained butchers'
     },
     {
-      icon: '❄️',
+      icon: '',
       title: '0°C-4°C Cold Chain Delivery',
       desc: 'Hygienically chilled from butcher block to customer doorstep'
     },
     {
-      icon: '🚫',
+      icon: '',
       title: 'Zero Antibiotics & Growth Hormones',
       desc: '100% clean meat without synthetic chemical additives'
     },

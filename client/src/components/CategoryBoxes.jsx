@@ -20,7 +20,7 @@ export default function CategoryBoxes({ categories, activeCategory, onSelectCate
     {
       id: 'goat',
       name: 'Goat & Sheep (Mutton)',
-      icon: '🐐',
+      icon: '',
       badge: 'Pasture-Raised',
       tagline: 'Tender grass-fed meat with rich flavor & zero hormones',
       image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80'
@@ -28,7 +28,7 @@ export default function CategoryBoxes({ categories, activeCategory, onSelectCate
     {
       id: 'chicken',
       name: 'Country & Farm Chicken',
-      icon: '🐔',
+      icon: '',
       badge: 'Antibiotic-Free',
       tagline: 'Authentic free-range Natukodi & juicy tender cuts',
       image: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781?auto=format&fit=crop&w=800&q=80'
@@ -36,7 +36,7 @@ export default function CategoryBoxes({ categories, activeCategory, onSelectCate
     {
       id: 'eggs',
       name: 'Farm-Fresh Organic Eggs',
-      icon: '🥚',
+      icon: '',
       badge: 'Daily Dawn Collection',
       tagline: 'Golden yolk eggs rich in natural Omega-3 & clean protein',
       image: 'https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?auto=format&fit=crop&w=800&q=80'
@@ -44,7 +44,7 @@ export default function CategoryBoxes({ categories, activeCategory, onSelectCate
     {
       id: 'combos',
       name: 'Special Cuts & Farm Combos',
-      icon: '✨',
+      icon: '',
       badge: 'Super Savings',
       tagline: 'Hand-picked bundles of premium mutton, chicken & eggs for family feasts',
       image: 'https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80'
@@ -90,7 +90,7 @@ export default function CategoryBoxes({ categories, activeCategory, onSelectCate
                 onClick={() => handleCardClick(cat.id)}
               >
                 <div className="ksf-cat-top">
-                  <span className="ksf-cat-icon">{cat.icon || '🥩'}</span>
+                  <span className="ksf-cat-icon">{cat.icon}</span>
                   {cat.badge && (
                     <span className="ksf-cat-badge">
                       <Sparkles size={11} style={{ display: 'inline', marginRight: '3px' }} />

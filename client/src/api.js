@@ -356,7 +356,7 @@ export const buildWhatsAppUrl = (whatsappNumber, product, variant, storeSettings
   const fssaiNo = product.fssaiNumber || storeSettings?.masterFssai || '13624014000889';
 
   const locationLine = selectedLocation?.name 
-    ? `* 📍 Delivery Location: *${selectedLocation.name}*${selectedLocation.area ? ` (${selectedLocation.area})` : ''}\n` 
+    ? `* Delivery Location: *${selectedLocation.name}*${selectedLocation.area ? ` (${selectedLocation.area})` : ''}\n` 
     : '';
 
   let template = storeSettings?.whatsappTemplate;
@@ -420,8 +420,8 @@ export const buildCartWhatsAppUrl = (whatsappNumber, cartItems, storeSettings, s
   });
 
   const locationSection = selectedLocation?.name 
-    ? `* 📍 Delivering To: *${selectedLocation.name}*${selectedLocation.area ? ` (${selectedLocation.area})` : ''}\n` +
-      (selectedLocation.deliverySlot ? `* ⏰ Delivery Schedule: ${selectedLocation.deliverySlot}\n` : '') +
+    ? `* Delivering To: *${selectedLocation.name}*${selectedLocation.area ? ` (${selectedLocation.area})` : ''}\n` +
+      (selectedLocation.deliverySlot ? `* Delivery Schedule: ${selectedLocation.deliverySlot}\n` : '') +
       `----------------------------------------\n`
     : '';
 

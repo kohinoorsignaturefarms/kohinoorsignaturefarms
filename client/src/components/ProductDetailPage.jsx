@@ -148,7 +148,7 @@ export default function ProductDetailPage({
                       gap: '0.5rem',
                       filter: isOutOfStock ? 'grayscale(40%)' : 'none'
                     }}>
-                      <span style={{ fontSize: '2.5rem' }}>🐐</span>
+                      
                       <span style={{ fontSize: '0.75rem', color: 'var(--green-primary)', fontWeight: 600, opacity: 0.7 }}>
                         Image could not be loaded
                       </span>
@@ -164,7 +164,7 @@ export default function ProductDetailPage({
                     gap: '0.5rem',
                     filter: isOutOfStock ? 'grayscale(40%)' : 'none'
                   }}>
-                    <span style={{ fontSize: '2.5rem' }}>🐐</span>
+                    
                     <span style={{ fontSize: '0.75rem', color: 'var(--green-primary)', fontWeight: 600, opacity: 0.7 }}>
                       Image coming soon
                     </span>
@@ -349,7 +349,7 @@ export default function ProductDetailPage({
                 </div>
                 {discountAmount > 0 && !isOutOfStock && (
                   <div style={{ fontSize: '0.725rem', color: 'var(--green-accent)', fontWeight: 700, marginTop: '0.15rem' }}>
-                    ✨ You save {formatCurrency(discountAmount)} on this cut!
+                    You save {formatCurrency(discountAmount)} on this cut!
                   </div>
                 )}
               </div>
@@ -357,11 +357,11 @@ export default function ProductDetailPage({
               <div>
                 {isOutOfStock ? (
                   <span style={{ color: 'var(--error-red)', fontWeight: 800, fontSize: '0.85rem' }}>
-                    ● Out of Stock Today
+                    Out of Stock Today
                   </span>
                 ) : (
                   <span style={{ color: 'var(--success-green)', fontWeight: 700, fontSize: '0.8rem' }}>
-                    ● Fresh Cut Available
+                    Fresh Cut Available
                   </span>
                 )}
               </div>
@@ -382,7 +382,7 @@ export default function ProductDetailPage({
                       lineHeight: 1.35
                     }}
                   >
-                    ⚠️ <strong>Currently Sold Out Today:</strong> Fresh pasture cuts are prepared every morning. Check back early tomorrow or select another portion size.
+                    <strong>Currently Sold Out Today:</strong> Fresh pasture cuts are prepared every morning. Check back early tomorrow or select another portion size.
                   </div>
 
                   <div style={{ display: 'flex', gap: '0.45rem' }}>
@@ -400,7 +400,7 @@ export default function ProductDetailPage({
                         cursor: 'not-allowed'
                       }}
                     >
-                      ● Out of Stock Today
+                      Out of Stock Today
                     </button>
 
                     <button
@@ -578,7 +578,7 @@ export default function ProductDetailPage({
 
                 {product.piecesEstimate && (
                   <tr>
-                    <th>⚖️ Portion Estimate:</th>
+                    <th>Portion Estimate:</th>
                     <td>{product.piecesEstimate}</td>
                   </tr>
                 )}
