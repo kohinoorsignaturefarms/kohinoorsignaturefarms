@@ -669,13 +669,13 @@ export default function App() {
             display: 'flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: '#25D366',
+            background: 'var(--green-primary)',
             color: '#FFFFFF',
             fontWeight: 800,
             fontSize: '0.85rem',
             padding: '0.7rem 1.15rem',
             borderRadius: 'var(--radius-full)',
-            boxShadow: '0 4px 16px rgba(37, 211, 102, 0.45)',
+            boxShadow: '0 4px 16px rgba(11, 59, 36, 0.4)',
             textDecoration: 'none'
           }}
           title="Direct WhatsApp Helpline"

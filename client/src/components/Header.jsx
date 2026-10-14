@@ -1,7 +1,5 @@
 import React from 'react';
 import { Search, X, ShoppingBag, MapPin, ChevronDown } from 'lucide-react';
-import { InstagramIcon, XIcon, FacebookIcon, YouTubeIcon } from './SocialIcons';
-import { DEFAULT_SOCIAL_LINKS } from '../api';
 
 export default function Header({
   searchTerm,
@@ -15,11 +13,6 @@ export default function Header({
   selectedLocation,
   onOpenLocationModal
 }) {
-  const socialLinks = {
-    ...DEFAULT_SOCIAL_LINKS,
-    ...(storeSettings?.socialLinks || {})
-  };
-
   return (
     <header className="ksf-header">
       <div className="ksf-container">
@@ -33,7 +26,6 @@ export default function Header({
               <span className="ksf-brand-tagline">Grass-Fed • Organic • Halal</span>
             </div>
           </div>
-
 
           {/* Desktop Search Bar (Hidden on Mobile) */}
           <div className="ksf-search-desktop">
@@ -62,9 +54,26 @@ export default function Header({
             )}
           </div>
 
+          {/* Desktop Location Pill — between search and basket, hidden on mobile */}
+          <button
+            type="button"
+            onClick={onOpenLocationModal}
+            className="ksf-header-loc-pill"
+            title="Change delivery location"
+            aria-label="Change delivery location"
+          >
+            <MapPin size={18} />
+            <div className="ksf-header-loc-pill-text">
+              <span className="ksf-header-loc-pill-sub">Delivering to</span>
+              <strong className="ksf-header-loc-pill-name">
+                {selectedLocation?.name || 'Select Society'}
+              </strong>
+            </div>
+            <ChevronDown size={12} />
+          </button>
+
           {/* Header Action Buttons */}
           <div className="ksf-header-actions">
-            {/* Basket / Cart Action */}
             <button
               type="button"
               onClick={onOpenCart}
@@ -133,81 +142,6 @@ export default function Header({
                 <X size={15} />
               </button>
             )}
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Header Bar: Luxury Social Channels */}
-      <div className="ksf-header-bottom-bar">
-        <div className="ksf-container ksf-header-bottom-container">
-          {/* Desktop-only: Location button in bottom bar */}
-          <button
-            type="button"
-            onClick={onOpenLocationModal}
-            className="ksf-bottom-location-btn"
-            title="Change delivery gated community"
-            aria-label="Change delivery location"
-          >
-            <MapPin size={13} />
-            <span className="ksf-bottom-loc-sub">Delivering to</span>
-            <strong className="ksf-bottom-loc-name">
-              {selectedLocation?.name || 'Select Society'}
-            </strong>
-            <ChevronDown size={12} />
-          </button>
-
-          <div className="ksf-header-socials">
-            <span className="ksf-social-title">Follow Us:</span>
-            <div className="ksf-social-icons-group">
-              {socialLinks.instagram && (
-                <a
-                  href={socialLinks.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ksf-social-btn ksf-social-instagram"
-                  title="Follow Kohinoor Signature Farms on Instagram"
-                  aria-label="Follow us on Instagram"
-                >
-                  <InstagramIcon size={14} />
-                </a>
-              )}
-              {socialLinks.x && (
-                <a
-                  href={socialLinks.x}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ksf-social-btn ksf-social-x"
-                  title="Follow Kohinoor Signature Farms on X"
-                  aria-label="Follow us on X"
-                >
-                  <XIcon size={13} />
-                </a>
-              )}
-              {socialLinks.facebook && (
-                <a
-                  href={socialLinks.facebook}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ksf-social-btn ksf-social-facebook"
-                  title="Follow Kohinoor Signature Farms on Facebook"
-                  aria-label="Follow us on Facebook"
-                >
-                  <FacebookIcon size={14} />
-                </a>
-              )}
-              {socialLinks.youtube && (
-                <a
-                  href={socialLinks.youtube}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ksf-social-btn ksf-social-youtube"
-                  title="Subscribe to Kohinoor Signature Farms on YouTube"
-                  aria-label="Subscribe on YouTube"
-                >
-                  <YouTubeIcon size={15} />
-                </a>
-              )}
-            </div>
           </div>
         </div>
       </div>
