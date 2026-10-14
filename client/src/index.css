@@ -237,7 +237,7 @@ input, select, textarea {
   align-items: center;
   justify-content: space-between;
   padding: 0.65rem 0;
-  gap: 0.5rem;
+  gap: 0.85rem;
   width: 100%;
   box-sizing: border-box;
 }
@@ -250,6 +250,7 @@ input, select, textarea {
   color: inherit;
   flex: 0 0 auto;
   flex-shrink: 0;
+  margin-right: 0.5rem;
 }
 
 .ksf-logo-img {
@@ -305,14 +306,15 @@ input, select, textarea {
   display: none;
   position: relative;
   flex: 1;
-  min-width: 140px;
-  max-width: 420px;
-  margin: 0 0.75rem 0 1rem;
+  min-width: 160px;
+  height: 42px;
+  margin: 0;
 }
 
 @media (min-width: 768px) {
   .ksf-search-desktop {
-    display: block;
+    display: flex;
+    align-items: center;
   }
 }
 
@@ -320,9 +322,10 @@ input, select, textarea {
 .ksf-header-loc-pill {
   display: none;
   align-items: center;
+  height: 42px;
   gap: 0.55rem;
-  padding: 0.45rem 0.95rem 0.45rem 0.85rem;
-  border-radius: 999px;
+  padding: 0 0.95rem 0 0.85rem;
+  border-radius: var(--radius-full);
   border: 1.5px solid rgba(11, 59, 36, 0.2);
   background: var(--bg-subtle, #F7F4EE);
   color: var(--green-primary);
@@ -332,9 +335,11 @@ input, select, textarea {
   flex: 0 0 auto;
   flex-shrink: 0;
   max-width: 250px;
-  min-width: 180px;
+  min-width: 175px;
   text-align: left;
   box-shadow: 0 1px 4px rgba(11, 59, 36, 0.07);
+  box-sizing: border-box;
+  margin: 0;
 }
 
 .ksf-header-loc-pill-icon {
@@ -415,13 +420,15 @@ input, select, textarea {
 
 .ksf-search-input {
   width: 100%;
-  padding: 0.55rem 1rem 0.55rem 2.3rem;
+  height: 42px;
+  padding: 0 1rem 0 2.4rem;
   background: var(--bg-subtle);
-  border: 1px solid var(--border-light);
+  border: 1.5px solid var(--border-light);
   border-radius: var(--radius-full);
   font-size: 0.85rem;
   color: var(--text-dark);
   transition: all 0.2s ease;
+  box-sizing: border-box;
 }
 
 .ksf-search-input:focus {
@@ -2411,17 +2418,20 @@ input, select, textarea {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   background: var(--green-light-bg);
   color: var(--green-primary);
-  border: 1px solid rgba(11, 59, 36, 0.15);
+  border: 1.5px solid rgba(11, 59, 36, 0.18);
   font-weight: 700;
-  font-size: 0.8rem;
-  padding: 0.45rem 0.85rem;
+  font-size: 0.85rem;
+  padding: 0 1.15rem;
+  height: 42px;
   border-radius: var(--radius-full);
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
 .btn-cart-header:hover {
