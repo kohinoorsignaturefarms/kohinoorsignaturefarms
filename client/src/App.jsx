@@ -284,7 +284,7 @@ export default function App() {
 
       if (targetId && products.length > 0) {
         const found = products.find((x) => x.id === targetId || x.slug === targetId);
-        if (found) {
+        if (found && !found.isHidden) {
           setSelectedProduct(found);
         }
       }
@@ -299,8 +299,9 @@ export default function App() {
     };
   }, [products]);
 
-  // Filter products based on category, search, and bestseller filter
+  // Filter products based on category, search, and bestseller filter (excluding hidden products)
   const displayedProducts = products.filter((p) => {
+    if (p.isHidden) return false;
     const matchesCategory = activeCategory === 'all' || p.category === activeCategory;
     const matchesSearch =
       !searchTerm ||

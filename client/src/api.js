@@ -64,6 +64,14 @@ export const api = {
     return res.json();
   },
 
+  async toggleProductVisibility(id) {
+    const res = await fetch(`${API_BASE}/products/${id}/toggle-visibility`, {
+      method: 'PATCH'
+    });
+    if (!res.ok) throw new Error('Failed to toggle product visibility');
+    return res.json();
+  },
+
   async deleteProduct(id) {
     const res = await fetch(`${API_BASE}/products/${id}`, {
       method: 'DELETE'

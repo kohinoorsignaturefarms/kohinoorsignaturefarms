@@ -257,7 +257,8 @@ input, select, textarea {
   width: 42px;
   height: 42px;
   border-radius: var(--radius-md);
-  object-fit: cover;
+  object-fit: contain;
+  background: #FFFFFF;
   border: 2px solid var(--gold-primary);
   box-shadow: 0 2px 8px rgba(212, 175, 55, 0.3);
   flex-shrink: 0;

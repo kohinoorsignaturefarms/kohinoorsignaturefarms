@@ -45,7 +45,7 @@ class GlobalErrorBoundary extends React.Component {
             boxSizing: 'border-box'
           }}>
             <img
-              src="/logo.jpeg"
+              src="/logo_page_1_square.png"
               alt="Kohinoor Signature Farms"
               style={{
                 width: '64px',
@@ -54,7 +54,8 @@ class GlobalErrorBoundary extends React.Component {
                 border: '2px solid #D4AF37',
                 margin: '0 auto 1rem',
                 display: 'block',
-                objectFit: 'cover'
+                objectFit: 'contain',
+                background: '#FFFFFF'
               }}
             />
             <h2 style={{

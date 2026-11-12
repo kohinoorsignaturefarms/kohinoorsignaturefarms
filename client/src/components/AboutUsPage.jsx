@@ -90,6 +90,22 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
       {/* Hero Header Section */}
       <section className="ksf-about-hero">
         <div className="ksf-container" style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto' }}>
+          {/* Page 2 Official Brand Logo for About Page */}
+          <div className="ksf-about-hero-logo-wrap" style={{ marginBottom: '1.5rem' }}>
+            <img
+              src="/logo-about-gold.png"
+              alt="Kohinoor Signature Farms"
+              className="ksf-about-hero-logo"
+              style={{
+                maxWidth: '440px',
+                width: '88%',
+                height: 'auto',
+                display: 'inline-block',
+                filter: 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4))'
+              }}
+            />
+          </div>
+
           <div className="ksf-about-badge">
             <MI name="auto_awesome" size={13} style={{ color: 'var(--gold-primary)' }} />
             <span>THE KOHINOOR STANDARD • AGRO &amp; LIVESTOCK FARMS</span>
@@ -131,6 +147,20 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
       {/* SECTION 1: 100% Halal Guarantee & Founder Assurance (Square Cards) */}
       <section className="ksf-about-section">
         <div className="ksf-container" style={{ maxWidth: '960px' }}>
+          {/* Page 2 Brand Identity Lockup */}
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <img
+              src="/logo-about.png"
+              alt="Kohinoor Signature Farms Official Logo"
+              style={{
+                maxWidth: '340px',
+                width: '85%',
+                height: 'auto',
+                display: 'inline-block'
+              }}
+            />
+          </div>
+
           <div className="ksf-guarantee-square-grid">
             {/* Square Card 1: 100% Authentic Halal Guarantee */}
             <div className="ksf-guarantee-square-card">
@@ -156,7 +186,12 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
             {/* Square Card 2: Founded & Managed by Feroz Shaik */}
             <div className="ksf-guarantee-square-card">
               <div className="ksf-guarantee-square-avatar-wrap">
-                <img src="/logo.jpeg" alt="Kohinoor Signature Farms" className="ksf-guarantee-square-avatar" />
+                <img
+                  src="/logo_page_1_square.png"
+                  alt="Kohinoor Signature Farms"
+                  className="ksf-guarantee-square-avatar"
+                  style={{ objectFit: 'contain', background: '#FFFFFF' }}
+                />
               </div>
               <span className="ksf-guarantee-square-badge">FOUNDED &amp; MANAGED BY</span>
               <h3 className="ksf-guarantee-square-title">

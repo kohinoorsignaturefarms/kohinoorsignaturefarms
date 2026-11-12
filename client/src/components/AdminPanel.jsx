@@ -147,6 +147,7 @@ function AdminPanelInner({
   // Search & Filters in Admin
   const [adminSearch, setAdminSearch] = useState('');
   const [adminCatFilter, setAdminCatFilter] = useState('all');
+  const [adminVisibilityFilter, setAdminVisibilityFilter] = useState('all'); // 'all', 'visible', 'hidden'
 
   // Product Editor Modal State
   const [editingProduct, setEditingProduct] = useState(null);
@@ -294,6 +295,7 @@ function AdminPanelInner({
       images: [],
       badges: ['Farm Fresh', '100% Halal'],
       inStock: true,
+      isHidden: false,
       isBestSeller: false,
       variants: [
         {
@@ -330,6 +332,7 @@ function AdminPanelInner({
       images: Array.isArray(prod.images) ? [...prod.images] : [],
       badges: Array.isArray(prod.badges) ? [...prod.badges] : ['Farm Fresh', '100% Halal'],
       inStock: prod.inStock !== false,
+      isHidden: prod.isHidden === true,
       isBestSeller: Boolean(prod.isBestSeller || (prod.badges || []).some(b => b.toLowerCase().includes('best seller') || b.toLowerCase().includes('bestseller'))),
       variants: Array.isArray(prod.variants) && prod.variants.length > 0 ? JSON.parse(JSON.stringify(prod.variants)) : [
         {
@@ -355,6 +358,18 @@ function AdminPanelInner({
       showToast(`${prod.name} marked as ${updated.inStock ? 'In Stock' : 'Out of Stock'}`);
     } catch (err) {
       showToast('Failed to update stock status', 'error');
+    }
+  };
+
+  const handleToggleProductVisibility = async (prod) => {
+    try {
+      const updated = { ...prod, isHidden: !prod.isHidden };
+      await api.updateProduct(prod.id, updated);
+      setProducts((prev) => prev.map((p) => (p.id === prod.id ? updated : p)));
+      if (onDataRefresh) onDataRefresh();
+      showToast(`"${prod.name}" is now ${updated.isHidden ? 'Hidden from Store' : 'Listed in Store'}`);
+    } catch (err) {
+      showToast('Failed to update product visibility', 'error');
     }
   };
 
@@ -684,10 +699,14 @@ function AdminPanelInner({
   const filteredProducts = safeProducts.filter((p) => {
     if (!p) return false;
     const matchesCat = adminCatFilter === 'all' || p.category === adminCatFilter;
+    const matchesVisibility =
+      adminVisibilityFilter === 'all' ||
+      (adminVisibilityFilter === 'visible' && !p.isHidden) ||
+      (adminVisibilityFilter === 'hidden' && p.isHidden);
     const q = (adminSearch || '').toLowerCase();
     const nameMatch = p.name ? String(p.name).toLowerCase().includes(q) : false;
     const tagMatch = p.tagline ? String(p.tagline).toLowerCase().includes(q) : false;
-    return matchesCat && (!q || nameMatch || tagMatch);
+    return matchesCat && matchesVisibility && (!q || nameMatch || tagMatch);
   });
 
   // ----------------------------------------------------
@@ -700,9 +719,10 @@ function AdminPanelInner({
           {/* Brand Logo & Badge */}
           <div className="ksf-admin-login-logo-wrap">
             <img
-              src="/logo.jpeg"
+              src="/logo_page_1_square.png"
               alt="Kohinoor Signature Farms"
               className="ksf-admin-login-logo"
+              style={{ objectFit: 'contain', background: '#FFFFFF' }}
             />
             <div className="ksf-admin-login-badge">
               <Lock size={11} />
@@ -824,9 +844,9 @@ function AdminPanelInner({
       <div className="ksf-admin-nav">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 0, flex: 1 }}>
           <img
-            src="/logo.jpeg"
+            src="/logo_page_1_square.png"
             alt="Logo"
-            style={{ width: '36px', height: '36px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--gold-primary)', flexShrink: 0 }}
+            style={{ width: '36px', height: '36px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--gold-primary)', flexShrink: 0, objectFit: 'contain', background: '#FFFFFF' }}
           />
           <div style={{ minWidth: 0 }}>
             <div style={{ fontFamily: 'var(--font-cinzel)', fontWeight: 800, fontSize: '0.88rem', color: 'var(--gold-light)', lineHeight: '1.2' }}>
@@ -994,6 +1014,17 @@ function AdminPanelInner({
                     </option>
                   ))}
                 </select>
+
+                <select
+                  className="ksf-input"
+                  style={{ width: 'auto', minWidth: '130px', background: '#FFFFFF' }}
+                  value={adminVisibilityFilter}
+                  onChange={(e) => setAdminVisibilityFilter(e.target.value)}
+                >
+                  <option value="all">All Visibility</option>
+                  <option value="visible">Listed (Visible)</option>
+                  <option value="hidden">Hidden Only</option>
+                </select>
               </div>
 
               <button
@@ -1028,6 +1059,7 @@ function AdminPanelInner({
                       <th>Pricing & Discount</th>
                       <th>FSSAI / Expiry</th>
                       <th>Stock Status</th>
+                      <th>Visibility</th>
                       <th style={{ textAlign: 'right' }}>Actions</th>
                     </tr>
                   </thead>
@@ -1119,6 +1151,8 @@ function AdminPanelInner({
                                 borderRadius: 'var(--radius-full)',
                                 fontSize: '0.75rem',
                                 fontWeight: 700,
+                                border: 'none',
+                                cursor: 'pointer',
                                 background: p.inStock !== false ? 'var(--discount-bg)' : '#FEE2E2',
                                 color: p.inStock !== false ? 'var(--discount-text)' : 'var(--error-red)'
                               }}
@@ -1127,8 +1161,45 @@ function AdminPanelInner({
                             </button>
                           </td>
 
+                          <td>
+                            <button
+                              onClick={() => handleToggleProductVisibility(p)}
+                              title={p.isHidden ? 'Click to list/show in store' : 'Click to hide from store'}
+                              style={{
+                                padding: '0.3rem 0.65rem',
+                                borderRadius: 'var(--radius-full)',
+                                fontSize: '0.75rem',
+                                fontWeight: 700,
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.35rem',
+                                border: p.isHidden ? '1px solid #F59E0B' : '1px solid #10B981',
+                                cursor: 'pointer',
+                                background: p.isHidden ? '#FEF3C7' : '#DCFCE7',
+                                color: p.isHidden ? '#92400E' : '#15803D',
+                                transition: 'all 0.15s ease'
+                              }}
+                            >
+                              {p.isHidden ? <EyeOff size={13} /> : <Eye size={13} />}
+                              <span>{p.isHidden ? 'Hidden' : 'Listed'}</span>
+                            </button>
+                          </td>
+
                           <td style={{ textAlign: 'right' }}>
                             <div style={{ display: 'inline-flex', gap: '0.4rem' }}>
+                              <button
+                                onClick={() => handleToggleProductVisibility(p)}
+                                style={{
+                                  padding: '0.4rem',
+                                  borderRadius: 'var(--radius-sm)',
+                                  background: p.isHidden ? '#FEF3C7' : 'var(--bg-subtle)',
+                                  color: p.isHidden ? '#92400E' : 'var(--text-muted)'
+                                }}
+                                title={p.isHidden ? 'Unhide Product (Show in Store)' : 'Hide Product (Remove from Store)'}
+                              >
+                                {p.isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                              </button>
+
                               <button
                                 onClick={() => handleOpenEditProduct(p)}
                                 style={{
@@ -1162,7 +1233,7 @@ function AdminPanelInner({
 
                     {filteredProducts.length === 0 && (
                       <tr>
-                        <td colSpan={7} style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-muted)' }}>
+                        <td colSpan={8} style={{ textAlign: 'center', padding: '2.5rem', color: 'var(--text-muted)' }}>
                           No products match your search or filter.
                         </td>
                       </tr>
@@ -1233,6 +1304,25 @@ function AdminPanelInner({
                           >
                             {p.inStock !== false ? 'In Stock' : 'Sold Out'}
                           </button>
+
+                          <button
+                            onClick={() => handleToggleProductVisibility(p)}
+                            style={{
+                              padding: '0.2rem 0.55rem',
+                              borderRadius: 'var(--radius-full)',
+                              fontSize: '0.7rem',
+                              fontWeight: 800,
+                              display: 'inline-flex',
+                              alignItems: 'center',
+                              gap: '0.25rem',
+                              border: p.isHidden ? '1px solid #F59E0B' : '1px solid #10B981',
+                              background: p.isHidden ? '#FEF3C7' : '#DCFCE7',
+                              color: p.isHidden ? '#92400E' : '#15803D'
+                            }}
+                          >
+                            {p.isHidden ? <EyeOff size={11} /> : <Eye size={11} />}
+                            <span>{p.isHidden ? 'Hidden' : 'Listed'}</span>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -1287,6 +1377,26 @@ function AdminPanelInner({
 
                     {/* Action Bar */}
                     <div className="ksf-admin-prod-card-actions">
+                      <button
+                        onClick={() => handleToggleProductVisibility(p)}
+                        style={{
+                          padding: '0.55rem 0.75rem',
+                          background: p.isHidden ? '#FEF3C7' : 'var(--bg-subtle)',
+                          color: p.isHidden ? '#92400E' : 'var(--text-muted)',
+                          borderRadius: 'var(--radius-md)',
+                          fontWeight: 700,
+                          fontSize: '0.8rem',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.35rem',
+                          border: p.isHidden ? '1px solid #FCD34D' : '1px solid var(--border-light)'
+                        }}
+                        title={p.isHidden ? 'Unhide Product (Show in Store)' : 'Hide Product (Remove from Store)'}
+                      >
+                        {p.isHidden ? <EyeOff size={14} /> : <Eye size={14} />}
+                        <span>{p.isHidden ? 'Unhide' : 'Hide'}</span>
+                      </button>
+
                       <button
                         onClick={() => handleOpenEditProduct(p)}
                         style={{
@@ -3317,6 +3427,40 @@ function AdminPanelInner({
                     Press Enter to add a URL • Click ‹ on any image to make it Primary
                   </small>
                 </div>
+              </div>
+
+              {/* Product Store Visibility */}
+              <div className="ksf-form-group">
+                <label className="ksf-form-label">Store Visibility</label>
+                {(() => {
+                  const isHidden = editingProduct.isHidden === true;
+                  return (
+                    <button
+                      type="button"
+                      onClick={() => setEditingProduct({ ...editingProduct, isHidden: !isHidden })}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.5rem',
+                        padding: '0.55rem 1.1rem',
+                        borderRadius: 'var(--radius-full)',
+                        border: isHidden ? '2px solid #F59E0B' : '2px solid #10B981',
+                        background: isHidden ? '#FEF3C7' : '#DCFCE7',
+                        color: isHidden ? '#92400E' : '#15803D',
+                        fontWeight: 700,
+                        fontSize: '0.825rem',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease'
+                      }}
+                    >
+                      {isHidden ? <EyeOff size={16} /> : <Eye size={16} />}
+                      <span>{isHidden ? 'Product is HIDDEN from Store (Click to Make Visible)' : 'Product is LISTED in Store (Click to Hide)'}</span>
+                    </button>
+                  );
+                })()}
+                <small style={{ color: 'var(--text-muted)', fontSize: '0.72rem', display: 'block', marginTop: '0.35rem' }}>
+                  When hidden, this product will not be shown to customers in the catalog, search, or category filters.
+                </small>
               </div>
 
               {/* Badges & Labels */}

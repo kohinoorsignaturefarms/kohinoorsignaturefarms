@@ -20,7 +20,7 @@ export default function Header({
         <div className="ksf-header-top-row">
           {/* Brand Logo & Title */}
           <div className="ksf-logo-wrap" onClick={onGoHome} style={{ cursor: 'pointer' }}>
-            <img src="/logo.jpeg" alt="Kohinoor Signature Farms" className="ksf-logo-img" />
+            <img src="/logo_page_1_square.png" alt="Kohinoor Signature Farms" className="ksf-logo-img" />
             <div className="ksf-logo-titles">
               <span className="ksf-brand-title">Kohinoor Signature Farms</span>
               <span className="ksf-brand-tagline">Grass-Fed • Organic • Halal</span>

@@ -9,13 +9,14 @@ export default function CategoryFilterBar({
   onlyBestSellers,
   setOnlyBestSellers
 }) {
+  const visibleProducts = (products || []).filter((p) => !p.isHidden);
+
   const getCount = (catId) => {
-    if (!products) return 0;
-    if (catId === 'all') return products.length;
-    return products.filter((p) => p.category === catId).length;
+    if (catId === 'all') return visibleProducts.length;
+    return visibleProducts.filter((p) => p.category === catId).length;
   };
 
-  const bestSellersCount = (products || []).filter((p) =>
+  const bestSellersCount = visibleProducts.filter((p) =>
     p.isBestSeller === true ||
     (p.badges || []).some((b) => b.toLowerCase().includes('best seller') || b.toLowerCase().includes('bestseller') || b.toLowerCase().includes('popular'))
   ).length;

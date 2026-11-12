@@ -618,6 +618,7 @@ app.post('/api/products', async (req, res) => {
     badges: req.body.badges || ['Farm Fresh', '100% Halal'],
     inStock: req.body.inStock !== false,
     isBestSeller: Boolean(req.body.isBestSeller),
+    isHidden: Boolean(req.body.isHidden),
     variants: Array.isArray(req.body.variants) && req.body.variants.length > 0 
       ? req.body.variants 
       : [
@@ -652,6 +653,7 @@ app.put('/api/products/:id', async (req, res) => {
   const updatedProduct = {
     ...products[index],
     ...req.body,
+    isHidden: req.body.isHidden !== undefined ? Boolean(req.body.isHidden) : Boolean(products[index].isHidden),
     id: products[index].id // preserve ID
   };
 
@@ -659,6 +661,21 @@ app.put('/api/products/:id', async (req, res) => {
   await setStoreData('products', products);
 
   res.json({ success: true, message: 'Product updated successfully', product: updatedProduct });
+});
+
+app.patch('/api/products/:id/toggle-visibility', async (req, res) => {
+  const { id } = req.params;
+  const products = (await getStoreData('products')) || [];
+  const index = products.findIndex((p) => p.id === id || p.slug === id);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Product not found' });
+  }
+
+  products[index].isHidden = !products[index].isHidden;
+  await setStoreData('products', products);
+
+  res.json({ success: true, message: 'Visibility updated', product: products[index] });
 });
 
 app.delete('/api/products/:id', async (req, res) => {

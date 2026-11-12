@@ -4,7 +4,7 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 export default function CategoryBoxes({ categories, activeCategory, onSelectCategory, products }) {
   const getProductCount = (catId) => {
     if (!products) return 0;
-    return products.filter((p) => p.category === catId).length;
+    return products.filter((p) => p.category === catId && !p.isHidden).length;
   };
 
   const handleCardClick = (catId) => {
