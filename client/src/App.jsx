@@ -1,17 +1,26 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import Header from './components/Header';
 import AnnouncementBar from './components/AnnouncementBar';
 import HeroSlider from './components/HeroSlider';
 import CategoryFilterBar from './components/CategoryFilterBar';
 import ProductCard from './components/ProductCard';
-import ProductDetailPage from './components/ProductDetailPage';
 import CartDrawer from './components/CartDrawer';
-import AboutUsPage from './components/AboutUsPage';
 import Footer from './components/Footer';
-import AdminPanel from './components/AdminPanel';
 import LocationModal from './components/LocationModal';
 import { api, formatCurrency, DEFAULT_DELIVERY_LOCATIONS } from './api';
 import { Sparkles, MessageCircle, AlertCircle, RefreshCw, Settings, ShieldCheck, ShoppingBag, ArrowRight } from 'lucide-react';
+
+// Dynamic code-splitting: heavy modules are loaded on-demand, keeping customer initial load ultra-fast
+const AdminPanel = lazy(() => import('./components/AdminPanel'));
+const AboutUsPage = lazy(() => import('./components/AboutUsPage'));
+const ProductDetailPage = lazy(() => import('./components/ProductDetailPage'));
+
+const PageLoader = () => (
+  <div style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--green-primary)', gap: '0.75rem' }}>
+    <RefreshCw className="animate-spin" size={32} />
+    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Loading...</span>
+  </div>
+);
 
 // Read cached catalog from localStorage for instant, zero-delay initial render (<1ms)
 const getCachedBootstrap = () => {
@@ -387,13 +396,15 @@ export default function App() {
 
   if (isAdminOpen) {
     return (
-      <AdminPanel
-        onClose={handleCloseAdmin}
-        initialProducts={products}
-        initialCategories={categories}
-        initialSettings={settings}
-        onDataRefresh={() => fetchData(true)}
-      />
+      <Suspense fallback={<PageLoader />}>
+        <AdminPanel
+          onClose={handleCloseAdmin}
+          initialProducts={products}
+          initialCategories={categories}
+          initialSettings={settings}
+          onDataRefresh={() => fetchData(true)}
+        />
+      </Suspense>
     );
   }
 
@@ -417,7 +428,9 @@ export default function App() {
       />
 
       {currentPage === 'about' ? (
-        <AboutUsPage storeSettings={settings} onGoToStore={handleGoHome} />
+        <Suspense fallback={<PageLoader />}>
+          <AboutUsPage storeSettings={settings} onGoToStore={handleGoHome} />
+        </Suspense>
       ) : (
         <>
           {/* Hero Banner Slider */}
@@ -599,15 +612,17 @@ export default function App() {
 
       {/* Product Detail Modal */}
       {selectedProduct && (
-        <ProductDetailPage
-          product={selectedProduct}
-          storeSettings={settings}
-          onClose={handleCloseDetail}
-          onAddToCart={handleAddToCart}
-          onOpenCart={() => setIsCartOpen(true)}
-          cartItems={cartItems}
-          selectedLocation={selectedLocation}
-        />
+        <Suspense fallback={null}>
+          <ProductDetailPage
+            product={selectedProduct}
+            storeSettings={settings}
+            onClose={handleCloseDetail}
+            onAddToCart={handleAddToCart}
+            onOpenCart={() => setIsCartOpen(true)}
+            cartItems={cartItems}
+            selectedLocation={selectedLocation}
+          />
+        </Suspense>
       )}
 
       {/* Cart Drawer Modal */}

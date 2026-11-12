@@ -259,6 +259,27 @@ export default function CartDrawer({
             <div className="ksf-cart-footer-note">
               Instant confirmation • Direct from Kohinoor Signature Farms
             </div>
+
+            {/* Shopper Trust & Safety Badges */}
+            <div
+              className="ksf-cart-trust-badges"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.85rem',
+                marginTop: '0.65rem',
+                fontSize: '0.72rem',
+                color: 'var(--text-muted)'
+              }}
+            >
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                <ShieldCheck size={13} style={{ color: 'var(--green-primary)' }} />
+                <span>FSSAI Lic. #{storeSettings?.masterFssai || '13624014000889'}</span>
+              </span>
+              <span>•</span>
+              <span>100% Authentic Halal</span>
+            </div>
           </div>
         )}
       </div>

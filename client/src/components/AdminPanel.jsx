@@ -36,7 +36,7 @@ import {
   Filter,
   MapPin
 } from 'lucide-react';
-import { api, formatCurrency } from '../api';
+import { api, formatCurrency, setAuthToken } from '../api';
 
 const safeAdminAuth = {
   get: () => {
@@ -52,6 +52,7 @@ const safeAdminAuth = {
         sessionStorage.setItem('ksf_admin_auth', 'true');
       } else {
         sessionStorage.removeItem('ksf_admin_auth');
+        setAuthToken(null);
       }
     } catch (e) {}
   }
@@ -269,6 +270,7 @@ function AdminPanelInner({
   const handleLogout = () => {
     setIsAuthenticated(false);
     safeAdminAuth.set(false);
+    setAuthToken(null);
     onClose();
   };
 

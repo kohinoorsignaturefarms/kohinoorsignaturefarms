@@ -15,6 +15,75 @@ export const getOrCreateVisitorId = () => {
   }
 };
 
+// Admin Auth Token helpers (persisted securely in sessionStorage)
+export const getAuthToken = () => {
+  try {
+    return sessionStorage.getItem('ksf_admin_token') || sessionStorage.getItem('ksf_admin_auth') || '';
+  } catch (e) {
+    return '';
+  }
+};
+
+export const setAuthToken = (token) => {
+  try {
+    if (token) {
+      sessionStorage.setItem('ksf_admin_token', token);
+    } else {
+      sessionStorage.removeItem('ksf_admin_token');
+    }
+  } catch (e) {}
+};
+
+export const getAuthHeaders = () => {
+  const token = getAuthToken();
+  return token ? { Authorization: `Bearer ${token}` } : {};
+};
+
+// High-speed browser-side image compression & WebP conversion helper
+export async function compressImage(file, maxWidth = 1200, quality = 0.82) {
+  if (!file || !file.type || !file.type.startsWith('image/')) return file;
+  if (file.type === 'image/svg+xml' || file.size < 60 * 1024) return file;
+
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target.result;
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob && blob.size < file.size) {
+              const newFile = new File([blob], file.name.replace(/\.[^.]+$/, '.webp'), {
+                type: 'image/webp',
+                lastModified: Date.now()
+              });
+              resolve(newFile);
+            } else {
+              resolve(file);
+            }
+          },
+          'image/webp',
+          quality
+        );
+      };
+      img.onerror = () => resolve(file);
+    };
+    reader.onerror = () => resolve(file);
+  });
+}
+
 export const api = {
   // Bootstrap: unified single fetch for catalog, categories, settings, locations
   async getBootstrap(options = {}) {
@@ -47,7 +116,7 @@ export const api = {
   async createProduct(productData) {
     const res = await fetch(`${API_BASE}/products`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
       body: JSON.stringify(productData)
     });
     if (!res.ok) throw new Error('Failed to create product');
@@ -57,7 +126,7 @@ export const api = {
   async updateProduct(id, productData) {
     const res = await fetch(`${API_BASE}/products/${id}`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
       body: JSON.stringify(productData)
     });
     if (!res.ok) throw new Error('Failed to update product');
@@ -66,7 +135,8 @@ export const api = {
 
   async toggleProductVisibility(id) {
     const res = await fetch(`${API_BASE}/products/${id}/toggle-visibility`, {
-      method: 'PATCH'
+      method: 'PATCH',
+      headers: { ...getAuthHeaders() }
     });
     if (!res.ok) throw new Error('Failed to toggle product visibility');
     return res.json();
@@ -74,7 +144,8 @@ export const api = {
 
   async deleteProduct(id) {
     const res = await fetch(`${API_BASE}/products/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: { ...getAuthHeaders() }
     });
     if (!res.ok) throw new Error('Failed to delete product');
     return res.json();
@@ -90,7 +161,7 @@ export const api = {
   async saveCategory(catData) {
     const res = await fetch(`${API_BASE}/categories`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
       body: JSON.stringify(catData)
     });
     if (!res.ok) throw new Error('Failed to save category');
@@ -99,7 +170,8 @@ export const api = {
 
   async deleteCategory(id) {
     const res = await fetch(`${API_BASE}/categories/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: { ...getAuthHeaders() }
     });
     if (!res.ok) throw new Error('Failed to delete category');
     return res.json();
@@ -115,7 +187,7 @@ export const api = {
   async updateSettings(settingsData) {
     const res = await fetch(`${API_BASE}/settings`, {
       method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
       body: JSON.stringify(settingsData)
     });
     if (!res.ok) throw new Error('Failed to update settings');
@@ -145,7 +217,7 @@ export const api = {
     try {
       const res = await fetch(url, {
         method,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
         body: JSON.stringify(locationData)
       });
       if (res.ok) return res.json();
@@ -167,7 +239,8 @@ export const api = {
   async deleteLocation(locationId) {
     try {
       const res = await fetch(`${API_BASE}/locations/${locationId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: { ...getAuthHeaders() }
       });
       if (res.ok) return res.json();
     } catch (e) {}
@@ -182,7 +255,8 @@ export const api = {
   async toggleLocation(locationId) {
     try {
       const res = await fetch(`${API_BASE}/locations/${locationId}/toggle`, {
-        method: 'PATCH'
+        method: 'PATCH',
+        headers: { ...getAuthHeaders() }
       });
       if (res.ok) return res.json();
     } catch (e) {}
@@ -202,29 +276,40 @@ export const api = {
       body: JSON.stringify({ pin })
     });
     if (!res.ok) {
-      const err = await res.json();
+      const err = await res.json().catch(() => ({}));
       throw new Error(err.message || 'Invalid PIN');
     }
-    return res.json();
+    const data = await res.json();
+    if (data.token) {
+      setAuthToken(data.token);
+    }
+    return data;
   },
 
-  // Admin Stats
+  // Admin Stats (Admin Protected)
   async getStats() {
-    const res = await fetch(`${API_BASE}/stats`);
+    const res = await fetch(`${API_BASE}/stats`, {
+      headers: { ...getAuthHeaders() }
+    });
     if (!res.ok) throw new Error('Failed to fetch stats');
     return res.json();
   },
 
-  // Image Upload (direct to Supabase Storage CDN)
+  // Image Upload (Auto-compressed to WebP CDN)
   async uploadImage(file, folder = 'products') {
+    const processedFile = await compressImage(file);
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append('image', processedFile);
     formData.append('folder', folder);
     const res = await fetch(`${API_BASE}/upload?folder=${encodeURIComponent(folder)}`, {
       method: 'POST',
+      headers: { ...getAuthHeaders() },
       body: formData
     });
-    if (!res.ok) throw new Error('Image upload failed');
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || 'Image upload failed');
+    }
     return res.json();
   },
 
@@ -286,10 +371,12 @@ export const api = {
     return null;
   },
 
-  // Get analytics for admin panel
+  // Get analytics for admin panel (Admin Protected)
   async getAnalytics(period = 'week') {
     try {
-      const res = await fetch(`${API_BASE}/analytics?period=${period}`);
+      const res = await fetch(`${API_BASE}/analytics?period=${period}`, {
+        headers: { ...getAuthHeaders() }
+      });
       if (!res.ok) return { totalClicks: 0, uniqueVisitors: 0, totalOrders: 0, totalOrderValue: 0, topProducts: [], eventBreakdown: {} };
       const data = await res.json();
       return data || { totalClicks: 0, uniqueVisitors: 0, totalOrders: 0, totalOrderValue: 0, topProducts: [], eventBreakdown: {} };
@@ -298,11 +385,13 @@ export const api = {
     }
   },
 
-  // Get all orders for admin panel
+  // Get all orders for admin panel (Admin Protected)
   async getOrders(status = 'all') {
     try {
       const url = status && status !== 'all' ? `${API_BASE}/orders?status=${status}` : `${API_BASE}/orders`;
-      const res = await fetch(url);
+      const res = await fetch(url, {
+        headers: { ...getAuthHeaders() }
+      });
       if (!res.ok) return [];
       const data = await res.json();
       return Array.isArray(data) ? data : [];
@@ -311,21 +400,22 @@ export const api = {
     }
   },
 
-  // Update order status from admin panel
+  // Update order status from admin panel (Admin Protected)
   async updateOrderStatus(id, status, note) {
     const res = await fetch(`${API_BASE}/orders/${id}`, {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
       body: JSON.stringify({ status, note })
     });
     if (!res.ok) throw new Error('Failed to update order');
     return res.json();
   },
 
-  // Delete order from admin panel
+  // Delete order from admin panel (Admin Protected)
   async deleteOrder(id) {
     const res = await fetch(`${API_BASE}/orders/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: { ...getAuthHeaders() }
     });
     if (!res.ok) throw new Error('Failed to delete order');
     return res.json();

@@ -9,32 +9,32 @@
   "heroBanners": [
     {
       "id": "banner-1",
-      "badge": "Signature Grass-Fed",
-      "image": "",
-      "title": "Premium Farm-Fresh Mutton Cuts",
-      "subtitle": "100% Grass-Fed pasture-raised goat — Halal certified, antibiotic-free, direct from farm to your doorstep.",
+      "badge": "Signature Select",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/banners/1790174585027-3z4mij.png",
+      "title": "Premium Farm Fresh Mutton Leg",
+      "subtitle": "Tender, Juicy & Freshly Cut for a Rich, Delicious Taste.",
       "buttonText": "Explore All Cuts",
-      "mobileImage": "",
-      "categoryFilter": "all"
-    },
-    {
-      "id": "banner-2",
-      "badge": "100% Antibiotic-Free",
-      "image": "",
-      "title": "Authentic Halal Butchery — Freshly Cut on Order",
-      "subtitle": "Every cut is prepared fresh upon your order by trained Halal butchers. Never frozen. Direct from open pasture.",
-      "buttonText": "Shop Fresh Mutton",
-      "mobileImage": "",
+      "mobileImage": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/banners/1790174591161-t4v957.png",
       "categoryFilter": "goat"
     },
     {
       "id": "banner-3",
-      "badge": "Premium Offal & Specialty Cuts",
-      "image": "",
-      "title": "Farm-to-Table Organ Meats & Specialty Cuts",
-      "subtitle": "From Kaleji and Kapura to Paya and Brain — the full goat, the authentic way. Sourced honest, delivered fresh.",
+      "badge": "Signature Select",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/banners/1790174797818-j7snot.png",
+      "title": "Specialty Cuts in Mutton Chops",
+      "subtitle": "Premium Tender Cuts, Rich in Flavour & Perfectly Prepared for a Delicious Feast.",
       "buttonText": "Explore Specialty Cuts",
-      "mobileImage": "",
+      "mobileImage": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/banners/1790174803032-7nqojp.png",
+      "categoryFilter": "goat"
+    },
+    {
+      "id": "banner-1790174741688",
+      "badge": "Signature Select",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/banners/1790174814741-cz92rt.png",
+      "title": "Authentic Mutton Mince Keema Kofta",
+      "subtitle": "Freshly Minced, Richly Flavoured & Perfectly Crafted for Delicious Koftas.",
+      "buttonText": "Order Fresh",
+      "mobileImage": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/banners/1790174820529-kuzpjm.png",
       "categoryFilter": "goat"
     }
   ],
