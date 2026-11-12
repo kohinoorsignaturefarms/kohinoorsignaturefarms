@@ -190,7 +190,7 @@ export default function Footer({ storeSettings, onOpenAbout }) {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '0.45rem',
-                    background: 'var(--green-primary)',
+                    background: '#25D366',
                     color: '#FFFFFF',
                     fontWeight: 700,
                     fontSize: '0.825rem',
@@ -198,7 +198,8 @@ export default function Footer({ storeSettings, onOpenAbout }) {
                     borderRadius: 'var(--radius-full)',
                     textDecoration: 'none',
                     marginTop: '0.35rem',
-                    boxShadow: '0 2px 8px rgba(11, 59, 36, 0.3)'
+                    boxShadow: '0 3px 12px rgba(37, 211, 102, 0.4)',
+                    transition: 'all 0.2s ease'
                   }}
                 >
                   <MessageCircle size={17} />

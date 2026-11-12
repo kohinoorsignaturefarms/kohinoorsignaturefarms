@@ -245,12 +245,34 @@ input, select, textarea {
 .ksf-logo-wrap {
   display: flex;
   align-items: center;
-  gap: 0.65rem;
   text-decoration: none;
   color: inherit;
   flex: 0 0 auto;
   flex-shrink: 0;
   margin-right: 0.5rem;
+}
+
+.ksf-header-brand-logo {
+  max-width: 340px;
+  width: 85%;
+  height: auto;
+  display: inline-block;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+@media (max-width: 767px) {
+  .ksf-logo-wrap {
+    max-width: calc(100% - 60px);
+    margin-right: 0.25rem;
+  }
+  .ksf-header-brand-logo {
+    max-width: 220px;
+    width: 85%;
+    max-height: 48px;
+    height: auto;
+    object-fit: contain;
+  }
 }
 
 .ksf-logo-img {
@@ -3131,6 +3153,33 @@ input, select, textarea {
   transition: bottom 0.25s ease;
 }
 
+.btn-floating-whatsapp {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-full);
+  background: #25D366 !important;
+  color: #FFFFFF !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.45);
+  border: 2px solid #FFFFFF;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+  text-decoration: none;
+}
+
+.btn-floating-whatsapp:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
+  color: #FFFFFF !important;
+}
+
+.ksf-floating-wa-tooltip {
+  display: none;
+}
+
 /* ==========================================================
    ADMIN LOGIN PORTAL (LUXURY BRANDED AUTHENTICATION)
    ========================================================== */
@@ -5233,6 +5282,20 @@ input, select, textarea {
   color: #FFFFFF;
   border-color: #FF0000;
   box-shadow: 0 4px 14px rgba(255, 0, 0, 0.4);
+}
+
+/* WhatsApp Vibrant Emerald Green Hover */
+.ksf-social-whatsapp,
+.ksf-social-wa {
+  color: #25D366 !important;
+}
+
+.ksf-social-whatsapp:hover,
+.ksf-social-wa:hover {
+  background: #25D366 !important;
+  color: #FFFFFF !important;
+  border-color: #25D366 !important;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.45) !important;
 }
 
 @media (max-width: 640px) {

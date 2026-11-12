@@ -93,22 +93,20 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
           {/* Page 2 Official Brand Logo for About Page */}
           <div className="ksf-about-hero-logo-wrap" style={{ marginBottom: '1.5rem' }}>
             <picture>
-              <source srcSet="/logo-about-gold.webp" type="image/webp" />
+              <source srcSet="/logo-about.webp" type="image/webp" />
               <img
-                src="/logo-about-gold.png"
-                alt="Kohinoor Signature Farms"
+                src="/logo-about.png"
+                alt="Kohinoor Signature Farms Official Logo"
                 className="ksf-about-hero-logo"
                 width="880"
                 height="218"
-                loading="eager"
-                fetchPriority="high"
+                loading="lazy"
                 decoding="async"
                 style={{
-                  maxWidth: '440px',
-                  width: '88%',
+                  maxWidth: '340px',
+                  width: '85%',
                   height: 'auto',
-                  display: 'inline-block',
-                  filter: 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4))'
+                  display: 'inline-block'
                 }}
               />
             </picture>

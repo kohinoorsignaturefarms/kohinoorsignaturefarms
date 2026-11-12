@@ -18,25 +18,26 @@ export default function Header({
       <div className="ksf-container">
         {/* Top Main Row */}
         <div className="ksf-header-top-row">
-          {/* Brand Logo & Title */}
+          {/* Official Brand Logo */}
           <div className="ksf-logo-wrap" onClick={onGoHome} style={{ cursor: 'pointer' }}>
             <picture>
-              <source srcSet="/logo_page_1_square.webp" type="image/webp" />
+              <source srcSet="/logo-about.webp" type="image/webp" />
               <img
-                src="/logo_page_1_square.png"
-                alt="Kohinoor Signature Farms"
-                className="ksf-logo-img"
-                width="48"
-                height="48"
-                loading="eager"
-                fetchPriority="high"
+                src="/logo-about.png"
+                alt="Kohinoor Signature Farms Official Logo"
+                className="ksf-header-brand-logo"
+                width="880"
+                height="218"
+                loading="lazy"
                 decoding="async"
+                style={{
+                  maxWidth: '340px',
+                  width: '85%',
+                  height: 'auto',
+                  display: 'inline-block'
+                }}
               />
             </picture>
-            <div className="ksf-logo-titles">
-              <span className="ksf-brand-title">Kohinoor Signature Farms</span>
-              <span className="ksf-brand-tagline">Grass-Fed • Organic • Halal</span>
-            </div>
           </div>
 
           {/* Desktop Search Bar (Hidden on Mobile) */}
