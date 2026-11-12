@@ -92,18 +92,26 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
         <div className="ksf-container" style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto' }}>
           {/* Page 2 Official Brand Logo for About Page */}
           <div className="ksf-about-hero-logo-wrap" style={{ marginBottom: '1.5rem' }}>
-            <img
-              src="/logo-about-gold.png"
-              alt="Kohinoor Signature Farms"
-              className="ksf-about-hero-logo"
-              style={{
-                maxWidth: '440px',
-                width: '88%',
-                height: 'auto',
-                display: 'inline-block',
-                filter: 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4))'
-              }}
-            />
+            <picture>
+              <source srcSet="/logo-about-gold.webp" type="image/webp" />
+              <img
+                src="/logo-about-gold.png"
+                alt="Kohinoor Signature Farms"
+                className="ksf-about-hero-logo"
+                width="880"
+                height="218"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
+                style={{
+                  maxWidth: '440px',
+                  width: '88%',
+                  height: 'auto',
+                  display: 'inline-block',
+                  filter: 'drop-shadow(0 4px 16px rgba(0, 0, 0, 0.4))'
+                }}
+              />
+            </picture>
           </div>
 
           <div className="ksf-about-badge">
@@ -149,16 +157,23 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
         <div className="ksf-container" style={{ maxWidth: '960px' }}>
           {/* Page 2 Brand Identity Lockup */}
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-            <img
-              src="/logo-about.png"
-              alt="Kohinoor Signature Farms Official Logo"
-              style={{
-                maxWidth: '340px',
-                width: '85%',
-                height: 'auto',
-                display: 'inline-block'
-              }}
-            />
+            <picture>
+              <source srcSet="/logo-about.webp" type="image/webp" />
+              <img
+                src="/logo-about.png"
+                alt="Kohinoor Signature Farms Official Logo"
+                width="880"
+                height="218"
+                loading="lazy"
+                decoding="async"
+                style={{
+                  maxWidth: '340px',
+                  width: '85%',
+                  height: 'auto',
+                  display: 'inline-block'
+                }}
+              />
+            </picture>
           </div>
 
           <div className="ksf-guarantee-square-grid">
@@ -186,12 +201,19 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
             {/* Square Card 2: Founded & Managed by Feroz Shaik */}
             <div className="ksf-guarantee-square-card">
               <div className="ksf-guarantee-square-avatar-wrap">
-                <img
-                  src="/logo_page_1_square.png"
-                  alt="Kohinoor Signature Farms"
-                  className="ksf-guarantee-square-avatar"
-                  style={{ objectFit: 'contain', background: '#FFFFFF' }}
-                />
+                <picture>
+                  <source srcSet="/logo_page_1_square.webp" type="image/webp" />
+                  <img
+                    src="/logo_page_1_square.png"
+                    alt="Kohinoor Signature Farms"
+                    className="ksf-guarantee-square-avatar"
+                    width="256"
+                    height="256"
+                    loading="lazy"
+                    decoding="async"
+                    style={{ objectFit: 'contain', background: '#FFFFFF' }}
+                  />
+                </picture>
               </div>
               <span className="ksf-guarantee-square-badge">FOUNDED &amp; MANAGED BY</span>
               <h3 className="ksf-guarantee-square-title">

@@ -718,12 +718,19 @@ function AdminPanelInner({
         <div className="ksf-admin-login-card animate-fade-in">
           {/* Brand Logo & Badge */}
           <div className="ksf-admin-login-logo-wrap">
-            <img
-              src="/logo_page_1_square.png"
-              alt="Kohinoor Signature Farms"
-              className="ksf-admin-login-logo"
-              style={{ objectFit: 'contain', background: '#FFFFFF' }}
-            />
+            <picture>
+              <source srcSet="/logo_page_1_square.webp" type="image/webp" />
+              <img
+                src="/logo_page_1_square.png"
+                alt="Kohinoor Signature Farms"
+                className="ksf-admin-login-logo"
+                width="72"
+                height="72"
+                loading="eager"
+                decoding="async"
+                style={{ objectFit: 'contain', background: '#FFFFFF' }}
+              />
+            </picture>
             <div className="ksf-admin-login-badge">
               <Lock size={11} />
               <span>Admin Portal</span>
@@ -843,11 +850,18 @@ function AdminPanelInner({
       {/* Admin Top Navigation */}
       <div className="ksf-admin-nav">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 0, flex: 1 }}>
-          <img
-            src="/logo_page_1_square.png"
-            alt="Logo"
-            style={{ width: '36px', height: '36px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--gold-primary)', flexShrink: 0, objectFit: 'contain', background: '#FFFFFF' }}
-          />
+          <picture>
+            <source srcSet="/logo_page_1_square.webp" type="image/webp" />
+            <img
+              src="/logo_page_1_square.png"
+              alt="Logo"
+              width="36"
+              height="36"
+              loading="lazy"
+              decoding="async"
+              style={{ width: '36px', height: '36px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--gold-primary)', flexShrink: 0, objectFit: 'contain', background: '#FFFFFF' }}
+            />
+          </picture>
           <div style={{ minWidth: 0 }}>
             <div style={{ fontFamily: 'var(--font-cinzel)', fontWeight: 800, fontSize: '0.88rem', color: 'var(--gold-light)', lineHeight: '1.2' }}>
               KOHINOOR SIGNATURE FARMS

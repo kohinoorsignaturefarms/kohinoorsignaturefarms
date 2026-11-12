@@ -18,19 +18,26 @@ export default function Footer({ storeSettings, onOpenAbout }) {
           {/* Brand Info & Mission */}
           <div className="ksf-footer-brand-col">
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.85rem', marginBottom: '1rem' }}>
-              <img
-                src="/logo_page_1_square.png"
-                alt="Kohinoor Signature Farms Logo"
-                style={{
-                  width: '54px',
-                  height: '54px',
-                  borderRadius: 'var(--radius-md)',
-                  border: '2px solid var(--gold-primary)',
-                  boxShadow: '0 2px 8px rgba(212, 175, 55, 0.3)',
-                  objectFit: 'contain',
-                  background: '#FFFFFF'
-                }}
-              />
+              <picture>
+                <source srcSet="/logo_page_1_square.webp" type="image/webp" />
+                <img
+                  src="/logo_page_1_square.png"
+                  alt="Kohinoor Signature Farms Logo"
+                  width="54"
+                  height="54"
+                  loading="lazy"
+                  decoding="async"
+                  style={{
+                    width: '54px',
+                    height: '54px',
+                    borderRadius: 'var(--radius-md)',
+                    border: '2px solid var(--gold-primary)',
+                    boxShadow: '0 2px 8px rgba(212, 175, 55, 0.3)',
+                    objectFit: 'contain',
+                    background: '#FFFFFF'
+                  }}
+                />
+              </picture>
               <div>
                 <div
                   style={{
