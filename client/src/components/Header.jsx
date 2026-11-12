@@ -19,7 +19,7 @@ export default function Header({
         {/* Top Main Row */}
         <div className="ksf-header-top-row">
           {/* Official Brand Logo */}
-          <div className="ksf-logo-wrap" onClick={onGoHome} style={{ cursor: 'pointer' }}>
+          <div className="ksf-logo-wrap" onClick={onGoHome} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', marginRight: 0, paddingRight: 0 }}>
             <picture>
               <source srcSet="/logo-about.webp" type="image/webp" />
               <img

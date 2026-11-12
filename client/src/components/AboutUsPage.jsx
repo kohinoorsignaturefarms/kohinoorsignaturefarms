@@ -91,7 +91,22 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
       <section className="ksf-about-hero">
         <div className="ksf-container" style={{ textAlign: 'center', maxWidth: '840px', margin: '0 auto' }}>
           {/* Page 2 Official Brand Logo for About Page */}
-          <div className="ksf-about-hero-logo-wrap">
+          <div
+            className="ksf-about-hero-logo-wrap"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: '#FFFFFF',
+              padding: '0.85rem 1.85rem',
+              borderRadius: '18px',
+              border: '2px solid var(--gold-primary)',
+              boxShadow: '0 10px 32px rgba(0, 0, 0, 0.42), 0 0 24px rgba(212, 175, 55, 0.22)',
+              margin: '0 auto 1.65rem',
+              maxWidth: '90%',
+              boxSizing: 'border-box'
+            }}
+          >
             <picture>
               <source srcSet="/logo-about.webp" type="image/webp" />
               <img
