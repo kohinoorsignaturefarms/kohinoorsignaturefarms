@@ -13,13 +13,29 @@ export default function Header({
   selectedLocation,
   onOpenLocationModal
 }) {
+  const handleLogoClick = () => {
+    if (activePage === 'about') {
+      if (onGoHome) onGoHome();
+    } else {
+      if (onOpenAbout) onOpenAbout();
+    }
+  };
+
   return (
     <header className="ksf-header">
       <div className="ksf-container">
         {/* Top Main Row */}
         <div className="ksf-header-top-row">
           {/* Official Brand Logo */}
-          <div className="ksf-logo-wrap" onClick={onGoHome} style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', marginRight: 0, paddingRight: 0 }}>
+          <div
+            className="ksf-logo-wrap"
+            onClick={handleLogoClick}
+            title={activePage === 'about' ? 'Return to Home Store' : 'About Kohinoor Signature Farms'}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleLogoClick()}
+            style={{ cursor: 'pointer', display: 'inline-flex', alignItems: 'center', marginRight: 0, paddingRight: 0 }}
+          >
             <picture>
               <source srcSet="/logo-about.webp" type="image/webp" />
               <img

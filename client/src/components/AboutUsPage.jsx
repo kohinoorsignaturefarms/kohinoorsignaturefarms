@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 
 /* Helper: renders a Material Symbols Outlined icon */
 function MI({ name, size = 24, style = {} }) {
@@ -9,6 +9,305 @@ function MI({ name, size = 24, style = {} }) {
     >
       {name}
     </span>
+  );
+}
+
+// Curated default high-resolution WebP farm photos (under 60 KB each)
+const DEFAULT_FARM_GALLERY = [
+  {
+    id: 'farm-def-1',
+    image: '/farm/farm-1.webp',
+    title: 'Natural Pasture Grazing',
+    caption: 'Indigenous livestock grazing naturally under open sunlight on pesticide-free green corridors in Shankarpally.',
+    tag: 'Open Pasture',
+    monthYear: 'Monthly Update • November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-2',
+    image: '/farm/farm-2.webp',
+    title: 'Free-Range Country Chickens',
+    caption: 'Country fowl roaming freely through organic fruit orchard grounds with pure herbal forage and natural shade.',
+    tag: 'Free Range',
+    monthYear: 'Monthly Update • November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-3',
+    image: '/farm/farm-3.webp',
+    title: 'Lush Agro-Pastoral Sanctuary',
+    caption: 'Vast green grasslands maintained with organic manure recycling and sustainable agro-ecological practices.',
+    tag: 'Sustainable Farm',
+    monthYear: 'Monthly Update • November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-4',
+    image: '/farm/farm-4.webp',
+    title: '100% Organic Herbal Feed',
+    caption: 'Cultivated green alfalfa, multi-grain feed, and medicinal herbs with zero growth hormones or antibiotics.',
+    tag: 'Organic Feed',
+    monthYear: 'Monthly Update • November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-5',
+    image: '/farm/farm-5.webp',
+    title: 'Sunrise Over Chevella Sanctuary',
+    caption: 'Peaceful morning mist over our farm sanctuary — where ethical animal welfare is our highest everyday commitment.',
+    tag: 'Sanctuary Life',
+    monthYear: 'Monthly Update • November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-6',
+    image: '/farm/farm-6.webp',
+    title: 'Veterinary Supervised Well-Being',
+    caption: 'Daily clinical health screenings, clean RO drinking water systems, and compassionate herd management.',
+    tag: 'Ethical Care',
+    monthYear: 'Monthly Update • November 2026',
+    active: true
+  }
+];
+
+function shuffleArray(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// Stable defaults to prevent allocation on every render
+const EMPTY_GALLERY = [];
+const EMPTY_SETTINGS = {};
+
+function FarmSlideshow({ gallery = EMPTY_GALLERY, settings = EMPTY_SETTINGS }) {
+  const isRandomizeEnabled = settings?.randomize !== false;
+  const autoplayEnabled = settings?.autoplay !== false;
+  // 3.5s duration per photo with gentle breathe-in Ken Burns effect
+  const intervalSeconds = Math.max(2, Number(settings?.intervalSeconds) || 3.5);
+
+  // Resolved list of active items
+  const sourceItems = useMemo(() => {
+    const list = Array.isArray(gallery) && gallery.length > 0 ? gallery : DEFAULT_FARM_GALLERY;
+    const activeOnes = list.filter((item) => item && item.active !== false && item.image);
+    return activeOnes.length > 0 ? activeOnes : DEFAULT_FARM_GALLERY;
+  }, [gallery]);
+
+  // Fingerprint of image IDs to detect actual content changes without false re-shuffles
+  const galleryFingerprint = useMemo(() => {
+    return sourceItems.map((item) => `${item.id || item.image}_${item.title || ''}`).join('|');
+  }, [sourceItems]);
+
+  // Shuffled slides state (randomizes on mount)
+  const [slides, setSlides] = useState(() => {
+    return isRandomizeEnabled ? shuffleArray(sourceItems) : [...sourceItems];
+  });
+
+  const lastFingerprintRef = useRef(galleryFingerprint);
+  const lastRandomizeRef = useRef(isRandomizeEnabled);
+
+  // Only re-shuffle if photos actually changed or randomize toggle was switched
+  useEffect(() => {
+    if (
+      lastFingerprintRef.current !== galleryFingerprint ||
+      lastRandomizeRef.current !== isRandomizeEnabled
+    ) {
+      lastFingerprintRef.current = galleryFingerprint;
+      lastRandomizeRef.current = isRandomizeEnabled;
+      setSlides(isRandomizeEnabled ? shuffleArray(sourceItems) : [...sourceItems]);
+      setCurrentIndex(0);
+    }
+  }, [galleryFingerprint, isRandomizeEnabled, sourceItems]);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchStartY, setTouchStartY] = useState(null);
+
+  const total = slides.length;
+
+  const handleNext = useCallback(() => {
+    if (total <= 1) return;
+    setCurrentIndex((prev) => (prev + 1) % total);
+  }, [total]);
+
+  const handlePrev = useCallback(() => {
+    if (total <= 1) return;
+    setCurrentIndex((prev) => (prev - 1 + total) % total);
+  }, [total]);
+
+  // Autoplay with stable timer
+  useEffect(() => {
+    if (!autoplayEnabled || isPaused || total <= 1) return;
+    const intervalMs = Math.round(intervalSeconds * 1000);
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % total);
+    }, intervalMs);
+    return () => clearInterval(timer);
+  }, [autoplayEnabled, isPaused, intervalSeconds, total]);
+
+  // Touch Swipe (Cross-browser safe: distinguishes horizontal swipe from vertical page scroll)
+  const onTouchStart = (e) => {
+    if (!e.touches || e.touches.length === 0) return;
+    setTouchStartX(e.touches[0].clientX);
+    setTouchStartY(e.touches[0].clientY);
+    setIsPaused(true);
+  };
+
+  const onTouchEnd = (e) => {
+    if (touchStartX === null || touchStartY === null) return;
+    const touch = e.changedTouches?.[0];
+    if (touch) {
+      const diffX = touchStartX - touch.clientX;
+      const diffY = touchStartY - touch.clientY;
+      // Only advance slide if user swiped predominantly horizontally (> 40px and 1.4x greater than vertical movement)
+      if (Math.abs(diffX) > 40 && Math.abs(diffX) > Math.abs(diffY) * 1.4) {
+        if (diffX > 0) handleNext();
+        else handlePrev();
+      }
+    }
+    setTouchStartX(null);
+    setTouchStartY(null);
+    setIsPaused(false);
+  };
+
+  if (total === 0) return null;
+  const currentSlide = slides[currentIndex] || slides[0];
+
+  return (
+    <div
+      className="ksf-farm-slideshow-wrap"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
+      <div className="ksf-farm-slideshow-viewport">
+        {/* Animated Progress Bar across top */}
+        {autoplayEnabled && !isPaused && total > 1 && (
+          <div
+            key={currentIndex}
+            className="ksf-farm-slide-progress-line"
+            style={{ animationDuration: `${intervalSeconds}s` }}
+          />
+        )}
+
+        {/* Slides */}
+        {slides.map((slide, idx) => {
+          const isActive = idx === currentIndex;
+          return (
+            <div
+              key={slide.id || idx}
+              className={`ksf-farm-slide ${isActive ? 'active' : ''}`}
+              aria-hidden={!isActive}
+            >
+              <img
+                src={slide.image}
+                alt={slide.title || 'Kohinoor Signature Farms sanctuary photo'}
+                className="ksf-farm-slide-img"
+                style={isActive ? { animationDuration: `${intervalSeconds + 0.4}s` } : undefined}
+                loading={idx === 0 ? 'eager' : 'lazy'}
+                fetchpriority={idx === 0 ? 'high' : 'low'}
+                decoding="async"
+              />
+              <div className="ksf-farm-slide-scrim" />
+            </div>
+          );
+        })}
+
+        {/* Top Control Bar with Slide Counter */}
+        {total > 1 && (
+          <div className="ksf-farm-slideshow-top" style={{ justifyContent: 'flex-end' }}>
+            <div className="ksf-farm-counter-pill">
+              {currentIndex + 1} / {total}
+            </div>
+          </div>
+        )}
+
+        {/* Navigation Arrows */}
+        {total > 1 && (
+          <>
+            <button
+              type="button"
+              onClick={handlePrev}
+              className="ksf-farm-nav-arrow ksf-farm-nav-prev"
+              title="Previous farm photo"
+              aria-label="Previous farm photo"
+            >
+              <MI name="chevron_left" size={24} />
+            </button>
+            <button
+              type="button"
+              onClick={handleNext}
+              className="ksf-farm-nav-arrow ksf-farm-nav-next"
+              title="Next farm photo"
+              aria-label="Next farm photo"
+            >
+              <MI name="chevron_right" size={24} />
+            </button>
+          </>
+        )}
+
+        {/* Bottom Slide Content */}
+        <div className="ksf-farm-slide-content">
+          {currentSlide.tag && (
+            <span className="ksf-farm-tag-pill">
+              <MI name="verified" size={12} />
+              <span>{currentSlide.tag}</span>
+            </span>
+          )}
+          <h3 className="ksf-farm-slide-title">
+            {currentSlide.title}
+          </h3>
+          {currentSlide.caption && (
+            <p className="ksf-farm-slide-desc">
+              {currentSlide.caption}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* Progress Dots */}
+      {total > 1 && (
+        <div className="ksf-farm-dots">
+          {slides.map((_, idx) => (
+            <button
+              key={idx}
+              type="button"
+              className={`ksf-farm-dot ${idx === currentIndex ? 'active' : ''}`}
+              onClick={() => setCurrentIndex(idx)}
+              aria-label={`Go to slide ${idx + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Thumbnail Selector Strip */}
+      {total > 1 && (
+        <div className="ksf-farm-thumbs-strip">
+          {slides.map((slide, idx) => (
+            <button
+              key={slide.id || idx}
+              type="button"
+              className={`ksf-farm-thumb-item ${idx === currentIndex ? 'active' : ''}`}
+              onClick={() => setCurrentIndex(idx)}
+              title={slide.title}
+              aria-label={`View ${slide.title}`}
+            >
+              <img
+                src={slide.image}
+                alt={slide.title}
+                className="ksf-farm-thumb-img"
+                loading="lazy"
+              />
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -93,6 +392,11 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
           {/* Page 2 Official Brand Logo for About Page */}
           <div
             className="ksf-about-hero-logo-wrap"
+            onClick={onGoToStore}
+            title="Return to Home Store"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onGoToStore?.()}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -104,7 +408,8 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
               boxShadow: '0 10px 32px rgba(0, 0, 0, 0.42), 0 0 24px rgba(212, 175, 55, 0.22)',
               margin: '0 auto 1.65rem',
               maxWidth: '90%',
-              boxSizing: 'border-box'
+              boxSizing: 'border-box',
+              cursor: 'pointer'
             }}
           >
             <picture>
@@ -165,11 +470,39 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
         </div>
       </section>
 
+      {/* SECTION: Life At Kohinoor Sanctuary — Monthly Photo Slideshow (Directly Below Hero) */}
+      <section className="ksf-about-section ksf-about-section-alt" style={{ paddingTop: '2.5rem', paddingBottom: '3.5rem' }}>
+        <div className="ksf-container" style={{ maxWidth: '1040px' }}>
+          <div className="ksf-section-title-wrap">
+            <h2 className="ksf-section-h2">
+              {storeSettings?.farmGallerySettings?.title || 'Glimpses of Kohinoor Sanctuary'}
+            </h2>
+            {(() => {
+              const rawSub = storeSettings?.farmGallerySettings?.subtitle || 'Authentic, unedited moments from our Shankarpally - Chevella corridor sanctuary.';
+              const cleanSub = rawSub.replace(/\.?\s*(Order dynamically shuffled on every visit|Updated monthly & dynamically shuffled|dynamically shuffled)[\.\s]*/gi, '. ').trim().replace(/\.\s*\.$/, '.');
+              return cleanSub ? <p className="ksf-section-p">{cleanSub}</p> : null;
+            })()}
+          </div>
+
+          <FarmSlideshow
+            gallery={storeSettings?.farmGallery}
+            settings={storeSettings?.farmGallerySettings}
+          />
+        </div>
+      </section>
+
       {/* SECTION 1: 100% Halal Guarantee & Founder Assurance (Square Cards) */}
       <section className="ksf-about-section">
         <div className="ksf-container" style={{ maxWidth: '960px' }}>
           {/* Page 2 Brand Identity Lockup */}
-          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+          <div
+            onClick={onGoToStore}
+            title="Return to Home Store"
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onGoToStore?.()}
+            style={{ textAlign: 'center', marginBottom: '2rem', cursor: 'pointer' }}
+          >
             <picture>
               <source srcSet="/logo-about.webp" type="image/webp" />
               <img
@@ -251,7 +584,7 @@ export default function AboutUsPage({ storeSettings, onGoToStore }) {
       </section>
 
       {/* SECTION 2: Core Agricultural & Ethical Pillars */}
-      <section className="ksf-about-section ksf-about-section-alt">
+      <section className="ksf-about-section">
         <div className="ksf-container">
           <div className="ksf-section-title-wrap">
             <span className="ksf-section-badge">INTEGRITY &amp; HERITAGE</span>

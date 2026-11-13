@@ -313,6 +313,12 @@ export const api = {
     return res.json();
   },
 
+  // Farm Gallery Photo Upload with client-side WebP compression
+  async uploadFarmPhoto(file) {
+    const processedFile = await compressImage(file, 1600, 0.84);
+    return this.uploadImage(processedFile, 'gallery');
+  },
+
   // ─── Analytics & Order Tracking ───────────────────────────────────────────
 
   // Track buy/cart click (fire-and-forget, never throws)

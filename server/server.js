@@ -310,7 +310,11 @@ const sanitizeAndUploadBase64 = async (obj, defaultFolder = 'products') => {
   if (typeof obj === 'object') {
     const res = {};
     for (const [k, val] of Object.entries(obj)) {
-      const folder = (k.toLowerCase().includes('banner') || defaultFolder === 'banners') ? 'banners' : defaultFolder;
+      const folder = (k.toLowerCase().includes('banner') || defaultFolder === 'banners')
+        ? 'banners'
+        : (k.toLowerCase().includes('gallery') || k.toLowerCase().includes('farm'))
+          ? 'gallery'
+          : defaultFolder;
       res[k] = await sanitizeAndUploadBase64(val, folder);
     }
     return res;
@@ -436,7 +440,23 @@ app.get('/api/settings', async (req, res) => {
   if (!req.query.t) {
     res.set('Cache-Control', 'public, s-maxage=60, stale-while-revalidate=300');
   }
-  const settings = (await getStoreData('settings')) || {};
+  const fileDefaults = readData('settings.json') || {};
+  const dbSettings = (await getStoreData('settings')) || {};
+  const settings = {
+    ...fileDefaults,
+    ...dbSettings
+  };
+  // Ensure farmGallery and farmGallerySettings default fallback if missing in DB
+  if (!Array.isArray(settings.farmGallery) || settings.farmGallery.length === 0) {
+    settings.farmGallery = fileDefaults.farmGallery || [];
+  }
+  if (!settings.farmGallerySettings) {
+    settings.farmGallerySettings = fileDefaults.farmGallerySettings || {
+      randomize: true,
+      autoplay: true,
+      intervalSeconds: 4
+    };
+  }
   const locations = await getStoreData('delivery_locations');
   if (Array.isArray(locations) && locations.length > 0) {
     settings.deliveryLocations = locations;
@@ -812,7 +832,7 @@ app.post('/api/upload', requireAdmin, upload.single('image'), async (req, res) =
   }
 
   const folder = (req.body?.folder || req.query?.folder || 'products').toString().toLowerCase().trim();
-  const safeFolder = ['banners', 'products', 'categories'].includes(folder) ? folder : 'products';
+  const safeFolder = ['banners', 'products', 'categories', 'gallery', 'farm'].includes(folder) ? folder : 'products';
 
   const fileBuffer = req.file.buffer; // memoryStorage gives us the buffer directly
   const ext = (path.extname(req.file.originalname) || '.jpg').toLowerCase().replace(/[^a-z0-9.]/g, '');

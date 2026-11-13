@@ -12,12 +12,18 @@ import {
   Layers,
   Settings as SettingsIcon,
   Image as ImageIcon,
+  Camera,
+  Shuffle,
   MessageCircle,
   ShieldCheck,
   Sparkles,
   ArrowLeft,
   ArrowRight,
+  ArrowUp,
+  ArrowDown,
   Upload,
+  UploadCloud,
+  Loader2,
   RefreshCw,
   Eye,
   EyeOff,
@@ -567,6 +573,145 @@ function AdminPanelInner({
   };
 
   // ----------------------------------------------------
+  // FARM GALLERY ACTIONS (Supports up to 20 photos)
+  // ----------------------------------------------------
+  const MAX_FARM_PHOTOS = 20;
+  const [uploadingGalleryField, setUploadingGalleryField] = useState(null);
+  const [uploadProgressText, setUploadProgressText] = useState(null);
+
+  const handleSaveFarmGallery = async (updatedGallery, updatedConfig) => {
+    setIsSaving(true);
+    try {
+      // Ensure strictly capped at 20 photos max
+      const cappedGallery = Array.isArray(updatedGallery) ? updatedGallery.slice(0, MAX_FARM_PHOTOS) : [];
+      const newSettings = {
+        ...settings,
+        farmGallery: cappedGallery,
+        farmGallerySettings: updatedConfig !== undefined ? updatedConfig : (settings.farmGallerySettings || {
+          randomize: true,
+          autoplay: true,
+          intervalSeconds: 3.5,
+          title: 'Glimpses of Kohinoor Sanctuary',
+          subtitle: 'Authentic moments direct from our farm sanctuary in Shankarpally - Chevella Corridor.'
+        })
+      };
+      await api.updateSettings(newSettings);
+      setSettings(newSettings);
+      showToast('Farm Gallery updated and saved successfully!');
+      if (onDataRefresh) onDataRefresh();
+    } catch (err) {
+      showToast('Failed to update Farm Gallery: ' + (err.message || ''), 'error');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  // Reorder photo positions within gallery
+  const handleMovePhoto = (fromIdx, toIdx) => {
+    if (!Array.isArray(settings.farmGallery)) return;
+    if (toIdx < 0 || toIdx >= settings.farmGallery.length) return;
+    const copy = [...settings.farmGallery];
+    const [moved] = copy.splice(fromIdx, 1);
+    copy.splice(toIdx, 0, moved);
+    setSettings({ ...settings, farmGallery: copy });
+  };
+
+  // Batch upload: supports selecting up to 20 photos at once with auto-compression
+  const handleBatchFarmPhotosUpload = async (fileList) => {
+    if (!fileList || fileList.length === 0) return;
+    const files = Array.from(fileList);
+    const currentList = Array.isArray(settings.farmGallery) ? [...settings.farmGallery] : [];
+    const currentCount = currentList.length;
+    const remainingSlots = Math.max(0, MAX_FARM_PHOTOS - currentCount);
+
+    if (remainingSlots <= 0) {
+      showToast('Maximum 20 farm gallery photos reached. Remove existing photos first to add new ones.', 'error');
+      return;
+    }
+
+    const filesToUpload = files.slice(0, remainingSlots);
+    if (files.length > remainingSlots) {
+      showToast(`Selected ${files.length} photos, but only ${remainingSlots} slots available (up to 20 total). Processing ${remainingSlots} photos.`, 'info');
+    }
+
+    setUploadingGalleryField('batch');
+    const newPhotos = [];
+    let successCount = 0;
+
+    for (let i = 0; i < filesToUpload.length; i++) {
+      const file = filesToUpload[i];
+      setUploadProgressText(`Compressing & uploading ${i + 1} of ${filesToUpload.length}...`);
+      try {
+        const res = await api.uploadFarmPhoto(file);
+        if (res && res.url) {
+          successCount++;
+          const baseName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
+          const formattedTitle = baseName ? (baseName.charAt(0).toUpperCase() + baseName.slice(1).slice(0, 32)) : `Sanctuary View ${currentCount + successCount}`;
+
+          newPhotos.push({
+            id: 'farm-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7),
+            image: res.url,
+            title: formattedTitle,
+            caption: 'Fresh photograph from our Shankarpally - Chevella corridor sanctuary.',
+            tag: 'Farm Sanctuary',
+            monthYear: `Updated ${new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}`,
+            active: true
+          });
+        }
+      } catch (err) {
+        console.warn(`Failed to upload ${file.name}:`, err.message);
+      }
+    }
+
+    if (newPhotos.length > 0) {
+      const updatedGallery = [...newPhotos, ...currentList].slice(0, MAX_FARM_PHOTOS);
+      await handleSaveFarmGallery(updatedGallery);
+      showToast(`Successfully compressed & added ${successCount} photo${successCount > 1 ? 's' : ''}! (${updatedGallery.length} / 20 photos in gallery)`);
+    } else {
+      showToast('No photos were uploaded. Please try again.', 'error');
+    }
+
+    setUploadingGalleryField(null);
+    setUploadProgressText(null);
+  };
+
+  const handleFarmPhotoUpload = async (photoIdx, file) => {
+    if (!file) return;
+    setUploadingGalleryField(photoIdx === null ? 'new' : `photo-${photoIdx}`);
+    try {
+      const origSize = (file.size / 1024).toFixed(0);
+      const res = await api.uploadFarmPhoto(file);
+      if (res.url) {
+        const copy = [...(settings.farmGallery || [])];
+
+        if (photoIdx !== null && copy[photoIdx]) {
+          copy[photoIdx].image = res.url;
+        } else {
+          if (copy.length >= MAX_FARM_PHOTOS) {
+            showToast('Maximum 20 farm gallery photos reached. Remove an existing photo first.', 'error');
+            return;
+          }
+          copy.unshift({
+            id: 'farm-' + Date.now(),
+            image: res.url,
+            title: 'New Sanctuary Scene',
+            caption: 'Fresh unedited photo from our farm sanctuary.',
+            tag: 'Pasture Life',
+            monthYear: `Updated ${new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}`,
+            active: true
+          });
+        }
+        await handleSaveFarmGallery(copy);
+        showToast(`Photo compressed (${origSize} KB → WebP) and uploaded!`);
+      }
+    } catch (err) {
+      showToast('Farm photo upload failed: ' + (err.message || ''), 'error');
+    } finally {
+      setUploadingGalleryField(null);
+    }
+  };
+
+  // ----------------------------------------------------
   // CATEGORIES ACTIONS
   // ----------------------------------------------------
   const handleSaveCategory = async (e) => {
@@ -952,6 +1097,14 @@ function AdminPanelInner({
           >
             <ImageIcon size={15} />
             <span>Hero Banners ({(settings?.heroBanners || []).length})</span>
+          </button>
+
+          <button
+            className={`btn-admin-tab ${activeTab === 'farmGallery' ? 'active' : ''}`}
+            onClick={() => setActiveTab('farmGallery')}
+          >
+            <Camera size={15} />
+            <span>Farm Gallery ({(settings?.farmGallery || []).length} / 20)</span>
           </button>
 
           <button
@@ -2094,6 +2247,675 @@ function AdminPanelInner({
                       >
                         Save Changes
                       </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* ====================================================
+            TAB: FARM GALLERY & ABOUT SLIDESHOW
+            ==================================================== */}
+        {activeTab === 'farmGallery' && (
+          <div>
+            {/* Header with Title and Add Action */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1.25rem' }}>
+              <div>
+                <h3 style={{ fontFamily: 'var(--font-cinzel)', fontSize: '1.25rem', fontWeight: 800, color: 'var(--green-primary)' }}>
+                  Farm Sanctuary Gallery &amp; About Slideshow
+                </h3>
+                <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>
+                  Upload and curate up to 20 monthly farm photos for the About section. Dynamically randomized so visitors see a fresh rotation on each visit.
+                </p>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
+                <label
+                  style={{
+                    background: (settings.farmGallery || []).length >= 20 ? '#718096' : 'var(--green-primary)',
+                    color: '#FFFFFF',
+                    padding: '0.6rem 1.15rem',
+                    borderRadius: 'var(--radius-md)',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    cursor: (uploadingGalleryField || (settings.farmGallery || []).length >= 20) ? 'not-allowed' : 'pointer',
+                    boxShadow: 'var(--shadow-sm)',
+                    opacity: (settings.farmGallery || []).length >= 20 ? 0.8 : 1
+                  }}
+                >
+                  <Plus size={16} />
+                  <span>
+                    {uploadingGalleryField === 'batch'
+                      ? (uploadProgressText || 'Compressing & Uploading...')
+                      : uploadingGalleryField === 'new'
+                        ? 'Compressing Photo...'
+                        : (settings.farmGallery || []).length >= 20
+                          ? 'Capacity Full (20/20)'
+                          : 'Upload Photos (Up to 20)'}
+                  </span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    style={{ display: 'none' }}
+                    disabled={Boolean(uploadingGalleryField) || (settings.farmGallery || []).length >= 20}
+                    onChange={(e) => {
+                      if (e.target.files && e.target.files.length > 0) {
+                        handleBatchFarmPhotosUpload(e.target.files);
+                        e.target.value = '';
+                      }
+                    }}
+                  />
+                </label>
+
+                <button
+                  type="button"
+                  disabled={(settings.farmGallery || []).length >= 20}
+                  onClick={() => {
+                    const current = settings.farmGallery || [];
+                    if (current.length >= 20) {
+                      showToast('Maximum 20 photos reached.', 'error');
+                      return;
+                    }
+                    const copy = [...current];
+                    copy.unshift({
+                      id: 'farm-' + Date.now(),
+                      image: '',
+                      title: `Sanctuary View ${copy.length + 1}`,
+                      caption: 'Fresh photograph from our Shankarpally farm sanctuary.',
+                      tag: 'Pasture Life',
+                      monthYear: `Updated ${new Date().toLocaleString('en-US', { month: 'long', year: 'numeric' })}`,
+                      active: true
+                    });
+                    setSettings({ ...settings, farmGallery: copy });
+                  }}
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1.5px solid var(--border-light)',
+                    color: (settings.farmGallery || []).length >= 20 ? 'var(--text-muted)' : 'var(--text-dark)',
+                    padding: '0.6rem 0.95rem',
+                    borderRadius: 'var(--radius-md)',
+                    fontWeight: 700,
+                    fontSize: '0.85rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    cursor: (settings.farmGallery || []).length >= 20 ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  <Plus size={15} />
+                  <span>Add by URL</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Capacity Meter Bar (Shows X / 20 photos with visual indicator) */}
+            <div style={{
+              background: '#FFFFFF',
+              border: '1.5px solid var(--border-light)',
+              borderRadius: 'var(--radius-lg)',
+              padding: '0.9rem 1.25rem',
+              marginBottom: '1.25rem',
+              boxShadow: 'var(--shadow-xs)'
+            }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Camera size={18} style={{ color: 'var(--green-primary)' }} />
+                  <span style={{ fontWeight: 800, fontSize: '0.88rem', color: 'var(--green-primary)' }}>
+                    Farm Gallery Quota: {(settings.farmGallery || []).length} / 20 Photos
+                  </span>
+                  <span style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 600 }}>
+                    ({Math.max(0, 20 - (settings.farmGallery || []).length)} slots available)
+                  </span>
+                </div>
+                {uploadProgressText && (
+                  <span style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--gold-dark)', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                    <Loader2 size={14} className="animate-spin" />
+                    {uploadProgressText}
+                  </span>
+                )}
+              </div>
+              <div style={{ width: '100%', height: '8px', background: 'var(--bg-subtle)', borderRadius: '999px', overflow: 'hidden' }}>
+                <div
+                  style={{
+                    width: `${Math.min(100, (((settings.farmGallery || []).length) / 20) * 100)}%`,
+                    height: '100%',
+                    background: (settings.farmGallery || []).length >= 20 ? 'var(--gold-dark)' : 'linear-gradient(90deg, var(--green-primary), var(--gold-primary))',
+                    borderRadius: '999px',
+                    transition: 'width 0.4s ease'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Drag & Drop Multi-Upload Box */}
+            {(settings.farmGallery || []).length < 20 && (
+              <div
+                onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    handleBatchFarmPhotosUpload(e.dataTransfer.files);
+                  }
+                }}
+                style={{
+                  border: '2px dashed rgba(11, 59, 36, 0.28)',
+                  borderRadius: 'var(--radius-lg)',
+                  padding: '1.25rem 1rem',
+                  textAlign: 'center',
+                  background: 'rgba(11, 59, 36, 0.02)',
+                  marginBottom: '1.25rem',
+                  cursor: 'pointer',
+                  transition: 'background 0.2s ease, border-color 0.2s ease'
+                }}
+                onClick={() => {
+                  const input = document.getElementById('ksf-batch-farm-upload-input');
+                  if (input) input.click();
+                }}
+              >
+                <UploadCloud size={30} style={{ color: 'var(--green-primary)', margin: '0 auto 0.45rem', display: 'block' }} />
+                <div style={{ fontWeight: 800, fontSize: '0.92rem', color: 'var(--green-primary)' }}>
+                  Click to Browse or Drag &amp; Drop up to {Math.max(0, 20 - (settings.farmGallery || []).length)} photos
+                </div>
+                <div style={{ fontSize: '0.78rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
+                  Select multiple high-resolution photos at once. Each is automatically compressed into modern WebP format before saving.
+                </div>
+                <input
+                  id="ksf-batch-farm-upload-input"
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files.length > 0) {
+                      handleBatchFarmPhotosUpload(e.target.files);
+                      e.target.value = '';
+                    }
+                  }}
+                />
+              </div>
+            )}
+
+            {/* Automatic Compression Notice */}
+            <div
+              style={{
+                background: 'rgba(11, 59, 36, 0.06)',
+                border: '1px solid rgba(11, 59, 36, 0.18)',
+                borderRadius: 'var(--radius-lg)',
+                padding: '0.85rem 1.15rem',
+                marginBottom: '1.5rem',
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '0.75rem'
+              }}
+            >
+              <Sparkles size={18} style={{ color: 'var(--gold-dark)', flexShrink: 0, marginTop: '2px' }} />
+              <div style={{ fontSize: '0.825rem', color: 'var(--text-body)', lineHeight: 1.55 }}>
+                <strong style={{ color: 'var(--green-primary)' }}>Automatic Fast-Loading Image Compression:</strong> All uploaded farm photos are automatically converted on-the-fly to modern WebP format with Lanczos downsampling. Photos load instantly on 4G/5G mobile connections while preserving lush pasture colors and clarity.
+              </div>
+            </div>
+
+            {/* Slideshow Configuration Box */}
+            <div
+              style={{
+                background: '#FFFFFF',
+                borderRadius: 'var(--radius-xl)',
+                border: '1.5px solid var(--gold-medium)',
+                padding: '1.25rem 1.35rem',
+                marginBottom: '2rem',
+                boxShadow: 'var(--shadow-sm)'
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '1rem', borderBottom: '1px solid var(--border-light)', paddingBottom: '0.85rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Sliders size={18} style={{ color: 'var(--gold-dark)' }} />
+                  <h4 style={{ margin: 0, fontFamily: 'var(--font-cinzel)', fontSize: '1rem', fontWeight: 800, color: 'var(--green-primary)' }}>
+                    Slideshow Behavior &amp; Display Settings
+                  </h4>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => handleSaveFarmGallery(settings.farmGallery || [], settings.farmGallerySettings)}
+                  style={{
+                    background: 'var(--green-primary)',
+                    color: '#FFFFFF',
+                    padding: '0.45rem 1.1rem',
+                    borderRadius: 'var(--radius-md)',
+                    fontWeight: 700,
+                    fontSize: '0.825rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.4rem',
+                    cursor: 'pointer'
+                  }}
+                >
+                  <Save size={14} />
+                  <span>Save Slideshow Settings</span>
+                </button>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.15rem' }}>
+                {/* Randomize Toggle */}
+                <div style={{ background: 'var(--bg-subtle)', padding: '0.85rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-light)' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', margin: 0 }}>
+                    <div>
+                      <div style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--green-primary)', display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                        <Shuffle size={14} style={{ color: 'var(--gold-dark)' }} />
+                        <span>Randomize Order (Shuffle)</span>
+                      </div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                        Shuffles slides dynamically on every visit
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settings.farmGallerySettings?.randomize !== false}
+                      onChange={(e) => {
+                        const updated = {
+                          ...(settings.farmGallerySettings || {}),
+                          randomize: e.target.checked
+                        };
+                        setSettings({ ...settings, farmGallerySettings: updated });
+                      }}
+                      style={{ width: '18px', height: '18px', accentColor: 'var(--green-primary)', cursor: 'pointer' }}
+                    />
+                  </label>
+                </div>
+
+                {/* Autoplay Toggle */}
+                <div style={{ background: 'var(--bg-subtle)', padding: '0.85rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-light)' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer', margin: 0 }}>
+                    <div>
+                      <div style={{ fontWeight: 800, fontSize: '0.85rem', color: 'var(--green-primary)' }}>
+                        Autoplay Slideshow
+                      </div>
+                      <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)', marginTop: '2px' }}>
+                        Automatically advances to next farm scene
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settings.farmGallerySettings?.autoplay !== false}
+                      onChange={(e) => {
+                        const updated = {
+                          ...(settings.farmGallerySettings || {}),
+                          autoplay: e.target.checked
+                        };
+                        setSettings({ ...settings, farmGallerySettings: updated });
+                      }}
+                      style={{ width: '18px', height: '18px', accentColor: 'var(--green-primary)', cursor: 'pointer' }}
+                    />
+                  </label>
+                </div>
+
+                {/* Slide Interval */}
+                <div style={{ background: 'var(--bg-subtle)', padding: '0.85rem 1rem', borderRadius: 'var(--radius-md)', border: '1px solid var(--border-light)' }}>
+                  <label style={{ display: 'block', fontWeight: 800, fontSize: '0.85rem', color: 'var(--green-primary)', marginBottom: '0.35rem' }}>
+                    Slide Duration (Seconds)
+                  </label>
+                  <select
+                    className="ksf-input"
+                    value={settings.farmGallerySettings?.intervalSeconds || 3.5}
+                    onChange={(e) => {
+                      const updated = {
+                        ...(settings.farmGallerySettings || {}),
+                        intervalSeconds: Number(e.target.value)
+                      };
+                      setSettings({ ...settings, farmGallerySettings: updated });
+                    }}
+                    style={{ padding: '0.35rem 0.65rem', fontSize: '0.825rem' }}
+                  >
+                    <option value={2.5}>2.5 Seconds (Fast)</option>
+                    <option value={3}>3 Seconds (Quick)</option>
+                    <option value={3.5}>3.5 Seconds (Recommended)</option>
+                    <option value={4}>4 Seconds</option>
+                    <option value={5}>5 Seconds (Relaxed)</option>
+                    <option value={6}>6 Seconds</option>
+                    <option value={8}>8 Seconds (Story mode)</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Title & Subtitle inputs */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginTop: '1rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: '0.25rem' }}>
+                    Slideshow Section Title
+                  </label>
+                  <input
+                    type="text"
+                    className="ksf-input"
+                    value={settings.farmGallerySettings?.title || ''}
+                    placeholder="Glimpses of Kohinoor Sanctuary"
+                    onChange={(e) => {
+                      const updated = {
+                        ...(settings.farmGallerySettings || {}),
+                        title: e.target.value
+                      };
+                      setSettings({ ...settings, farmGallerySettings: updated });
+                    }}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: '0.25rem' }}>
+                    Slideshow Subtitle / Description
+                  </label>
+                  <input
+                    type="text"
+                    className="ksf-input"
+                    value={settings.farmGallerySettings?.subtitle || ''}
+                    placeholder="Authentic, unedited moments from our Shankarpally - Chevella corridor sanctuary."
+                    onChange={(e) => {
+                      const updated = {
+                        ...(settings.farmGallerySettings || {}),
+                        subtitle: e.target.value
+                      };
+                      setSettings({ ...settings, farmGallerySettings: updated });
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Photos Grid Header & Count */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+              <div style={{ fontSize: '0.9rem', fontWeight: 800, color: 'var(--green-primary)' }}>
+                Farm Photos ({(settings.farmGallery || []).length})
+              </div>
+              <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                Update monthly • Active photos will be included in the live About slideshow
+              </div>
+            </div>
+
+            {/* Photos Cards */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              {(settings.farmGallery || []).map((photo, idx) => (
+                <div
+                  key={photo.id || idx}
+                  style={{
+                    background: '#FFFFFF',
+                    border: '1.5px solid var(--border-light)',
+                    borderRadius: 'var(--radius-lg)',
+                    padding: '1.25rem',
+                    boxShadow: 'var(--shadow-sm)',
+                    display: 'grid',
+                    gridTemplateColumns: 'minmax(200px, 260px) 1fr',
+                    gap: '1.25rem',
+                    alignItems: 'start'
+                  }}
+                  className="ksf-admin-gallery-card-row"
+                >
+                  {/* Photo Thumbnail / Upload Area */}
+                  <div>
+                    <div
+                      style={{
+                        position: 'relative',
+                        width: '100%',
+                        aspectRatio: '16 / 10',
+                        borderRadius: 'var(--radius-md)',
+                        overflow: 'hidden',
+                        background: '#051A10',
+                        border: '1px solid var(--border-light)',
+                        marginBottom: '0.65rem'
+                      }}
+                    >
+                      {photo.image ? (
+                        <img
+                          src={photo.image}
+                          alt={photo.title || 'Farm photo'}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      ) : (
+                        <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', gap: '0.4rem', fontSize: '0.75rem' }}>
+                          <Camera size={24} style={{ opacity: 0.6 }} />
+                          <span>No Image URL</span>
+                        </div>
+                      )}
+                    </div>
+
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <label
+                        style={{
+                          flex: 1,
+                          background: 'var(--bg-subtle)',
+                          border: '1px solid var(--border-light)',
+                          color: 'var(--green-primary)',
+                          padding: '0.4rem',
+                          borderRadius: 'var(--radius-sm)',
+                          fontSize: '0.75rem',
+                          fontWeight: 700,
+                          textAlign: 'center',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.35rem'
+                        }}
+                      >
+                        <Upload size={13} />
+                        <span>{uploadingGalleryField === `photo-${idx}` ? 'Uploading...' : 'Replace'}</span>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          style={{ display: 'none' }}
+                          disabled={uploadingGalleryField === `photo-${idx}`}
+                          onChange={(e) => {
+                            if (e.target.files?.[0]) {
+                              handleFarmPhotoUpload(idx, e.target.files[0]);
+                              e.target.value = '';
+                            }
+                          }}
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Fields & Actions */}
+                  <div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.85rem', marginBottom: '0.85rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: '0.2rem' }}>
+                          Photo Title
+                        </label>
+                        <input
+                          type="text"
+                          className="ksf-input"
+                          value={photo.title || ''}
+                          placeholder="e.g. Natural Pasture Grazing"
+                          onChange={(e) => {
+                            const copy = [...settings.farmGallery];
+                            copy[idx].title = e.target.value;
+                            setSettings({ ...settings, farmGallery: copy });
+                          }}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: '0.2rem' }}>
+                          Category Tag / Badge
+                        </label>
+                        <input
+                          type="text"
+                          className="ksf-input"
+                          value={photo.tag || ''}
+                          placeholder="e.g. Open Pasture, Free Range"
+                          onChange={(e) => {
+                            const copy = [...settings.farmGallery];
+                            copy[idx].tag = e.target.value;
+                            setSettings({ ...settings, farmGallery: copy });
+                          }}
+                        />
+                      </div>
+
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: '0.2rem' }}>
+                          Monthly Update Tag
+                        </label>
+                        <input
+                          type="text"
+                          className="ksf-input"
+                          value={photo.monthYear || ''}
+                          placeholder="e.g. Updated November 2026"
+                          onChange={(e) => {
+                            const copy = [...settings.farmGallery];
+                            copy[idx].monthYear = e.target.value;
+                            setSettings({ ...settings, farmGallery: copy });
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    <div style={{ marginBottom: '0.85rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: '0.2rem' }}>
+                        Photo Caption &amp; Farm Story
+                      </label>
+                      <textarea
+                        className="ksf-input"
+                        rows={2}
+                        value={photo.caption || ''}
+                        placeholder="Describe what is happening in this photo (pasture details, natural feed, ethical care)..."
+                        onChange={(e) => {
+                          const copy = [...settings.farmGallery];
+                          copy[idx].caption = e.target.value;
+                          setSettings({ ...settings, farmGallery: copy });
+                        }}
+                      />
+                    </div>
+
+                    <div style={{ marginBottom: '0.85rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: 'var(--text-dark)', marginBottom: '0.2rem' }}>
+                        Image Source URL (WebP or CDN link)
+                      </label>
+                      <input
+                        type="text"
+                        className="ksf-input"
+                        value={photo.image || ''}
+                        placeholder="/farm/farm-1.webp or https://..."
+                        onChange={(e) => {
+                          const copy = [...settings.farmGallery];
+                          copy[idx].image = e.target.value;
+                          setSettings({ ...settings, farmGallery: copy });
+                        }}
+                      />
+                    </div>
+
+                    {/* Bottom Action Bar */}
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.75rem', borderTop: '1px solid var(--border-light)', paddingTop: '0.75rem' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', margin: 0 }}>
+                        <input
+                          type="checkbox"
+                          checked={photo.active !== false}
+                          onChange={(e) => {
+                            const copy = [...settings.farmGallery];
+                            copy[idx].active = e.target.checked;
+                            setSettings({ ...settings, farmGallery: copy });
+                          }}
+                          style={{ width: '16px', height: '16px', accentColor: 'var(--green-primary)' }}
+                        />
+                        <span style={{ fontSize: '0.8rem', fontWeight: 700, color: photo.active !== false ? 'var(--green-primary)' : 'var(--text-muted)' }}>
+                          {photo.active !== false ? 'Active in Slideshow' : 'Hidden from Slideshow'}
+                        </span>
+                      </label>
+
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', flexWrap: 'wrap' }}>
+                        {idx > 0 && (
+                          <button
+                            type="button"
+                            onClick={() => handleMovePhoto(idx, idx - 1)}
+                            title="Move Up"
+                            aria-label="Move Up"
+                            style={{
+                              background: 'transparent',
+                              border: '1px solid var(--border-light)',
+                              color: 'var(--text-dark)',
+                              padding: '0.4rem 0.55rem',
+                              borderRadius: 'var(--radius-md)',
+                              fontSize: '0.78rem',
+                              display: 'flex',
+                              alignItems: 'center',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <ArrowUp size={13} />
+                          </button>
+                        )}
+
+                        {idx < (settings.farmGallery || []).length - 1 && (
+                          <button
+                            type="button"
+                            onClick={() => handleMovePhoto(idx, idx + 1)}
+                            title="Move Down"
+                            aria-label="Move Down"
+                            style={{
+                              background: 'transparent',
+                              border: '1px solid var(--border-light)',
+                              color: 'var(--text-dark)',
+                              padding: '0.4rem 0.55rem',
+                              borderRadius: 'var(--radius-md)',
+                              fontSize: '0.78rem',
+                              display: 'flex',
+                              alignItems: 'center',
+                              cursor: 'pointer'
+                            }}
+                          >
+                            <ArrowDown size={13} />
+                          </button>
+                        )}
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!window.confirm(`Are you sure you want to delete "${photo.title || 'this photo'}"?`)) return;
+                            const copy = [...settings.farmGallery];
+                            copy.splice(idx, 1);
+                            handleSaveFarmGallery(copy);
+                          }}
+                          style={{
+                            background: 'transparent',
+                            border: '1px solid var(--border-light)',
+                            color: 'var(--error-red)',
+                            padding: '0.4rem 0.75rem',
+                            borderRadius: 'var(--radius-md)',
+                            fontSize: '0.78rem',
+                            fontWeight: 600,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <Trash2 size={13} />
+                          <span>Delete</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleSaveFarmGallery(settings.farmGallery)}
+                          style={{
+                            background: 'var(--green-primary)',
+                            color: '#FFFFFF',
+                            padding: '0.4rem 0.95rem',
+                            borderRadius: 'var(--radius-md)',
+                            fontSize: '0.78rem',
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.35rem',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          <Check size={14} />
+                          <span>Save Changes</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

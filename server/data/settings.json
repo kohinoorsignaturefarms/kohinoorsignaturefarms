@@ -70,5 +70,68 @@
       "pincode": "500085",
       "deliverySlot": "On Sundays & Holidays From 7:00AM To 6:00PM"
     }
-  ]
+  ],
+  "farmGallery": [
+    {
+      "id": "farm-img-1",
+      "image": "/farm/farm-1.webp",
+      "title": "Natural Pasture Grazing",
+      "caption": "Our indigenous livestock grazing under natural sunlight on pesticide-free open green corridors in Shankarpally.",
+      "tag": "Open Pasture",
+      "monthYear": "Updated November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-2",
+      "image": "/farm/farm-2.webp",
+      "title": "Free-Range Country Chickens",
+      "caption": "Country fowl roaming freely through organic fruit orchard grounds with pure herbal forage and natural shade.",
+      "tag": "Free Range",
+      "monthYear": "Updated November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-3",
+      "image": "/farm/farm-3.webp",
+      "title": "Lush Agro-Pastoral Sanctuary",
+      "caption": "Vast green grasslands maintained with organic manure recycling and sustainable agro-ecological practices.",
+      "tag": "Sustainable Farm",
+      "monthYear": "Updated November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-4",
+      "image": "/farm/farm-4.webp",
+      "title": "100% Organic Herbal Feed",
+      "caption": "Cultivated green alfalfa, multi-grain feed, and medicinal herbs with zero growth hormones or antibiotics.",
+      "tag": "Organic Feed",
+      "monthYear": "Updated November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-5",
+      "image": "/farm/farm-5.webp",
+      "title": "Sunrise Over Chevella Sanctuary",
+      "caption": "Peaceful morning mist over our farm sanctuary — where ethical animal welfare is our highest everyday commitment.",
+      "tag": "Sanctuary Life",
+      "monthYear": "Updated November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-6",
+      "image": "/farm/farm-6.webp",
+      "title": "Veterinary Supervised Well-Being",
+      "caption": "Daily clinical health screenings, clean RO drinking water systems, and compassionate herd management.",
+      "tag": "Ethical Care",
+      "monthYear": "Updated November 2026",
+      "active": true
+    }
+  ],
+  "farmGallerySettings": {
+    "randomize": true,
+    "autoplay": true,
+    "intervalSeconds": 3.5,
+    "title": "Glimpses of Kohinoor Sanctuary",
+    "subtitle": "Authentic moments direct from our farm sanctuary in Shankarpally - Chevella Corridor."
+  }
 }
