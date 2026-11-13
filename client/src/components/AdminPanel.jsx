@@ -43,6 +43,12 @@ import {
   MapPin
 } from 'lucide-react';
 import { api, formatCurrency, setAuthToken } from '../api';
+import {
+  AdminSavingOverlay,
+  AdminAnalyticsSkeleton,
+  AdminOrdersSkeleton,
+  AdminTableSkeleton
+} from './LoadingComponents';
 
 const safeAdminAuth = {
   get: () => {
@@ -863,32 +869,52 @@ function AdminPanelInner({
     return (
       <div className="ksf-admin-login-screen">
         <div className="ksf-admin-login-card animate-fade-in">
-          {/* Brand Logo & Badge */}
-          <div className="ksf-admin-login-logo-wrap">
-            <picture>
-              <source srcSet="/logo_page_1_square.webp" type="image/webp" />
+          {/* Official Brand Logo */}
+          <div
+            className="ksf-admin-login-logo-wrap"
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              margin: '0 auto 0.75rem',
+              textAlign: 'center'
+            }}
+          >
+            <picture
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                margin: '0 auto',
+                width: '100%',
+                maxWidth: '280px'
+              }}
+            >
+              <source srcSet="/logo-about.webp" type="image/webp" />
               <img
-                src="/logo_page_1_square.png"
-                alt="Kohinoor Signature Farms"
-                className="ksf-admin-login-logo"
-                width="72"
-                height="72"
+                src="/logo-about.png"
+                alt="Kohinoor Signature Farms Official Logo"
+                className="ksf-admin-login-brand-logo"
+                width="880"
+                height="218"
                 loading="eager"
                 decoding="async"
-                style={{ objectFit: 'contain', background: '#FFFFFF' }}
+                style={{
+                  maxWidth: '280px',
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block',
+                  margin: '0 auto',
+                  objectFit: 'contain'
+                }}
               />
             </picture>
-            <div className="ksf-admin-login-badge">
-              <Lock size={11} />
-              <span>Admin Portal</span>
-            </div>
           </div>
 
-          <h2 className="ksf-admin-login-title">
-            Kohinoor Signature Farms
-          </h2>
           <p className="ksf-admin-login-subtitle">
-            Management & Inventory Portal
+            Management &amp; Inventory Portal
           </p>
 
           <form onSubmit={handlePinSubmit} className="ksf-admin-login-form">
@@ -964,6 +990,19 @@ function AdminPanelInner({
   // ----------------------------------------------------
   return (
     <div className="ksf-admin-container">
+      {/* Saving / Processing Floating Overlay */}
+      {isSaving && (
+        <AdminSavingOverlay
+          title="Saving Changes"
+          subtitle="Syncing updates securely with Supabase Cloud database..."
+        />
+      )}
+      {uploadingGalleryField === 'batch' && (
+        <AdminSavingOverlay
+          title="Compressing & Uploading Photos"
+          subtitle={uploadProgressText || "Converting camera photos to high-speed WebP and syncing to CDN..."}
+        />
+      )}
       {/* Toast Notification */}
       {toastMessage && (
         <div
@@ -997,24 +1036,36 @@ function AdminPanelInner({
       {/* Admin Top Navigation */}
       <div className="ksf-admin-nav">
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', minWidth: 0, flex: 1 }}>
-          <picture>
-            <source srcSet="/logo_page_1_square.webp" type="image/webp" />
-            <img
-              src="/logo_page_1_square.png"
-              alt="Logo"
-              width="36"
-              height="36"
-              loading="lazy"
-              decoding="async"
-              style={{ width: '36px', height: '36px', borderRadius: 'var(--radius-sm)', border: '1px solid var(--gold-primary)', flexShrink: 0, objectFit: 'contain', background: '#FFFFFF' }}
-            />
-          </picture>
+          <div
+            style={{
+              background: '#FFFFFF',
+              padding: '0.2rem 0.5rem',
+              borderRadius: 'var(--radius-sm)',
+              border: '1px solid var(--gold-primary)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              flexShrink: 0
+            }}
+          >
+            <picture>
+              <source srcSet="/logo-about.webp" type="image/webp" />
+              <img
+                src="/logo-about.png"
+                alt="Kohinoor Signature Farms"
+                width="880"
+                height="218"
+                loading="lazy"
+                decoding="async"
+                style={{ height: '22px', width: 'auto', objectFit: 'contain', display: 'block' }}
+              />
+            </picture>
+          </div>
           <div style={{ minWidth: 0 }}>
-            <div style={{ fontFamily: 'var(--font-cinzel)', fontWeight: 800, fontSize: '0.88rem', color: 'var(--gold-light)', lineHeight: '1.2' }}>
-              KOHINOOR SIGNATURE FARMS
+            <div style={{ fontFamily: 'var(--font-cinzel)', fontWeight: 800, fontSize: '0.85rem', color: 'var(--gold-light)', lineHeight: '1.2' }}>
+              ADMIN CONTROL PANEL
             </div>
             <div style={{ fontSize: '0.68rem', color: 'rgba(255, 255, 255, 0.75)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              Admin Control: Catalog, WhatsApp & Settings
+              Inventory, Farm Gallery & Settings
             </div>
           </div>
         </div>
@@ -1216,8 +1267,14 @@ function AdminPanelInner({
               </button>
             </div>
 
-            {/* Desktop Table View (>= 820px) */}
-            <div className="ksf-admin-desktop-view">
+            {loading && (!products || products.length === 0) ? (
+              <div style={{ marginTop: '1rem' }}>
+                <AdminTableSkeleton />
+              </div>
+            ) : (
+              <>
+                {/* Desktop Table View (>= 820px) */}
+                <div className="ksf-admin-desktop-view">
               <div className="ksf-admin-table-container">
                 <table className="ksf-admin-table">
                   <thead>
@@ -1617,6 +1674,8 @@ function AdminPanelInner({
                 </div>
               )}
             </div>
+              </>
+            )}
           </div>
         )}
 
@@ -2072,7 +2131,11 @@ function AdminPanelInner({
                             boxShadow: 'var(--shadow-sm)'
                           }}
                         >
-                          <Upload size={13} />
+                          {uploadingBannerField === `desktop-${idx}` ? (
+                            <RefreshCw size={13} className="animate-spin" />
+                          ) : (
+                            <Upload size={13} />
+                          )}
                           <span>{uploadingBannerField === `desktop-${idx}` ? 'Uploading...' : 'Upload'}</span>
                           <input
                             type="file"
@@ -2163,7 +2226,11 @@ function AdminPanelInner({
                             whiteSpace: 'nowrap'
                           }}
                         >
-                          <Upload size={13} />
+                          {uploadingBannerField === `mobile-${idx}` ? (
+                            <RefreshCw size={13} className="animate-spin" />
+                          ) : (
+                            <Upload size={13} />
+                          )}
                           <span>{uploadingBannerField === `mobile-${idx}` ? 'Uploading...' : 'Upload Mobile'}</span>
                           <input
                             type="file"
@@ -2288,7 +2355,11 @@ function AdminPanelInner({
                     opacity: (settings.farmGallery || []).length >= 20 ? 0.8 : 1
                   }}
                 >
-                  <Plus size={16} />
+                  {uploadingGalleryField ? (
+                    <RefreshCw size={16} className="animate-spin" />
+                  ) : (
+                    <Plus size={16} />
+                  )}
                   <span>
                     {uploadingGalleryField === 'batch'
                       ? (uploadProgressText || 'Compressing & Uploading...')
@@ -2700,7 +2771,11 @@ function AdminPanelInner({
                           gap: '0.35rem'
                         }}
                       >
-                        <Upload size={13} />
+                        {uploadingGalleryField === `photo-${idx}` ? (
+                          <RefreshCw size={13} className="animate-spin" />
+                        ) : (
+                          <Upload size={13} />
+                        )}
                         <span>{uploadingGalleryField === `photo-${idx}` ? 'Uploading...' : 'Replace'}</span>
                         <input
                           type="file"
@@ -3155,10 +3230,7 @@ function AdminPanelInner({
               </div>
 
               {analyticsLoading ? (
-                <div className="ksf-analytics-loader">
-                  <RefreshCw size={28} className="ksf-spin" />
-                  <p>Loading analytics...</p>
-                </div>
+                <AdminAnalyticsSkeleton />
               ) : analytics ? (
                 <>
                   {/* Metric Cards */}
@@ -3315,10 +3387,7 @@ function AdminPanelInner({
             </div>
 
             {ordersLoading ? (
-              <div className="ksf-analytics-loader">
-                <RefreshCw size={28} className="ksf-spin" />
-                <p>Loading orders...</p>
-              </div>
+              <AdminOrdersSkeleton />
             ) : !Array.isArray(orders) || orders.length === 0 ? (
               <div className="ksf-analytics-empty">
                 <ShoppingCart size={40} />
@@ -4135,7 +4204,11 @@ function AdminPanelInner({
                       padding: '0.35rem 0.75rem',
                       transition: 'all 0.15s'
                     }}>
-                      <Upload size={13} />
+                      {uploadingImage ? (
+                        <RefreshCw size={13} className="animate-spin" />
+                      ) : (
+                        <Upload size={13} />
+                      )}
                       <span>{uploadingImage ? 'Uploading...' : '+ Add Image'}</span>
                       <input
                         type="file"
@@ -4515,7 +4588,11 @@ function AdminPanelInner({
                       boxShadow: 'var(--shadow-sm)'
                     }}
                   >
-                    <Upload size={13} />
+                    {uploadingImage ? (
+                      <RefreshCw size={13} className="animate-spin" />
+                    ) : (
+                      <Upload size={13} />
+                    )}
                     <span>{uploadingImage ? 'Uploading...' : 'Upload'}</span>
                     <input
                       type="file"

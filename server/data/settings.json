@@ -6,6 +6,134 @@
   "adminPin": "goateggs",
   "storeName": "Kohinoor Signature Farms",
   "farmAddress": "Kohinoor Signature Farms Sanctuary, Shankarpally - Chevella Corridor, Telangana 501503",
+  "farmGallery": [
+    {
+      "id": "farm-img-1",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564844501-rqxqcg.webp",
+      "title": "Elevated Slotted Flock Shelters",
+      "caption": "Indigenous flock housed in ventilated, elevated slotted shelters designed for high veterinary hygiene, clean bedding, and maximum welfare.",
+      "tag": "Hygienic Housing",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-2",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564848661-jddr9o.webp",
+      "title": "Open-Paddock Sunlight Grazing",
+      "caption": "Young goats and lambs enjoying fresh morning sunshine and organic whole-grain feed in our open farm paddocks.",
+      "tag": "Open Paddock",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-3",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564850841-6k4ftp.webp",
+      "title": "Prize Indigenous Heritage Goat",
+      "caption": "A robust indigenous black goat displaying radiant health, nourished on natural pasture foraging and zero growth hormones.",
+      "tag": "Heritage Breed",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-4",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564853736-godkya.webp",
+      "title": "100% Organic Herbal & Alfalfa Fodder",
+      "caption": "Spotted breed goat feeding on farm-cultivated dry alfalfa and medicinal herbs, ensuring lean, tender, and wholesome meat.",
+      "tag": "Organic Nutrition",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-5",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564857890-fir7lb.webp",
+      "title": "Vast Agro-Sanctuary Aerial Horizon",
+      "caption": "Panoramic sunrise drone view of Kohinoor Signature Farms across Shankarpally, featuring expansive orchards, water reservoirs, and green fields.",
+      "tag": "Sanctuary View",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-6",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564861697-lqnzjp.webp",
+      "title": "Sanctuary Morning Feed Gathering",
+      "caption": "Bird's-eye drone perspective of sheep gathering naturally around open-air feeding stations on pesticide-free red soil pastures.",
+      "tag": "Sanctuary Life",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-7",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564865373-qt10v8.webp",
+      "title": "Sustainable Agro-Forestry & Orchards",
+      "caption": "High-altitude aerial survey revealing our integrated palm groves, fruit orchards, polyhouses, and sustainable permaculture design.",
+      "tag": "Agro-Forestry",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-8",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564869163-jcrees.webp",
+      "title": "Solar Powered Green Infrastructure",
+      "caption": "Eco-friendly solar array, sheltered polyhouse cultivation nursery, and precision organic crop rows supporting a zero-chemical ecosystem.",
+      "tag": "Clean Energy",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-9",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564872945-1kh0e7.webp",
+      "title": "Open Herd Paddocks & Shaded Stalls",
+      "caption": "Aerial view of shaded blue-canopy shelters and organized hydration troughs providing optimal comfort and shade during afternoon hours.",
+      "tag": "Ethical Welfare",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-10",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564877341-ou2r4w.webp",
+      "title": "Afternoon Herd Hydration & Nourishment",
+      "caption": "Organized paddock feeding and clean RO water stations keeping the entire herd well-nourished, hydrated, and tranquil.",
+      "tag": "Daily Farm Life",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-11",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564881368-olhxrv.webp",
+      "title": "Modern Bio-Secure Barn Facilities",
+      "caption": "Engineered livestock housing built with ventilated roofs, veterinary quarantine zones, and hygienic waste management systems.",
+      "tag": "Modern Farming",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-12",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564883469-gay6uh.webp",
+      "title": "Lakeside Farm Sanctuary Panorama",
+      "caption": "Breathtaking landscape overlooking the tranquil lake waters adjoining Kohinoor Signature Farms, blessing the soil with natural moisture.",
+      "tag": "Lakeside Sanctuary",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-13",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564885965-zikgqu.webp",
+      "title": "Organic Polyhouse & Banana Groves",
+      "caption": "Low-altitude flight capturing the protective greenhouse nursery surrounded by lush banana trees and coconut palm corridors.",
+      "tag": "Green Pastures",
+      "monthYear": "November 2026",
+      "active": true
+    },
+    {
+      "id": "farm-img-14",
+      "image": "https://ifhjqtysuyhgpqjwxudf.supabase.co/storage/v1/object/public/product-images/gallery/1794564888785-pj9grb.webp",
+      "title": "Sanctuary Orchard & Facility Courtyard",
+      "caption": "Vertical drone overview of the central facility compound flanked by growing fruit tree rows and open grazing borders.",
+      "tag": "Farm Compound",
+      "monthYear": "November 2026",
+      "active": true
+    }
+  ],
   "heroBanners": [
     {
       "id": "banner-1",
@@ -71,67 +199,10 @@
       "deliverySlot": "On Sundays & Holidays From 7:00AM To 6:00PM"
     }
   ],
-  "farmGallery": [
-    {
-      "id": "farm-img-1",
-      "image": "/farm/farm-1.webp",
-      "title": "Natural Pasture Grazing",
-      "caption": "Our indigenous livestock grazing under natural sunlight on pesticide-free open green corridors in Shankarpally.",
-      "tag": "Open Pasture",
-      "monthYear": "Updated November 2026",
-      "active": true
-    },
-    {
-      "id": "farm-img-2",
-      "image": "/farm/farm-2.webp",
-      "title": "Free-Range Country Chickens",
-      "caption": "Country fowl roaming freely through organic fruit orchard grounds with pure herbal forage and natural shade.",
-      "tag": "Free Range",
-      "monthYear": "Updated November 2026",
-      "active": true
-    },
-    {
-      "id": "farm-img-3",
-      "image": "/farm/farm-3.webp",
-      "title": "Lush Agro-Pastoral Sanctuary",
-      "caption": "Vast green grasslands maintained with organic manure recycling and sustainable agro-ecological practices.",
-      "tag": "Sustainable Farm",
-      "monthYear": "Updated November 2026",
-      "active": true
-    },
-    {
-      "id": "farm-img-4",
-      "image": "/farm/farm-4.webp",
-      "title": "100% Organic Herbal Feed",
-      "caption": "Cultivated green alfalfa, multi-grain feed, and medicinal herbs with zero growth hormones or antibiotics.",
-      "tag": "Organic Feed",
-      "monthYear": "Updated November 2026",
-      "active": true
-    },
-    {
-      "id": "farm-img-5",
-      "image": "/farm/farm-5.webp",
-      "title": "Sunrise Over Chevella Sanctuary",
-      "caption": "Peaceful morning mist over our farm sanctuary — where ethical animal welfare is our highest everyday commitment.",
-      "tag": "Sanctuary Life",
-      "monthYear": "Updated November 2026",
-      "active": true
-    },
-    {
-      "id": "farm-img-6",
-      "image": "/farm/farm-6.webp",
-      "title": "Veterinary Supervised Well-Being",
-      "caption": "Daily clinical health screenings, clean RO drinking water systems, and compassionate herd management.",
-      "tag": "Ethical Care",
-      "monthYear": "Updated November 2026",
-      "active": true
-    }
-  ],
   "farmGallerySettings": {
     "randomize": true,
     "autoplay": true,
-    "intervalSeconds": 3.5,
-    "title": "Glimpses of Kohinoor Sanctuary",
-    "subtitle": "Authentic moments direct from our farm sanctuary in Shankarpally - Chevella Corridor."
-  }
+    "intervalSeconds": 3.5
+  },
+  "loaderStyle": "breathing-crest"
 }

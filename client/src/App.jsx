@@ -14,13 +14,7 @@ import { Sparkles, MessageCircle, AlertCircle, RefreshCw, Settings, ShieldCheck,
 const AdminPanel = lazy(() => import('./components/AdminPanel'));
 const AboutUsPage = lazy(() => import('./components/AboutUsPage'));
 const ProductDetailPage = lazy(() => import('./components/ProductDetailPage'));
-
-const PageLoader = () => (
-  <div style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: 'var(--green-primary)', gap: '0.75rem' }}>
-    <RefreshCw className="animate-spin" size={32} />
-    <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Loading...</span>
-  </div>
-);
+import { PageLoader, CatalogSkeletonGrid, BreathingCrestLoader } from './components/LoadingComponents';
 
 // Read cached catalog from localStorage for instant, zero-delay initial render (<1ms)
 const getCachedBootstrap = () => {
@@ -499,11 +493,13 @@ export default function App() {
             )}
           </div>
 
-          {/* Loading State — only when no products are loaded yet */}
+          {/* Loading State — Subtle Breathing Crest & Shimmer Skeletons */}
           {loading && displayedProducts.length === 0 && (
-            <div style={{ textAlign: 'center', padding: '4rem 0', color: 'var(--green-primary)' }}>
-              <RefreshCw className="animate-spin" size={32} style={{ margin: '0 auto 0.75rem' }} />
-              <div style={{ fontWeight: 700 }}>Fetching fresh farm inventory...</div>
+            <div>
+              <div style={{ textAlign: 'center', margin: '0 auto 1.5rem' }}>
+                <BreathingCrestLoader text="Harvesting today's fresh farm cuts direct from sanctuary..." compact={true} />
+              </div>
+              <CatalogSkeletonGrid count={8} />
             </div>
           )}
 

@@ -12,60 +12,132 @@ function MI({ name, size = 24, style = {} }) {
   );
 }
 
-// Curated default high-resolution WebP farm photos (under 60 KB each)
+// Curated default high-resolution WebP farm photos direct from Kohinoor Sanctuary (F:\KSF Images)
 const DEFAULT_FARM_GALLERY = [
   {
     id: 'farm-def-1',
     image: '/farm/farm-1.webp',
-    title: 'Natural Pasture Grazing',
-    caption: 'Indigenous livestock grazing naturally under open sunlight on pesticide-free green corridors in Shankarpally.',
-    tag: 'Open Pasture',
-    monthYear: 'Monthly Update • November 2026',
+    title: 'Elevated Slotted Flock Shelters',
+    caption: 'Indigenous flock housed in ventilated, elevated slotted shelters designed for high veterinary hygiene, clean bedding, and maximum welfare.',
+    tag: 'Hygienic Housing',
+    monthYear: 'November 2026',
     active: true
   },
   {
     id: 'farm-def-2',
     image: '/farm/farm-2.webp',
-    title: 'Free-Range Country Chickens',
-    caption: 'Country fowl roaming freely through organic fruit orchard grounds with pure herbal forage and natural shade.',
-    tag: 'Free Range',
-    monthYear: 'Monthly Update • November 2026',
+    title: 'Open-Paddock Sunlight Grazing',
+    caption: 'Young goats and lambs enjoying fresh morning sunshine and organic whole-grain feed in our open farm paddocks.',
+    tag: 'Open Paddock',
+    monthYear: 'November 2026',
     active: true
   },
   {
     id: 'farm-def-3',
     image: '/farm/farm-3.webp',
-    title: 'Lush Agro-Pastoral Sanctuary',
-    caption: 'Vast green grasslands maintained with organic manure recycling and sustainable agro-ecological practices.',
-    tag: 'Sustainable Farm',
-    monthYear: 'Monthly Update • November 2026',
+    title: 'Prize Indigenous Heritage Goat',
+    caption: 'A robust indigenous black goat displaying radiant health, nourished on natural pasture foraging and zero growth hormones.',
+    tag: 'Heritage Breed',
+    monthYear: 'November 2026',
     active: true
   },
   {
     id: 'farm-def-4',
     image: '/farm/farm-4.webp',
-    title: '100% Organic Herbal Feed',
-    caption: 'Cultivated green alfalfa, multi-grain feed, and medicinal herbs with zero growth hormones or antibiotics.',
-    tag: 'Organic Feed',
-    monthYear: 'Monthly Update • November 2026',
+    title: '100% Organic Herbal & Alfalfa Fodder',
+    caption: 'Spotted breed goat feeding on farm-cultivated dry alfalfa and medicinal herbs, ensuring lean, tender, and wholesome meat.',
+    tag: 'Organic Nutrition',
+    monthYear: 'November 2026',
     active: true
   },
   {
     id: 'farm-def-5',
     image: '/farm/farm-5.webp',
-    title: 'Sunrise Over Chevella Sanctuary',
-    caption: 'Peaceful morning mist over our farm sanctuary — where ethical animal welfare is our highest everyday commitment.',
-    tag: 'Sanctuary Life',
-    monthYear: 'Monthly Update • November 2026',
+    title: 'Vast Agro-Sanctuary Aerial Horizon',
+    caption: 'Panoramic sunrise drone view of Kohinoor Signature Farms across Shankarpally, featuring expansive orchards, water reservoirs, and green fields.',
+    tag: 'Sanctuary View',
+    monthYear: 'November 2026',
     active: true
   },
   {
     id: 'farm-def-6',
     image: '/farm/farm-6.webp',
-    title: 'Veterinary Supervised Well-Being',
-    caption: 'Daily clinical health screenings, clean RO drinking water systems, and compassionate herd management.',
-    tag: 'Ethical Care',
-    monthYear: 'Monthly Update • November 2026',
+    title: 'Sanctuary Morning Feed Gathering',
+    caption: 'Bird\'s-eye drone perspective of sheep gathering naturally around open-air feeding stations on pesticide-free red soil pastures.',
+    tag: 'Sanctuary Life',
+    monthYear: 'November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-7',
+    image: '/farm/farm-7.webp',
+    title: 'Sustainable Agro-Forestry & Orchards',
+    caption: 'High-altitude aerial survey revealing our integrated palm groves, fruit orchards, polyhouses, and sustainable permaculture design.',
+    tag: 'Agro-Forestry',
+    monthYear: 'November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-8',
+    image: '/farm/farm-8.webp',
+    title: 'Solar Powered Green Infrastructure',
+    caption: 'Eco-friendly solar array, sheltered polyhouse cultivation nursery, and precision organic crop rows supporting a zero-chemical ecosystem.',
+    tag: 'Clean Energy',
+    monthYear: 'November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-9',
+    image: '/farm/farm-9.webp',
+    title: 'Open Herd Paddocks & Shaded Stalls',
+    caption: 'Aerial view of shaded blue-canopy shelters and organized hydration troughs providing optimal comfort and shade during afternoon hours.',
+    tag: 'Ethical Welfare',
+    monthYear: 'November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-10',
+    image: '/farm/farm-10.webp',
+    title: 'Afternoon Herd Hydration & Nourishment',
+    caption: 'Organized paddock feeding and clean RO water stations keeping the entire herd well-nourished, hydrated, and tranquil.',
+    tag: 'Daily Farm Life',
+    monthYear: 'November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-11',
+    image: '/farm/farm-11.webp',
+    title: 'Modern Bio-Secure Barn Facilities',
+    caption: 'Engineered livestock housing built with ventilated roofs, veterinary quarantine zones, and hygienic waste management systems.',
+    tag: 'Modern Farming',
+    monthYear: 'November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-12',
+    image: '/farm/farm-12.webp',
+    title: 'Lakeside Farm Sanctuary Panorama',
+    caption: 'Breathtaking landscape overlooking the tranquil lake waters adjoining Kohinoor Signature Farms, blessing the soil with natural moisture.',
+    tag: 'Lakeside Sanctuary',
+    monthYear: 'November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-13',
+    image: '/farm/farm-13.webp',
+    title: 'Organic Polyhouse & Banana Groves',
+    caption: 'Low-altitude flight capturing the protective greenhouse nursery surrounded by lush banana trees and coconut palm corridors.',
+    tag: 'Green Pastures',
+    monthYear: 'November 2026',
+    active: true
+  },
+  {
+    id: 'farm-def-14',
+    image: '/farm/farm-14.webp',
+    title: 'Sanctuary Orchard & Facility Courtyard',
+    caption: 'Vertical drone overview of the central facility compound flanked by growing fruit tree rows and open grazing borders.',
+    tag: 'Farm Compound',
+    monthYear: 'November 2026',
     active: true
   }
 ];
